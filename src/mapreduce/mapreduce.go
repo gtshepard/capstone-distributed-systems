@@ -85,6 +85,7 @@ func InitMapReduce(nmap int, nreduce int,
 
 func MakeMapReduce(nmap int, nreduce int,
 	file string, master string) *MapReduce {
+	myLogger("1", "hi", "MakeMapReduce", "mapreduce.go")
 	mr := InitMapReduce(nmap, nreduce, file, master)
 	mr.StartRegistrationServer()
 	go mr.Run()
