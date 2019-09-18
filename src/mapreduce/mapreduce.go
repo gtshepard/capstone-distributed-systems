@@ -66,6 +66,7 @@ type MapReduce struct {
 	Workers map[string]*WorkerInfo
 
 	// add any additional state here
+	MapJobChannel chan string
 }
 
 func InitMapReduce(nmap int, nreduce int,
@@ -107,7 +108,7 @@ func (mr *MapReduce) Register(args *RegisterArgs, res *RegisterReply) error {
 
 func (mr *MapReduce) Shutdown(args *ShutdownArgs, res *ShutdownReply) error {
 	DPrintf("Shutdown: registration server\n")
-	//no nee incoming requests
+	//no new incoming requests
 	mr.alive = false
 	mr.l.Close() // causes the Accept to fail
 	return nil
@@ -133,7 +134,7 @@ func (mr *MapReduce) StartRegistrationServer() {
 	// concurently listens for incoming requests
 	go func() {
 		for mr.alive {
-			//blocks until connection recieved, accepts wjhen there is one
+			//blocks until connection recieved, accepts when there is one
 			conn, err := mr.l.Accept()
 			if err == nil {
 				//each time we recieve a connection, we start another thread to handle the request
@@ -238,7 +239,7 @@ func hash(s string) uint32 {
 // partitions.
 func DoMap(JobNumber int, fileName string,
 	nreduce int, Map func(string) *list.List) {
-
+	myLogger("17", "GO FUNC 1 - DOMAP", "DoMap()", "mapreduce.go")
 	//gets map name
 	name := MapName(fileName, JobNumber)
 	//opens file
@@ -303,6 +304,7 @@ func MergeName(fileName string, ReduceJob int) string {
 // key
 func DoReduce(job int, fileName string, nmap int,
 	Reduce func(string, *list.List) string) {
+	myLogger("17", "GO FUNC 2 - DOREDUCE", "DoReduce()", "mapreduce.go")
 	//make a lof map where key is string and value is *list.List
 	kvs := make(map[string]*list.List)
 	for i := 0; i < nmap; i++ {

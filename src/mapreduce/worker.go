@@ -27,14 +27,20 @@ func (wk *Worker) DoJob(arg *DoJobArgs, res *DoJobReply) error {
 	fmt.Printf("Dojob %s job %d file %s operation %v N %d\n",
 		wk.name, arg.JobNumber, arg.File, arg.Operation,
 		arg.NumOtherPhase)
+	myLogger("13", "GO FUNC 1 - RPC", "DoJbob()", "Worker.go")
 	switch arg.Operation {
 	case Map:
 		// do a map job based on user defined map function
+		myLogger("14", "GO FUNC 1 - BEFORE DOMAP", "DoJbob()", "Worker.go")
 		DoMap(arg.JobNumber, arg.File, arg.NumOtherPhase, wk.Map)
+	//send value
 	case Reduce:
+		myLogger("14", "GO FUNC 2 ", "RunMaster()", "master.go")
 		//do a reduce based on a user define reduce function
 		DoReduce(arg.JobNumber, arg.File, arg.NumOtherPhase, wk.Reduce)
+
 	}
+	myLogger("15", "GO FUNC 1 - RPC", "DoJbob()", "Worker.go")
 	res.OK = true
 	return nil
 }
