@@ -37,11 +37,31 @@ func (mr *MapReduce) RunMaster() *list.List {
 	// 	workerInfo.address = worker
 	// 	mr.Workers[worker] = workerInfo
 	// }
+
 	for i := 0; i < 2; i++ {
 		worker := <-mr.registerChannel
 		myLogger("8", "worker: "+worker, "RunMaster()", "master.go")
+		//	var info *WorkerInfo
+		info := &WorkerInfo{}
+		info.address = worker
+		mr.Workers[worker] = info
 		//i need to schedule workers to do map jobs on seperate threads
 	}
+
+	// go func() {
+
+	// 	var reply *DoJobReply
+	// 	args := &DoJobArgs{}
+	// 	args.File = mr.file
+	// 	args.JobNumber = 0
+	// 	args.NumOtherPhase = mr.nReduce
+	// 	args.Operation = "Map"
+	// 	ok := call(worker, "Worker.DoJob", args, &reply)
+	// 	if ok {
+	// 		fmt.Println("Success")
+	// 	}
+
+	// }()
 
 	return mr.KillWorkers()
 }

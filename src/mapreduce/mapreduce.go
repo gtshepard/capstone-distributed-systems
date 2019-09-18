@@ -81,6 +81,7 @@ func InitMapReduce(nmap int, nreduce int,
 	mr.DoneChannel = make(chan bool)          //unbuffered channel sender blocks until value recieved
 
 	// initialize any additional state here
+	mr.Workers = make(map[string]*WorkerInfo)
 	return mr
 }
 
