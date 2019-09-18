@@ -55,7 +55,7 @@ type MapReduce struct {
 	nMap            int          // Number of Map jobs
 	nReduce         int          // Number of Reduce jobs
 	file            string       // Name of input file
-	MasterAddress   string       //address of master node
+	MasterAddress   string       //localhost:7777
 	registerChannel chan string  //Read start registartion server later
 	DoneChannel     chan bool    // channel to signal process is done running
 	alive           bool         //denote wether MR job is running or not
@@ -70,7 +70,7 @@ type MapReduce struct {
 
 func InitMapReduce(nmap int, nreduce int,
 	file string, master string) *MapReduce {
-
+	myLogger("4", "begin", "InitMapReduce()", "mapreduce.go")
 	mr := new(MapReduce)
 	mr.nMap = nmap
 	mr.nReduce = nreduce
@@ -86,9 +86,13 @@ func InitMapReduce(nmap int, nreduce int,
 
 func MakeMapReduce(nmap int, nreduce int,
 	file string, master string) *MapReduce {
-	myLogger("1", "hi", "MakeMapReduce", "mapreduce.go")
+	myLogger("3", "begin", "MakeMapReduce()", "mapreduce.go")
+	//initializes map reduce object
 	mr := InitMapReduce(nmap, nreduce, file, master)
+	myLogger("3", "after initMapReduce", "MakeMapReduce()", "mapreduce.go")
+	//registers master so its methods are availbe as a service
 	mr.StartRegistrationServer()
+	//concurrently executes Run()
 	go mr.Run()
 	return mr
 }
@@ -102,16 +106,22 @@ func (mr *MapReduce) Register(args *RegisterArgs, res *RegisterReply) error {
 
 func (mr *MapReduce) Shutdown(args *ShutdownArgs, res *ShutdownReply) error {
 	DPrintf("Shutdown: registration server\n")
+	//no nee incoming requests
 	mr.alive = false
 	mr.l.Close() // causes the Accept to fail
 	return nil
 }
 
 func (mr *MapReduce) StartRegistrationServer() {
+	myLogger("5", "begin", "StartRegistrationServer()", "mapreduce.go")
+	//creates a new server for RPC the callee is the client, the reciever is the server
 	rpcs := rpc.NewServer()
+	//reigster the MR object so its methods are availible for RPC
 	rpcs.Register(mr)
 	os.Remove(mr.MasterAddress) // only needed for "unix"
+	//create a listenr for localhost:7777 (MR  master address)
 	l, e := net.Listen("unix", mr.MasterAddress)
+
 	if e != nil {
 		log.Fatal("RegstrationServer", mr.MasterAddress, " error: ", e)
 	}
@@ -119,12 +129,18 @@ func (mr *MapReduce) StartRegistrationServer() {
 
 	// now that we are listening on the master address, can fork off
 	// accepting connections to another thread.
+	// concurently listens for incoming requests
 	go func() {
 		for mr.alive {
+			//blocks until connection recieved, accepts wjhen there is one
 			conn, err := mr.l.Accept()
 			if err == nil {
+				//each time we recieve a connection, we start another thread to handle the request
 				go func() {
+					//servers client unitl they hang up (how do clients hang up?)
+					//in our case client hangs up after the mehtod does its work (test this)
 					rpcs.ServeConn(conn)
+					//closes connection when done
 					conn.Close()
 				}()
 			} else {
@@ -134,6 +150,11 @@ func (mr *MapReduce) StartRegistrationServer() {
 		}
 		DPrintf("RegistrationServer: done\n")
 	}()
+
+	// every object that acts as a server in RPC must be registered to make its methods availible as a service to other entities.
+	// the callee (caller of the call function) is the client, which makes a request to the server.
+	// we do this for both master and workers because at we need workers to act as both clients & servers and same goes for master
+	// meaning sometimes the worker is going to need the services master provides and vice versa kkind of P2P
 }
 
 // Name of the file that is the input for map job <MapJob>
@@ -468,10 +489,13 @@ func (mr *MapReduce) CleanupRegistration() {
 
 // Run jobs in parallel, assuming a shared file system
 func (mr *MapReduce) Run() {
+	myLogger("6", "begin", "Run()", "mapreduce.go")
 	fmt.Printf("Run mapreduce job %s %s\n", mr.MasterAddress, mr.file)
-
+	//breaks file into nMap pieces
 	mr.Split(mr.file)
+	//retuns list ok killed workers
 	mr.stats = mr.RunMaster()
+	//merge files
 	mr.Merge()
 	mr.CleanupRegistration()
 
