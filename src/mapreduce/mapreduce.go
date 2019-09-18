@@ -333,6 +333,7 @@ func DoReduce(job int, fileName string, nmap int,
 	if err != nil {
 		log.Fatal("DoReduce: create ", err)
 	}
+
 	//encode the file as Json
 	enc := json.NewEncoder(file)
 	//for each key in the slice
@@ -350,39 +351,54 @@ func DoReduce(job int, fileName string, nmap int,
 // XXX use merge sort
 func (mr *MapReduce) Merge() {
 	DPrintf("Merge phase")
+	//map where key = string, value = string
 	kvs := make(map[string]string)
 	for i := 0; i < mr.nReduce; i++ {
+		//open specified merge fil
 		p := MergeName(mr.file, i)
 		fmt.Printf("Merge: read %s\n", p)
 		file, err := os.Open(p)
+
 		if err != nil {
 			log.Fatal("Merge: ", err)
 		}
+
+		//decode json
 		dec := json.NewDecoder(file)
+
 		for {
 			var kv KeyValue
+			//decode a line in the file and store it in kv
 			err = dec.Decode(&kv)
 			if err != nil {
 				break
 			}
+			//add key and value to map
 			kvs[kv.Key] = kv.Value
 		}
 		file.Close()
 	}
+
 	var keys []string
+	//append each key in the map to the slice
 	for k := range kvs {
 		keys = append(keys, k)
 	}
+	//sort all the keys in the slice
 	sort.Strings(keys)
 
+	//create a file
 	file, err := os.Create("mrtmp." + mr.file)
+
 	if err != nil {
 		log.Fatal("Merge: create ", err)
 	}
+	//for each key in the map, write its value to the file
 	w := bufio.NewWriter(file)
 	for _, k := range keys {
 		fmt.Fprintf(w, "%s: %s\n", k, kvs[k])
 	}
+	//clean the writers buffer and close the file
 	w.Flush()
 	file.Close()
 }
