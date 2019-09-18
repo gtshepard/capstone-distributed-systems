@@ -30,15 +30,18 @@ func (mr *MapReduce) KillWorkers() *list.List {
 
 func (mr *MapReduce) RunMaster() *list.List {
 	// Your code here
+	// for i := 0; i < 2; i++ {
+	// 	worker := <-mr.registerChannel
+	// 	myLogger("8", "worker: "+worker, "RunMaster()", "master.go")
+	// 	var workerInfo WorkerInfo
+	// 	workerInfo.address = worker
+	// 	mr.Workers[worker] = workerInfo
+	// }
 	for i := 0; i < 2; i++ {
 		worker := <-mr.registerChannel
 		myLogger("8", "worker: "+worker, "RunMaster()", "master.go")
-		var workerInfo WorkerInfo
-		workerInfo.address = worker
-		mr.Workers[worker] = &workerInfo
+		//i need to schedule workers to do map jobs on seperate threads
 	}
-
-	//i need to schedule workers to do map jobs on seperate threads
 
 	return mr.KillWorkers()
 }

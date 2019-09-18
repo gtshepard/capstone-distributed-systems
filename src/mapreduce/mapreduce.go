@@ -77,8 +77,8 @@ func InitMapReduce(nmap int, nreduce int,
 	mr.file = file
 	mr.MasterAddress = master
 	mr.alive = true
-	mr.registerChannel = make(chan string) //unbuffered channel sender blocks until value recieved
-	mr.DoneChannel = make(chan bool)       //unbuffered channel sender blocks until value recieved
+	mr.registerChannel = make(chan string, 2) //unbuffered channel sender blocks until value recieved
+	mr.DoneChannel = make(chan bool)          //unbuffered channel sender blocks until value recieved
 
 	// initialize any additional state here
 	return mr
