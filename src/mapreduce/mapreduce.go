@@ -52,15 +52,15 @@ type KeyValue struct {
 }
 
 type MapReduce struct {
-	nMap            int    // Number of Map jobs
-	nReduce         int    // Number of Reduce jobs
-	file            string // Name of input file
-	MasterAddress   string
-	registerChannel chan string
-	DoneChannel     chan bool
-	alive           bool
-	l               net.Listener
-	stats           *list.List
+	nMap            int          // Number of Map jobs
+	nReduce         int          // Number of Reduce jobs
+	file            string       // Name of input file
+	MasterAddress   string       //address of master node
+	registerChannel chan string  //Read start registartion server later
+	DoneChannel     chan bool    // channel to signal process is done running
+	alive           bool         //denote wether MR job is running or not
+	l               net.Listener //IDK
+	stats           *list.List   //IDK
 
 	// Map of registered workers that you need to keep up to date
 	Workers map[string]*WorkerInfo
@@ -70,14 +70,15 @@ type MapReduce struct {
 
 func InitMapReduce(nmap int, nreduce int,
 	file string, master string) *MapReduce {
+
 	mr := new(MapReduce)
 	mr.nMap = nmap
 	mr.nReduce = nreduce
 	mr.file = file
 	mr.MasterAddress = master
 	mr.alive = true
-	mr.registerChannel = make(chan string)
-	mr.DoneChannel = make(chan bool)
+	mr.registerChannel = make(chan string) //unbuffered channel sender blocks until value recieved
+	mr.DoneChannel = make(chan bool)       //unbuffered channel sender blocks until value recieved
 
 	// initialize any additional state here
 	return mr
@@ -127,7 +128,7 @@ func (mr *MapReduce) StartRegistrationServer() {
 					conn.Close()
 				}()
 			} else {
-				DPrintf("RegistrationServer: accept error", err)
+				DPrintf("RegistrationServer: accept error")
 				break
 			}
 		}
@@ -142,30 +143,45 @@ func MapName(fileName string, MapJob int) string {
 
 // Split bytes of input file into nMap splits, but split only on white space
 func (mr *MapReduce) Split(fileName string) {
+
 	fmt.Printf("Split %s\n", fileName)
+	//open file
 	infile, err := os.Open(fileName)
 	if err != nil {
 		log.Fatal("Split: ", err)
 	}
+	//close file when Split function ends
 	defer infile.Close()
+
+	//return a struct with file information
 	fi, err := infile.Stat()
+
 	if err != nil {
 		log.Fatal("Split: ", err)
 	}
+	//get size of file in bytes
 	size := fi.Size()
+
+	//define chunk size and make it a integer
 	nchunk := size / int64(mr.nMap)
 	nchunk += 1
 
+	//handle first file
+	//creates a file for a map
 	outfile, err := os.Create(MapName(fileName, 0))
+
 	if err != nil {
 		log.Fatal("Split: ", err)
 	}
+	//write to output file
 	writer := bufio.NewWriter(outfile)
 	m := 1
 	i := 0
 
+	//scan input file line by line
 	scanner := bufio.NewScanner(infile)
 	for scanner.Scan() {
+		//if end of chunk make new output file
 		if int64(i) > nchunk*int64(m) {
 			writer.Flush()
 			outfile.Close()
@@ -173,14 +189,19 @@ func (mr *MapReduce) Split(fileName string) {
 			writer = bufio.NewWriter(outfile)
 			m += 1
 		}
+
+		//read line and write to output file n
 		line := scanner.Text() + "\n"
 		writer.WriteString(line)
+		//move to next chunk (each characeter is one byte)
 		i += len(line)
 	}
+	//remove buffered  data from bufio.writer
 	writer.Flush()
 	outfile.Close()
 }
 
+//name a reduce file
 func ReduceName(fileName string, MapJob int, ReduceJob int) string {
 	return MapName(fileName, MapJob) + "-" + strconv.Itoa(ReduceJob)
 }
@@ -195,34 +216,53 @@ func hash(s string) uint32 {
 // partitions.
 func DoMap(JobNumber int, fileName string,
 	nreduce int, Map func(string) *list.List) {
+
+	//gets map name
 	name := MapName(fileName, JobNumber)
+	//opens file
 	file, err := os.Open(name)
+
 	if err != nil {
 		log.Fatal("DoMap: ", err)
 	}
+	//get file info
 	fi, err := file.Stat()
 	if err != nil {
 		log.Fatal("DoMap: ", err)
 	}
+
 	size := fi.Size()
 	fmt.Printf("DoMap: read split %s %d\n", name, size)
+	//make a slice b that has slot for each byte in the file
 	b := make([]byte, size)
+	//read N bytes into slice b from file
 	_, err = file.Read(b)
 	if err != nil {
 		log.Fatal("DoMap: ", err)
 	}
+
 	file.Close()
+	//run user defined map function on this string (contents of file with map name)
+	//returns a *list.List of type KeyValue (defined above in MR)
 	res := Map(string(b))
+
 	// XXX a bit inefficient. could open r files and run over list once
 	for r := 0; r < nreduce; r++ {
+		//create a reduce file
 		file, err = os.Create(ReduceName(fileName, JobNumber, r))
+		//check for error
 		if err != nil {
 			log.Fatal("DoMap: create ", err)
 		}
+		//files format is now json
 		enc := json.NewEncoder(file)
+		//traverse list
 		for e := res.Front(); e != nil; e = e.Next() {
+			//get list value (which is a  KeyValue)
 			kv := e.Value.(KeyValue)
+			//IDK what this chekc means
 			if hash(kv.Key)%uint32(nreduce) == uint32(r) {
+				//encode keyvalue pair to json and write to file
 				err := enc.Encode(&kv)
 				if err != nil {
 					log.Fatal("DoMap: marshall ", err)
@@ -241,42 +281,66 @@ func MergeName(fileName string, ReduceJob int) string {
 // key
 func DoReduce(job int, fileName string, nmap int,
 	Reduce func(string, *list.List) string) {
+	//make a lof map where key is string and value is *list.List
 	kvs := make(map[string]*list.List)
 	for i := 0; i < nmap; i++ {
+		//open specified reduce file
 		name := ReduceName(fileName, i, job)
 		fmt.Printf("DoReduce: read %s\n", name)
 		file, err := os.Open(name)
+
 		if err != nil {
 			log.Fatal("DoReduce: ", err)
 		}
+		//decode JSON file
 		dec := json.NewDecoder(file)
+
 		for {
 			var kv KeyValue
+			//decode fills kv with decode data
 			err = dec.Decode(&kv)
+
+			//when no more to decode
 			if err != nil {
 				break
 			}
+			//check if map contians key
 			_, ok := kvs[kv.Key]
+
 			if !ok {
+				//create key and empty list
 				kvs[kv.Key] = list.New()
 			}
+			//if key exists add value to list
 			kvs[kv.Key].PushBack(kv.Value)
+			//we now have all the values associated with a particular key, so we can now reduce them
 		}
 		file.Close()
 	}
+	//create a slice of strings
 	var keys []string
+	//for key in the map, append the key to the slice
 	for k := range kvs {
 		keys = append(keys, k)
 	}
+	//sort the slice of keys
 	sort.Strings(keys)
+
+	//create a merge file
 	p := MergeName(fileName, job)
 	file, err := os.Create(p)
+
 	if err != nil {
 		log.Fatal("DoReduce: create ", err)
 	}
+	//encode the file as Json
 	enc := json.NewEncoder(file)
+	//for each key in the slice
 	for _, k := range keys {
+		//call user defined reduce by passing in the key and its list of associated values
+		//returns key value pair, where k is the key, v is single reduced value
 		res := Reduce(k, kvs[k])
+		//JSON encode the pair and write to merge file
 		enc.Encode(KeyValue{k, res})
 	}
 	file.Close()
@@ -344,18 +408,36 @@ func (mr *MapReduce) CleanupFiles() {
 }
 
 // Run jobs sequentially.
+// nMap int: # of map jobs to run
+// nReduce int: # of reduce jobs to run
+// file string: the inpit file to split,
+// Map func(string) *list.List: a user defined function to perform mapping
+// Reduce func(string, *list.List) string: a user defined function to perform the reducing
 func RunSingle(nMap int, nReduce int, file string,
 	Map func(string) *list.List,
 	Reduce func(string, *list.List) string) {
+
+	// initializes MapReduce Object and returns an instance
+	// pass in empty string becuase no concept of master/worker in sequential version.
+	// note of parallel veriosn this call is ade in mapreduce.MakeMapReduce passes in master address
 	mr := InitMapReduce(nMap, nReduce, file, "")
+
+	//split file into nMap pieces
 	mr.Split(mr.file)
+
+	//run  nMap map jobs
 	for i := 0; i < nMap; i++ {
+		//perform map
 		DoMap(i, mr.file, mr.nReduce, Map)
 	}
+	// then run nReduce jobs
 	for i := 0; i < mr.nReduce; i++ {
+		//perfom reduce
 		DoReduce(i, mr.file, mr.nMap, Reduce)
 	}
+	// merge nReduce pieces
 	mr.Merge()
+	// end of sequential map reduce
 }
 
 func (mr *MapReduce) CleanupRegistration() {
