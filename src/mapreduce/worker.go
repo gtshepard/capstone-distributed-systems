@@ -7,6 +7,7 @@ import (
 	"net"
 	"net/rpc"
 	"os"
+	"strconv"
 )
 
 // Worker is a server waiting for DoJob or Shutdown RPCs
@@ -31,27 +32,33 @@ func (wk *Worker) DoJob(arg *DoJobArgs, res *DoJobReply) error {
 
 	switch arg.Operation {
 	case Map:
-		// do a map job based on user defined map function
 		//	myLogger("12", "BEFORE DOMAP - "+wk.name, "DoJob()", "Worker.go")
-		DoMap(arg.JobNumber, arg.File, arg.NumOtherPhase, wk.Map)
-		// var rep DoJobReply
-		// ok := call(arg.Master, "MapReduce.MapJobComplete", arg, &rep)
-		// if ok {
-		// 	myLogger("12", "COMPELTE: Map Job"+strconv.Itoa(arg.JobNumber)+":"+wk.name, "DoJob()", "Worker.go")
-		// }
+		success := DoMap(arg.JobNumber, arg.File, arg.NumOtherPhase, wk.Map)
+		if success {
+			var rep DoJobReply
+			ok := call(arg.Master, "MapReduce.MapJobComplete", arg, &rep)
+			if ok {
+				myLogger("12", "COMPELTE: Map Job "+strconv.Itoa(arg.JobNumber)+":"+wk.name, "DoJob()", "Worker.go")
+			}
+		} else {
+			myLogger("12", "ERROR DOMAP didnt return", "DoJob()", "Worker.go")
+		}
 	case Reduce:
 
 		//	myLogger("XXXXXXXXXXXXXXX", "BEFORE REDUCE - "+wk.name, "DoJob()", "Worker.go")
-		DoReduce(arg.JobNumber, arg.File, arg.NumOtherPhase, wk.Reduce)
+		success := DoReduce(arg.JobNumber, arg.File, arg.NumOtherPhase, wk.Reduce)
 		// myLogger("XXXXXXXXXXXXXXX", "AFTER REDUCE - "+wk.name, "DoJob()", "Worker.go")
-		// var rep DoJobReply
-		// ok := call(arg.Master, "MapReduce.ReduceJobComplete", arg, &rep)
-		// if ok {
-		// 	myLogger("000000000000000000000000000000000000000000000000000000", "COMPELTE: Reduce Job"+strconv.Itoa(arg.JobNumber)+":"+wk.name, "DoJob()", "Worker.go")
-		// } else {
-		// 	myLogger("12", "@@@@@@@@@@@@@@@@@@@@ RPC CALL FAILED @@@@@@@@@@@@@@@@@@@@@", "DoJob()", "Worker.go")
-		// }
-
+		if success {
+			var rep DoJobReply
+			ok := call(arg.Master, "MapReduce.ReduceJobComplete", arg, &rep)
+			if ok {
+				myLogger("000000000000000000000000000000000000000000000000000000", "COMPELTE: Reduce Job"+strconv.Itoa(arg.JobNumber)+":"+wk.name, "DoJob()", "Worker.go")
+			} else {
+				myLogger("12", "@@@@@@@@@@@@@@@@@@@@ RPC CALL FAILED @@@@@@@@@@@@@@@@@@@@@", "DoJob()", "Worker.go")
+			}
+		} else {
+			myLogger("12", "ERROR DOREDUCE didnt return", "DoJob()", "Worker.go")
+		}
 	}
 	myLogger("15", "END", "DoJob()", "Worker.go")
 	res.OK = true
