@@ -88,9 +88,7 @@ func main() {
 		if os.Args[3] == "sequential" {
 			mapreduce.RunSingle(5, 3, os.Args[2], Map, Reduce)
 		} else {
-			//myLogger("0", "before make map", "main()", "wc.go")
 			mr := mapreduce.MakeMapReduce(5, 3, os.Args[2], os.Args[3])
-			//	myLogger("1", "after make map", "main()", "wc.go")
 			// Wait until MR is done
 			<-mr.DoneChannel
 		}

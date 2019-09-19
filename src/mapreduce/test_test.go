@@ -153,7 +153,6 @@ func TestBasic(t *testing.T) {
 	checkWorker(t, mr.stats)
 	cleanup(mr)
 	fmt.Printf("  ... Basic Passed\n")
-
 }
 
 func TestOneFailure(t *testing.T) {

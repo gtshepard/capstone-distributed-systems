@@ -24,23 +24,36 @@ type Worker struct {
 //arg *DoJobArgs: info about the job
 //res *DoJobReply: response after job started
 func (wk *Worker) DoJob(arg *DoJobArgs, res *DoJobReply) error {
+
 	fmt.Printf("Dojob %s job %d file %s operation %v N %d\n",
 		wk.name, arg.JobNumber, arg.File, arg.Operation,
 		arg.NumOtherPhase)
-	myLogger("13", "GO FUNC 1 - RPC", "DoJbob()", "Worker.go")
+
 	switch arg.Operation {
 	case Map:
 		// do a map job based on user defined map function
-		myLogger("14", "GO FUNC 1 - BEFORE DOMAP", "DoJbob()", "Worker.go")
+		//	myLogger("12", "BEFORE DOMAP - "+wk.name, "DoJob()", "Worker.go")
 		DoMap(arg.JobNumber, arg.File, arg.NumOtherPhase, wk.Map)
-	//send value
+		// var rep DoJobReply
+		// ok := call(arg.Master, "MapReduce.MapJobComplete", arg, &rep)
+		// if ok {
+		// 	myLogger("12", "COMPELTE: Map Job"+strconv.Itoa(arg.JobNumber)+":"+wk.name, "DoJob()", "Worker.go")
+		// }
 	case Reduce:
-		myLogger("14", "GO FUNC 2 ", "RunMaster()", "master.go")
-		//do a reduce based on a user define reduce function
+
+		//	myLogger("XXXXXXXXXXXXXXX", "BEFORE REDUCE - "+wk.name, "DoJob()", "Worker.go")
 		DoReduce(arg.JobNumber, arg.File, arg.NumOtherPhase, wk.Reduce)
+		// myLogger("XXXXXXXXXXXXXXX", "AFTER REDUCE - "+wk.name, "DoJob()", "Worker.go")
+		// var rep DoJobReply
+		// ok := call(arg.Master, "MapReduce.ReduceJobComplete", arg, &rep)
+		// if ok {
+		// 	myLogger("000000000000000000000000000000000000000000000000000000", "COMPELTE: Reduce Job"+strconv.Itoa(arg.JobNumber)+":"+wk.name, "DoJob()", "Worker.go")
+		// } else {
+		// 	myLogger("12", "@@@@@@@@@@@@@@@@@@@@ RPC CALL FAILED @@@@@@@@@@@@@@@@@@@@@", "DoJob()", "Worker.go")
+		// }
 
 	}
-	myLogger("15", "GO FUNC 1 - RPC", "DoJbob()", "Worker.go")
+	myLogger("15", "END", "DoJob()", "Worker.go")
 	res.OK = true
 	return nil
 }

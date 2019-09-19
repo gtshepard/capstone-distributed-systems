@@ -66,7 +66,8 @@ type MapReduce struct {
 	Workers map[string]*WorkerInfo
 
 	// add any additional state here
-	MapJobChannel chan string
+	MapJobChannel    chan string
+	ReduceJobChannel chan string
 }
 
 func InitMapReduce(nmap int, nreduce int,
@@ -81,6 +82,8 @@ func InitMapReduce(nmap int, nreduce int,
 	mr.registerChannel = make(chan string, 2) //unbuffered channel sender blocks until value recieved
 	mr.DoneChannel = make(chan bool)          //unbuffered channel sender blocks until value recieved
 
+	mr.MapJobChannel = make(chan string)
+	mr.ReduceJobChannel = make(chan string)
 	// initialize any additional state here
 	mr.Workers = make(map[string]*WorkerInfo)
 	return mr
@@ -102,6 +105,18 @@ func MakeMapReduce(nmap int, nreduce int,
 func (mr *MapReduce) Register(args *RegisterArgs, res *RegisterReply) error {
 	DPrintf("Register: worker %s\n", args.Worker)
 	mr.registerChannel <- args.Worker
+	res.OK = true
+	return nil
+}
+
+func (mr *MapReduce) MapJobComplete(args *DoJobArgs, res *DoJobReply) error {
+	mr.MapJobChannel <- "~~~~~~~~~~~~~~~ MAP JOB DONE~~~~~~~~~~~~~~~~~~~~~"
+	res.OK = true
+	return nil
+}
+
+func (mr *MapReduce) ReduceJobComplete(args *DoJobArgs, res *DoJobReply) error {
+	mr.ReduceJobChannel <- "@@@@@@@@@@@@@@@@@@@@ REDUCEJOB DONE @@@@@@@@@@@@@@@@@@@@@"
 	res.OK = true
 	return nil
 }
@@ -239,7 +254,7 @@ func hash(s string) uint32 {
 // partitions.
 func DoMap(JobNumber int, fileName string,
 	nreduce int, Map func(string) *list.List) {
-	myLogger("17", "GO FUNC 1 - DOMAP", "DoMap()", "mapreduce.go")
+	//	myLogger("14", "BEGIN", "DoMap()", "mapreduce.go")
 	//gets map name
 	name := MapName(fileName, JobNumber)
 	//opens file
@@ -273,12 +288,14 @@ func DoMap(JobNumber int, fileName string,
 	for r := 0; r < nreduce; r++ {
 		//create a reduce file
 		file, err = os.Create(ReduceName(fileName, JobNumber, r))
+		//myLogger("R-file: ", ReduceName(fileName, JobNumber, r), "DoMap()", "mapreduce.go")
 		//check for error
 		if err != nil {
 			log.Fatal("DoMap: create ", err)
 		}
 		//files format is now json
 		enc := json.NewEncoder(file)
+
 		//traverse list
 		for e := res.Front(); e != nil; e = e.Next() {
 			//get list value (which is a  KeyValue)
@@ -294,6 +311,7 @@ func DoMap(JobNumber int, fileName string,
 		}
 		file.Close()
 	}
+	//myLogger("14", "END", "DoMap()", "mapreduce.go")
 }
 
 func MergeName(fileName string, ReduceJob int) string {
@@ -304,7 +322,7 @@ func MergeName(fileName string, ReduceJob int) string {
 // key
 func DoReduce(job int, fileName string, nmap int,
 	Reduce func(string, *list.List) string) {
-	myLogger("17", "GO FUNC 2 - DOREDUCE", "DoReduce()", "mapreduce.go")
+	myLogger("14", "DOREDUCE", "DoReduce()", "mapreduce.go")
 	//make a lof map where key is string and value is *list.List
 	kvs := make(map[string]*list.List)
 	for i := 0; i < nmap; i++ {
@@ -312,13 +330,13 @@ func DoReduce(job int, fileName string, nmap int,
 		name := ReduceName(fileName, i, job)
 		fmt.Printf("DoReduce: read %s\n", name)
 		file, err := os.Open(name)
-
+		//myLogger("R-file", ReduceName(fileName, i, job), "DoReduce()", "mapreduce.go")
 		if err != nil {
 			log.Fatal("DoReduce: ", err)
 		}
 		//decode JSON file
 		dec := json.NewDecoder(file)
-
+		myLogger("14", "DOREDUCE - MIDDLE", "DoReduce()", "mapreduce.go")
 		for {
 			var kv KeyValue
 			//decode fills kv with decode data
@@ -341,6 +359,7 @@ func DoReduce(job int, fileName string, nmap int,
 		}
 		file.Close()
 	}
+	myLogger("14", " KEY _ VALUE _END _ LOOP", "DoReuce()", "mapreduce.go")
 	//create a slice of strings
 	var keys []string
 	//for key in the map, append the key to the slice
@@ -369,6 +388,7 @@ func DoReduce(job int, fileName string, nmap int,
 		enc.Encode(KeyValue{k, res})
 	}
 	file.Close()
+	myLogger("14", "DOREDUCE - END", "DoReuce()", "mapreduce.go")
 }
 
 // Merge the results of the reduce jobs
