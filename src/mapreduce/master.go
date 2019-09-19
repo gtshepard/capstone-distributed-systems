@@ -84,6 +84,49 @@ func (mr *MapReduce) RunMaster() *list.List {
 	reduceJobDone := <-mr.ReduceJobChannel
 	fmt.Println("Job " + strconv.Itoa(reduceJobDone) + " Done")
 
+	// master must schedule all jobs and wait for there completion
+	// master can only schedule jobs to avialible workers
+	// there are 2 different job types Map or Reduce. there will be M map jobs and R reduce jobs
+	// the set of availible workers is accessable as an array. each worker has an IsIdle property
+	// we search the availible set of workers  for an idle worker.
+	// if we find an idle worker, we set the workers isIdle flag to false and
+	// we schedule a job by starting another thread of execution()
+	// and make an RPC call to a worker to start the job
+	// we start another thread of exeuction so master can continue scheduling while the other workers are running
+	// if there is no idle worker, master must wait for one of the non-idle workers to complete a job.
+	// master waits to recieve a message from the job completion channel then schedules the job to the worker
+	// that just completed it job.
+	// example of process described above: same logic can be used for both map and reduce(just sub in ReduceJob for the loop)
+	// for i in MapJob:
+	//     if isAvailbleWorker:
+	//		  idleWoker = getIdleWorker()
+	//        go schedule(idleWorker, job)
+	//	   else:
+	//		  idleWorker := <-signalMapCompletedJob
+	//	      append(mapSlice, idleWorker)
+	//		  go scheudle(idleWorker, job)
+	//
+	// recall master must wait until all jobs (both map and reduce) have completed, and then merge the results
+	// since each job has been scheduled on seperate threads of execution we have no way of knowing when these jobs
+	// will complete, so it is not enough to let these loops expire. yet we must garuntee that all jobs finish, becuase master will just continue its thread of exexution
+	// we need another mechanism which bring us to a point of synchronization, a garuntee that we know the order of what will happen next
+	// in our case all jobs will finish, then we proceed  on
+	// this can be done waiting until we collect nMap completed jobs from the mapCompletedJob channel, and
+	// waiting until we collect nReduce completed jobs from the reduceCompletedJob channel
+	// an example of this would be as follows
+	//
+	// while nMap != len(mapSlice):
+	//   mapJobDone := <-signalMapCompletedJob
+	//   append(mapSlice, mapJobDone)
+	//
+	// while nReduce != len(reduceSlice):
+	//   reduceJobDone := <-signalReduceCompletedJob
+	//   append(reduceSlice, reduceJobDone)
+	//
+	// merge()
+	//
+	// master shutsdown all workers
+
 	//mapChannel := make(chan string, mr.nMap)
 	//	reduceChannel := make(chan string, mr.nReduce)
 
