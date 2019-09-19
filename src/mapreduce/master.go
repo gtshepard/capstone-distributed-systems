@@ -29,8 +29,9 @@ func (mr *MapReduce) KillWorkers() *list.List {
 	return l
 }
 
-func (mr *MapReduce) AssignJobToIdleWorker(job JobType, jobNumber int, worker string, otherPhase int) {
+func (mr *MapReduce) AssignJobToIdleWorker(job JobType, jobNumber int, worker string, otherPhase int, c chan string) {
 	myLogger("RM-8", "Schedule Job Start", "RunMaster()", "master.go")
+
 	var reply *DoJobReply
 	args := &DoJobArgs{}
 	args.File = mr.file
@@ -46,13 +47,22 @@ func (mr *MapReduce) AssignJobToIdleWorker(job JobType, jobNumber int, worker st
 	} else {
 		myLogger("RM-10", "RPC call to worker failed", "RunMaster()", "master.go")
 	}
-	myLogger("RM-11", "Schedule Job End", "RunMaster()", "master.go")
+
+	myLogger("RM-11", "Schedule Job End"+strconv.Itoa(jobNumber), "RunMaster()", "master.go")
+	c <- worker
+}
+
+func (mr *MapReduce) printer() {
+	//defer wgMap.Done()
+	fmt.Println("I AM A PRINTER")
+	myLogger("----------", "I AM A PRINTER", "RunMaster()", "master.go")
 }
 
 func (mr *MapReduce) RunMaster() *list.List {
 	//register workers and set them to idle
 	myLogger("RM-1", "START OF TEST", "RunMaster()", "master.go")
 	var workers []*RegisterArgs
+
 	for i := 0; i < 2; i++ {
 		worker := <-mr.registerChannel
 		worker.isIdle = true
@@ -61,7 +71,6 @@ func (mr *MapReduce) RunMaster() *list.List {
 		info := &WorkerInfo{}
 		info.address = worker.Worker
 		mr.Workers[worker.Worker] = info
-		//i need to schedule workers to do map jobs on seperate threads
 	}
 
 	//find an idle worker
@@ -78,62 +87,151 @@ func (mr *MapReduce) RunMaster() *list.List {
 	}
 
 	completedMapJobs := make([]string, 0)
-	mapSyncChannel := make(chan string)
+	completedReduceJobs := make([]string, 0)
+	mapSyncChannel := make(chan string, mr.nMap)
+	reduceSyncChannel := make(chan string, mr.nReduce)
 
 	//var mapIdleWg sync.WaitGroup
 	//var mapNonIdleWg sync.WaitGroup
 	//schedule all M map jobs
 	//jobs can only be scheduled on idle workers
+
 	for i := 0; i < mr.nMap; i++ {
 		index, workerName, isAvailibleWorker := getIdleWorker(workers)
-
+		//schedule worker
 		if isAvailibleWorker {
-			//myLogger("$$$$$$$$$$$$$$$$$$$$$$$$$$$", "isAvailebleWorker: "+strconv.FormatBool(isAvailibleWorker), "RunMaster()", "master.go")
 			workers[index].isIdle = false
-			go func(worker string, job int, c chan string) {
-				//myLogger("RM-5", "start go routine to schedule", "RunMaster()", "master.go")
-				c <- worker
-				mr.AssignJobToIdleWorker("Map", i, worker, mr.nReduce)
-				<-mr.MapJobChannel
-			}(workerName, i, mapSyncChannel)
+			//schedule Reduce Jobs concurrently
+			go mr.AssignJobToIdleWorker("Map", i, workerName, mr.nReduce, mapSyncChannel)
 
 		} else {
-			//myLogger("RM-5", "Wait for Worker - isAvailibleWorker: "+strconv.FormatBool(isAvailibleWorker), "RunMaster()", "master.go")
-			//	mapJobDone := <-mr.MapJobChannel
-			//	completedMapJobs = append(completedMapJobs, mapJobDone)
-			//nowAvailbleWorker := mapJobDone
-			//	myLogger("RM-6", "Schedule Newly Availible Worker ", "RunMaster()", "master.go")
-			newlyAvailibleWorker := <-mapSyncChannel
-
-			go func(worker string, job int, c chan string) {
-				//	myLogger("RM-6", "start go routine to schedule Map", "RunMaster()", "master.go")
-				c <- worker
-				mr.AssignJobToIdleWorker("Map", i, worker, mr.nReduce)
-				<-mr.MapJobChannel
-			}(newlyAvailibleWorker, i, mapSyncChannel)
-
-			//myLogger("RM-6", "Map Done By Worker: "+mapJobDone, "RunMaster()", "master.go")
+			myLogger("RM-2", "not idle ", "RunMaster() - register-worker", "master.go")
+			mapJobDone := <-mr.MapJobChannel
+			myLogger("RM-2", "not idle recieve job  "+mapJobDone, "RunMaster() - register-worker", "master.go")
+			completedMapJobs = append(completedMapJobs, mapJobDone)
+			go mr.AssignJobToIdleWorker("Map", i, mapJobDone, mr.nReduce, mapSyncChannel)
 		}
+		myLogger("---------", "channel item count"+strconv.Itoa(len(mapSyncChannel)), "RunMaster() - register-worker", "master.go")
 	}
 
-	myLogger("RM-13", "Number of Map Jobs Done: "+strconv.Itoa(len(completedMapJobs)), "RunMaster()", "master.go")
-	fmt.Println("Number of Map Jobs Done: " + strconv.Itoa(len(completedMapJobs)))
+	newlyAvailibleWorker := <-mr.MapJobChannel
+	completedMapJobs = append(completedMapJobs, newlyAvailibleWorker)
+	myLogger("---------", "channel item count"+strconv.Itoa(len(mapSyncChannel)), "RunMaster() - register-worker", "master.go")
 
-	//finish remaining map jobs
-	i := 0
-	for len(completedMapJobs) != mr.nMap {
-		mapJobDone := <-mr.MapJobChannel
-		//mapWg.Wait()
-		myLogger("RM----", strconv.Itoa(i)+"-"+mapJobDone, "RunMaster()", "master.go")
-		completedMapJobs = append(completedMapJobs, mapJobDone)
-		myLogger("RM-14", "Number of Map Jobs Done: "+strconv.Itoa(len(completedMapJobs)), "RunMaster()", "master.go")
-		fmt.Println("Number of Map Jobs Done: " + strconv.Itoa(len(completedMapJobs)))
-	}
+	//myLogger("RM------IN LOOP", "Number of Map Jobs Done: "+strconv.Itoa(len(completedMapJobs)), "RunMaster()", "master.go")
+	// for len(completedMapJobs) != mr.nMap {
+	// 	// 	myLogger("RM------IN LOOP", "Number of Map Jobs Done: "+strconv.Itoa(len(completedMapJobs)), "RunMaster()", "master.go")
+	// 	newlyAvailibleWorker := <-mr.MapJobChannel
+	// 	completedMapJobs = append(completedMapJobs, newlyAvailibleWorker)
+	// 	myLogger("---------", "channel item count"+strconv.Itoa(len(mapSyncChannel)), "RunMaster() - register-worker", "master.go")
+	// }
+	// v := len(mapSyncChannel)
+	// myLogger("RM-2", "channel item count"+strconv.Itoa(v), "RunMaster() - register-worker", "master.go")
 
 	//all jobs completed, set all workers to idle
-	for _, w := range workers {
-		w.isIdle = true
+	// for _, w := range workers {
+	// 	w.isIdle = true
+	// }
+	workers[0].isIdle = true
+	workers[1].isIdle = true
+
+	for i := 0; i < mr.nReduce; i++ {
+		index, workerName, isAvailibleWorker := getIdleWorker(workers)
+		//schedule worker
+		if isAvailibleWorker {
+			workers[index].isIdle = false
+			//schedule Reduce Jobs concurrently
+			go mr.AssignJobToIdleWorker("Reduce", i, workerName, mr.nMap, reduceSyncChannel)
+
+		} else {
+			myLogger("RM-2", "not idle ", "RunMaster() - register-worker", "master.go")
+			reduceJobDone := <-mr.ReduceJobChannel
+			myLogger("RM-2", "not idle recieve job  "+reduceJobDone, "RunMaster() - register-worker", "master.go")
+			completedReduceJobs = append(completedMapJobs, reduceJobDone)
+			go mr.AssignJobToIdleWorker("Reduce", i, reduceJobDone, mr.nMap, reduceSyncChannel)
+		}
+		myLogger("&&&&&&&&&&", "Reduce channel item count"+strconv.Itoa(len(reduceSyncChannel)), "RunMaster() - register-worker", "master.go")
 	}
+
+	//for len(completedMapJobs) != mr.nReduce {
+	// 	myLogger("RM------IN LOOP", "Number of Map Jobs Done: "+strconv.Itoa(len(completedMapJobs)), "RunMaster()", "master.go")
+	Rna := <-mr.ReduceJobChannel
+	completedReduceJobs = append(completedReduceJobs, Rna)
+
+	//}
+
+	myLogger("RM------", "Number of Map Jobs Done: "+strconv.Itoa(len(completedMapJobs)), "RunMaster()", "master.go")
+
+	// myLogger("*****************", "Number of Map Jobs Done: "+strconv.Itoa(len(completedMapJobs)), "RunMaster()", "master.go")
+	// newlyAvailibleWorker := <-mr.MapJobChannel
+	// completedMapJobs = append(completedMapJobs, newlyAvailibleWorker)
+
+	// newlyAvailibleWorker = <-mr.MapJobChannel
+	// completedMapJobs = append(completedMapJobs, newlyAvailibleWorker)
+	// myLogger("RM------", "Number of Map Jobs Done: "+strconv.Itoa(len(completedMapJobs)), "RunMaster()", "master.go")
+	// for len(completedMapJobs) != mr.nMap {
+	// 	myLogger("RM------IN LOOP", "Number of Map Jobs Done: "+strconv.Itoa(len(completedMapJobs)), "RunMaster()", "master.go")
+	// 	newlyAvailibleWorker := <-mr.MapJobChannel
+	// 	completedMapJobs = append(completedMapJobs, newlyAvailibleWorker)
+	// }
+	//myLogger("RM-13", "Number of Map Jobs Done: "+strconv.Itoa(len(completedMapJobs)), "RunMaster()", "master.go")
+
+	//	fmt.Println("Number of Map Jobs Done: " + strconv.Itoa(len(completedMapJobs)))
+	//myLogger("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&", " set all workers to idle loop", "RunMaster()", "master.go")
+
+	//all jobs completed, set all workers to idle
+	// for _, w := range workers {
+	// 	w.isIdle = true
+	// }
+
+	myLogger("RM--1", " before Reduce loop", "RunMaster()", "master.go")
+
+	// for i := 0; i < mr.nReduce; i++ {
+	// 	index, workerName, isAvailibleWorker := getIdleWorker(workers)
+	// 	myLogger("RM-R-1", "Reduce loop", "RunMaster()", "master.go")
+	// 	if isAvailibleWorker {
+
+	// 		workers[index].isIdle = false
+	// 		go func(worker string, job int, c chan string) {
+	// 			c <- worker
+	// 			mr.AssignJobToIdleWorker("Reduce", job, worker, mr.nMap)
+	// 			<-mr.ReduceJobChannel
+	// 		}(workerName, i, reduceSyncChannel)
+
+	// 	} else {
+	// 		newlyAvailibleWorker := <-reduceSyncChannel
+	// 		completedReduceJobs = append(completedReduceJobs, newlyAvailibleWorker)
+	// 		go func(worker string, job int, c chan string) {
+	// 			c <- worker
+	// 			mr.AssignJobToIdleWorker("Reduce", job, worker, mr.nMap)
+	// 			<-mr.ReduceJobChannel
+	// 		}(newlyAvailibleWorker, i, reduceSyncChannel)
+	// 	}
+	// }
+
+	// for len(completedMapJobs) != mr.nReduce {
+	// 	newlyAvailibleWorker := <-reduceSyncChannel
+	// 	completedReduceJobs = append(completedReduceJobs, newlyAvailibleWorker)
+	// }
+
+	// myLogger("RM-13", "Number of Reduce Jobs Done: "+strconv.Itoa(len(completedReduceJobs)), "RunMaster()", "master.go")
+	// fmt.Println("Number of Reduce Jobs Done: " + strconv.Itoa(len(completedReduceJobs)))
+
+	//finish remaining map jobs
+	// i := 0
+	// for len(completedMapJobs) != mr.nMap {
+	// 	mapJobDone := <-mr.MapJobChannel
+	// 	//mapWg.Wait()
+	// 	myLogger("RM----", strconv.Itoa(i)+"-"+mapJobDone, "RunMaster()", "master.go")
+	// 	completedMapJobs = append(completedMapJobs, mapJobDone)
+	// 	myLogger("RM-14", "Number of Map Jobs Done: "+strconv.Itoa(len(completedMapJobs)), "RunMaster()", "master.go")
+	// 	fmt.Println("Number of Map Jobs Done: " + strconv.Itoa(len(completedMapJobs)))
+	// }
+
+	// //all jobs completed, set all workers to idle
+	// for _, w := range workers {
+	// 	w.isIdle = true
+	// }
 
 	// completedReduceJobs := make([]string, 0)
 	// //schedule all R Reduce jobs
@@ -360,7 +458,6 @@ func (mr *MapReduce) RunMaster() *list.List {
 	//<-reduceChannel
 	//myLogger("-----------||||||||||----------", "REDUCE CHANNEL RECIEVED", "RunMaster()", "master.go")
 	mr.Merge()
-
 	return mr.KillWorkers()
 
 	// we have T tasks that must be done by W workers. a worker can only do one task at time. W workers will be doing work concurrently
