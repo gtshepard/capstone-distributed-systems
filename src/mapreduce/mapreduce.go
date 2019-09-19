@@ -72,7 +72,7 @@ type MapReduce struct {
 
 func InitMapReduce(nmap int, nreduce int,
 	file string, master string) *MapReduce {
-	myLogger("4", "begin", "InitMapReduce()", "mapreduce.go")
+	//myLogger("4", "begin", "InitMapReduce()", "mapreduce.go")
 	mr := new(MapReduce)
 	mr.nMap = nmap
 	mr.nReduce = nreduce
@@ -91,10 +91,10 @@ func InitMapReduce(nmap int, nreduce int,
 
 func MakeMapReduce(nmap int, nreduce int,
 	file string, master string) *MapReduce {
-	myLogger("3", "begin", "MakeMapReduce()", "mapreduce.go")
+	//myLogger("3", "begin", "MakeMapReduce()", "mapreduce.go")
 	//initializes map reduce object
 	mr := InitMapReduce(nmap, nreduce, file, master)
-	myLogger("3", "after initMapReduce", "MakeMapReduce()", "mapreduce.go")
+	//myLogger("3", "after initMapReduce", "MakeMapReduce()", "mapreduce.go")
 	//registers master so its methods are availbe as a service
 	mr.StartRegistrationServer()
 	//concurrently executes Run()
@@ -130,7 +130,7 @@ func (mr *MapReduce) Shutdown(args *ShutdownArgs, res *ShutdownReply) error {
 }
 
 func (mr *MapReduce) StartRegistrationServer() {
-	myLogger("5", "begin", "StartRegistrationServer()", "mapreduce.go")
+	//myLogger("5", "begin", "StartRegistrationServer()", "mapreduce.go")
 	//creates a new server for RPC the callee is the client, the reciever is the server
 	rpcs := rpc.NewServer()
 	//reigster the MR object so its methods are availible for RPC
@@ -560,7 +560,7 @@ func (mr *MapReduce) CleanupRegistration() {
 
 // Run jobs in parallel, assuming a shared file system
 func (mr *MapReduce) Run() {
-	myLogger("6", "begin", "Run()", "mapreduce.go")
+	//myLogger("6", "begin", "Run()", "mapreduce.go")
 	fmt.Printf("Run mapreduce job %s %s\n", mr.MasterAddress, mr.file)
 	//breaks file into nMap pieces
 	mr.Split(mr.file)

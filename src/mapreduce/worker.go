@@ -38,7 +38,7 @@ func (wk *Worker) DoJob(arg *DoJobArgs, res *DoJobReply) error {
 		if success {
 			var rep DoJobReply
 			ok := call(arg.Master, "MapReduce.MapJobComplete", arg, &rep)
-			if ok {
+			if ok && rep.OK {
 				myLogger("12", "COMPELTE: Map Job "+strconv.Itoa(arg.JobNumber)+":"+wk.name, "DoJob()", "Worker.go")
 			}
 		} else {
@@ -52,7 +52,7 @@ func (wk *Worker) DoJob(arg *DoJobArgs, res *DoJobReply) error {
 		if success {
 			var rep DoJobReply
 			ok := call(arg.Master, "MapReduce.ReduceJobComplete", arg, &rep)
-			if ok {
+			if ok && rep.OK {
 				myLogger("000000000000000000000000000000000000000000000000000000", "COMPELTE: Reduce Job"+strconv.Itoa(arg.JobNumber)+":"+wk.name, "DoJob()", "Worker.go")
 			} else {
 				myLogger("12", "@@@@@@@@@@@@@@@@@@@@ RPC CALL FAILED @@@@@@@@@@@@@@@@@@@@@", "DoJob()", "Worker.go")
