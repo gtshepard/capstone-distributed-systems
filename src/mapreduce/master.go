@@ -29,9 +29,8 @@ func (mr *MapReduce) KillWorkers() *list.List {
 }
 
 func (mr *MapReduce) RunMaster() *list.List {
-
+	//register workers and set them to idle
 	var workers []*RegisterArgs
-
 	for i := 0; i < 2; i++ {
 		worker := <-mr.registerChannel
 		worker.isIdle = true
@@ -42,6 +41,27 @@ func (mr *MapReduce) RunMaster() *list.List {
 		mr.Workers[worker.Worker] = info
 		//i need to schedule workers to do map jobs on seperate threads
 	}
+
+	//find an idle worker
+	getWorker := func(s []*RegisterArgs) (string, bool) {
+		for _, e := range s {
+			if e.isIdle {
+				return e.Worker, true
+			}
+		}
+		return "", false
+	}
+
+	//schedule map jobs to idle workers concurrently
+	for i := 0; i < mr.nMap; i++ {
+		workerName, isAvailibleWorker := getWorker(workers)
+		if isAvailibleWorker {
+			fmt.Println(workerName)
+		} else {
+			//mapJobDone := <-mr.MapJobChannel
+		}
+	}
+
 	fmt.Println("Hello")
 	// fmt.Println("THIS IS A TEST")
 	// go func() {
