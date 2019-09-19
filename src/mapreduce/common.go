@@ -40,6 +40,7 @@ type ShutdownReply struct {
 
 type RegisterArgs struct {
 	Worker string
+	isIdle bool
 }
 
 type RegisterReply struct {

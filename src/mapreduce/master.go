@@ -3,7 +3,6 @@ package mapreduce
 import (
 	"container/list"
 	"fmt"
-	"strconv"
 )
 
 type WorkerInfo struct {
@@ -31,58 +30,62 @@ func (mr *MapReduce) KillWorkers() *list.List {
 
 func (mr *MapReduce) RunMaster() *list.List {
 
-	var workers [2]string
+	var workers []*RegisterArgs
+
 	for i := 0; i < 2; i++ {
 		worker := <-mr.registerChannel
-		myLogger("8", "worker: "+worker, "RunMaster()", "master.go")
-		workers[i] = worker
+		worker.isIdle = true
+		myLogger("8", "worker: ", "RunMaster()", "master.go")
+		workers = append(workers, worker)
 		info := &WorkerInfo{}
-		info.address = worker
-		mr.Workers[worker] = info
+		info.address = worker.Worker
+		mr.Workers[worker.Worker] = info
 		//i need to schedule workers to do map jobs on seperate threads
 	}
+	fmt.Println("Hello")
+	// fmt.Println("THIS IS A TEST")
+	// go func() {
+	// 	var reply *DoJobReply
+	// 	args := &DoJobArgs{}
+	// 	args.File = mr.file
+	// 	args.JobNumber = 0
+	// 	args.NumOtherPhase = mr.nReduce
+	// 	args.Operation = "Map"
+	// 	args.Master = mr.MasterAddress
+	// 	args.Worker = workers[0]
 
-	fmt.Println("THIS IS A TEST")
-	go func() {
-		var reply *DoJobReply
-		args := &DoJobArgs{}
-		args.File = mr.file
-		args.JobNumber = 0
-		args.NumOtherPhase = mr.nReduce
-		args.Operation = "Map"
-		args.Master = mr.MasterAddress
-		args.Worker = workers[0]
+	// 	ok := call(workers[0], "Worker.DoJob", args, &reply)
+	// 	if ok {
+	// 		myLogger("--", "Map Job "+strconv.Itoa(0)+" Done", "RunMaster()", "master.go")
+	// 	} else {
+	// 		myLogger("--", "RPC fail!", "RunMaster()", "master.go")
+	// 	}
+	// }()
+	// mapJobDone := <-mr.MapJobChannel
+	// fmt.Println("Job " + strconv.Itoa(mapJobDone) + " Done")
 
-		ok := call(workers[0], "Worker.DoJob", args, &reply)
-		if ok {
-			myLogger("--", "Map Job "+strconv.Itoa(0)+" Done", "RunMaster()", "master.go")
-		} else {
-			myLogger("--", "RPC fail!", "RunMaster()", "master.go")
-		}
-	}()
-	mapJobDone := <-mr.MapJobChannel
-	fmt.Println("Job " + strconv.Itoa(mapJobDone) + " Done")
+	//go func() {
+	// 	var reply *DoJobReply
+	// 	args := &DoJobArgs{}
+	// 	args.File = mr.file
+	// 	args.JobNumber = 0
+	// 	args.NumOtherPhase = mr.nMap
+	// 	args.Operation = "Reduce"
+	// 	args.Master = mr.MasterAddress
+	// 	args.Worker = workers[0]
 
-	go func() {
-		var reply *DoJobReply
-		args := &DoJobArgs{}
-		args.File = mr.file
-		args.JobNumber = 0
-		args.NumOtherPhase = mr.nMap
-		args.Operation = "Reduce"
-		args.Master = mr.MasterAddress
-		args.Worker = workers[0]
+	// 	ok := call(workers[0], "Worker.DoJob", args, &reply)
+	// 	if ok {
+	// 		myLogger("--", "Map Job "+strconv.Itoa(0)+" Done", "RunMaster()", "master.go")
+	// 	} else {
+	// 		myLogger("--", "RPC fail!", "RunMaster()", "master.go")
+	// 	}
+	// }()
+	// fmt.Println("Job Reduce " + strconv.Itoa(0) + " NOT Done")
+	// reduceJobDone := <-mr.ReduceJobChannel
+	// fmt.Println("Job " + strconv.Itoa(reduceJobDone) + " Done")
 
-		ok := call(workers[0], "Worker.DoJob", args, &reply)
-		if ok {
-			myLogger("--", "Map Job "+strconv.Itoa(0)+" Done", "RunMaster()", "master.go")
-		} else {
-			myLogger("--", "RPC fail!", "RunMaster()", "master.go")
-		}
-	}()
-	fmt.Println("Job Reduce " + strconv.Itoa(0) + " NOT Done")
-	reduceJobDone := <-mr.ReduceJobChannel
-	fmt.Println("Job " + strconv.Itoa(reduceJobDone) + " Done")
+	//one thing to note reduce job kept failing when only one map job  was scheduled
 
 	// master must schedule all jobs and wait for there completion
 	// master can only schedule jobs to avialible workers

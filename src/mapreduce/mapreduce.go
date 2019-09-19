@@ -52,15 +52,15 @@ type KeyValue struct {
 }
 
 type MapReduce struct {
-	nMap            int          // Number of Map jobs
-	nReduce         int          // Number of Reduce jobs
-	file            string       // Name of input file
-	MasterAddress   string       //localhost:7777
-	registerChannel chan string  //Read start registartion server later
-	DoneChannel     chan bool    // channel to signal process is done running
-	alive           bool         //denote wether MR job is running or not
-	l               net.Listener //IDK
-	stats           *list.List   //IDK
+	nMap            int                // Number of Map jobs
+	nReduce         int                // Number of Reduce jobs
+	file            string             // Name of input file
+	MasterAddress   string             //localhost:7777
+	registerChannel chan *RegisterArgs //Read start registartion server later
+	DoneChannel     chan bool          // channel to signal process is done running
+	alive           bool               //denote wether MR job is running or not
+	l               net.Listener       //IDK
+	stats           *list.List         //IDK
 
 	// Map of registered workers that you need to keep up to date
 	Workers map[string]*WorkerInfo
@@ -79,8 +79,8 @@ func InitMapReduce(nmap int, nreduce int,
 	mr.file = file
 	mr.MasterAddress = master
 	mr.alive = true
-	mr.registerChannel = make(chan string, 2) //unbuffered channel sender blocks until value recieved
-	mr.DoneChannel = make(chan bool)          //unbuffered channel sender blocks until value recieved
+	mr.registerChannel = make(chan *RegisterArgs, 2) //unbuffered channel sender blocks until value recieved
+	mr.DoneChannel = make(chan bool)                 //unbuffered channel sender blocks until value recieved
 
 	mr.MapJobChannel = make(chan string)
 	mr.ReduceJobChannel = make(chan string)
@@ -104,7 +104,7 @@ func MakeMapReduce(nmap int, nreduce int,
 
 func (mr *MapReduce) Register(args *RegisterArgs, res *RegisterReply) error {
 	DPrintf("Register: worker %s\n", args.Worker)
-	mr.registerChannel <- args.Worker
+	mr.registerChannel <- args
 	res.OK = true
 	return nil
 }

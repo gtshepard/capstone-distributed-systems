@@ -19,6 +19,7 @@ type Worker struct {
 	nRPC   int
 	nJobs  int
 	l      net.Listener
+	isIdle bool
 }
 
 // The master sent us a job
