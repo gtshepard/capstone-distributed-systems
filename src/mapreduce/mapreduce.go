@@ -91,13 +91,8 @@ func InitMapReduce(nmap int, nreduce int,
 
 func MakeMapReduce(nmap int, nreduce int,
 	file string, master string) *MapReduce {
-	//myLogger("3", "begin", "MakeMapReduce()", "mapreduce.go")
-	//initializes map reduce object
 	mr := InitMapReduce(nmap, nreduce, file, master)
-	//myLogger("3", "after initMapReduce", "MakeMapReduce()", "mapreduce.go")
-	//registers master so its methods are availbe as a service
 	mr.StartRegistrationServer()
-	//concurrently executes Run()
 	go mr.Run()
 	return mr
 }
@@ -130,13 +125,11 @@ func (mr *MapReduce) Shutdown(args *ShutdownArgs, res *ShutdownReply) error {
 }
 
 func (mr *MapReduce) StartRegistrationServer() {
-	//myLogger("5", "begin", "StartRegistrationServer()", "mapreduce.go")
 	//creates a new server for RPC the callee is the client, the reciever is the server
 	rpcs := rpc.NewServer()
 	//reigster the MR object so its methods are availible for RPC
 	rpcs.Register(mr)
 	os.Remove(mr.MasterAddress) // only needed for "unix"
-	//create a listenr for localhost:7777 (MR  master address)
 	l, e := net.Listen("unix", mr.MasterAddress)
 
 	if e != nil {
@@ -319,82 +312,7 @@ func MergeName(fileName string, ReduceJob int) string {
 	return "mrtmp." + fileName + "-res-" + strconv.Itoa(ReduceJob)
 }
 
-// Read map outputs for partition job, sort them by key, call reduce for each
-// key
-// func DoReduce(job int, fileName string, nmap int,
-// 	Reduce func(string, *list.List) string) bool {
-// 	myLogger("14", "DOREDUCE", "DoReduce()", "mapreduce.go")
-// 	//make a lof map where key is string and value is *list.List
-// 	kvs := make(map[string]*list.List)
-// 	for i := 0; i < nmap; i++ {
-// 		//open specified reduce file
-// 		name := ReduceName(fileName, i, job)
-// 		fmt.Printf("DoReduce: read %s\n", name)
-// 		file, err := os.Open(name)
-// 		//myLogger("R-file", ReduceName(fileName, i, job), "DoReduce()", "mapreduce.go")
-// 		if err != nil {
-// 			log.Fatal("DoReduce: ", err)
-// 		}
-// 		//decode JSON file
-// 		dec := json.NewDecoder(file)
-// 		myLogger("14", "DOREDUCE - MIDDLE", "DoReduce()", "mapreduce.go")
-// 		for {
-// 			var kv KeyValue
-// 			//decode fills kv with decode data
-// 			err = dec.Decode(&kv)
-// 			myLogger("14", "KEY VALUE", "DoReduce()", "mapreduce.go")
-// 			//when no more to decode
-// 			if err != nil {
-// 				break
-// 			}
-// 			//check if map contians key
-// 			_, ok := kvs[kv.Key]
-
-// 			if !ok {
-// 				//create key and empty list
-// 				kvs[kv.Key] = list.New()
-// 			}
-// 			//if key exists add value to list
-// 			kvs[kv.Key].PushBack(kv.Value)
-// 			//we now have all the values associated with a particular key, so we can now reduce them
-// 		}
-// 		file.Close()
-// 		myLogger("14", "CLOSE FILE", "DoReduce()", "mapreduce.go")
-// 	}
-
-// 	myLogger("14", " KEY _ VALUE _END _ LOOP", "DoReuce()", "mapreduce.go")
-// 	//create a slice of strings
-// 	var keys []string
-// 	//for key in the map, append the key to the slice
-// 	for k := range kvs {
-// 		keys = append(keys, k)
-// 	}
-// 	//sort the slice of keys
-// 	sort.Strings(keys)
-
-// 	//create a merge file
-// 	p := MergeName(fileName, job)
-// 	file, err := os.Create(p)
-
-// 	if err != nil {
-// 		log.Fatal("DoReduce: create ", err)
-// 	}
-
-// 	//encode the file as Json
-// 	enc := json.NewEncoder(file)
-// 	//for each key in the slice
-// 	for _, k := range keys {
-// 		//call user defined reduce by passing in the key and its list of associated values
-// 		//returns key value pair, where k is the key, v is single reduced value
-// 		res := Reduce(k, kvs[k])
-// 		//JSON encode the pair and write to merge file
-// 		enc.Encode(KeyValue{k, res})
-// 	}
-// 	file.Close()
-// 	myLogger("14", "DOREDUCE - END", "DoReuce()", "mapreduce.go")
-// 	return true
-// }
-
+// Read map outputs for partition job, sort them by key, call reduce for each key
 func DoReduce(job int, fileName string, nmap int,
 	Reduce func(string, *list.List) string) bool {
 	kvs := make(map[string]*list.List)

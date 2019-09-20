@@ -33,7 +33,6 @@ func (wk *Worker) DoJob(arg *DoJobArgs, res *DoJobReply) error {
 
 	switch arg.Operation {
 	case Map:
-		//	myLogger("12", "BEFORE DOMAP - "+wk.name, "DoJob()", "Worker.go")
 		success := DoMap(arg.JobNumber, arg.File, arg.NumOtherPhase, wk.Map)
 		if success {
 			var rep DoJobReply
@@ -42,23 +41,20 @@ func (wk *Worker) DoJob(arg *DoJobArgs, res *DoJobReply) error {
 				myLogger("12", "COMPELTE: Map Job "+strconv.Itoa(arg.JobNumber)+":"+wk.name, "DoJob()", "Worker.go")
 			}
 		} else {
-			myLogger("12", "ERROR DOMAP didnt return", "DoJob()", "Worker.go")
+			myLogger("ERROR", "ERROR DOMAP didnt return", "DoJob()", "Worker.go")
 		}
 	case Reduce:
-
-		//	myLogger("XXXXXXXXXXXXXXX", "BEFORE REDUCE - "+wk.name, "DoJob()", "Worker.go")
 		success := DoReduce(arg.JobNumber, arg.File, arg.NumOtherPhase, wk.Reduce)
-		// myLogger("XXXXXXXXXXXXXXX", "AFTER REDUCE - "+wk.name, "DoJob()", "Worker.go")
 		if success {
 			var rep DoJobReply
 			ok := call(arg.Master, "MapReduce.ReduceJobComplete", arg, &rep)
 			if ok && rep.OK {
-				myLogger("000000000000000000000000000000000000000000000000000000", "COMPELTE: Reduce Job"+strconv.Itoa(arg.JobNumber)+":"+wk.name, "DoJob()", "Worker.go")
+				myLogger("SUCCESS", "COMPELTE: Reduce Job"+strconv.Itoa(arg.JobNumber)+":"+wk.name, "DoJob()", "Worker.go")
 			} else {
-				myLogger("12", "@@@@@@@@@@@@@@@@@@@@ RPC CALL FAILED @@@@@@@@@@@@@@@@@@@@@", "DoJob()", "Worker.go")
+				myLogger("ERROR", "@@@@@@@@@@@@@@@@@@@@ RPC CALL FAILED @@@@@@@@@@@@@@@@@@@@@", "DoJob()", "Worker.go")
 			}
 		} else {
-			myLogger("12", "ERROR DOREDUCE didnt return", "DoJob()", "Worker.go")
+			myLogger("ERRROR", "ERROR DOREDUCE didnt return", "DoJob()", "Worker.go")
 		}
 	}
 	myLogger("15", "END", "DoJob()", "Worker.go")

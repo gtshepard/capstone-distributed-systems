@@ -47,6 +47,7 @@ func (mr *MapReduce) AssignJobToIdleWorker(job JobType, jobNumber int, worker st
 	}
 	c <- worker
 }
+
 func (mr *MapReduce) getIdleWorker(workers []*RegisterArgs) (int, string, bool) {
 	for i := 0; i < len(workers); i++ {
 		if workers[i].isIdle {
@@ -83,9 +84,7 @@ func (mr *MapReduce) DistributedReduce(workers []*RegisterArgs, buffer chan stri
 	}
 	<-mr.ReduceJobChannel
 }
-
-func (mr *MapReduce) RunMaster() *list.List {
-
+func (mr *MapReduce) RecieveWorkers() []*RegisterArgs {
 	var workers []*RegisterArgs
 
 	for i := 0; i < 2; i++ {
@@ -96,52 +95,22 @@ func (mr *MapReduce) RunMaster() *list.List {
 		info.address = worker.Worker
 		mr.Workers[worker.Worker] = info
 	}
+	return workers
+}
 
-	//find an idle worker
-	// getIdleWorker := func(s []*RegisterArgs) (int, string, bool) {
-	// 	for i := 0; i < len(s); i++ {
-	// 		if s[i].isIdle {
-	// 			return i, s[i].Worker, true
-	// 		}
-	// 	}
-	// 	return 0, "", false
-	// }
-
-	mapSyncChannel := make(chan string, mr.nMap)
-	reduceSyncChannel := make(chan string, mr.nReduce)
-
-	// for i := 0; i < mr.nMap; i++ {
-	// 	index, workerName, isAvailibleWorker := getIdleWorker(workers)
-	// 	if isAvailibleWorker {
-	// 		workers[index].isIdle = false
-	// 		go mr.AssignJobToIdleWorker("Map", i, workerName, mr.nReduce, mapSyncChannel)
-	// 	} else {
-	// 		mapJobDone := <-mr.MapJobChannel
-	// 		go mr.AssignJobToIdleWorker("Map", i, mapJobDone, mr.nReduce, mapSyncChannel)
-	// 	}
-	// }
-	// <-mr.MapJobChannel
-
-	mr.DistributedMap(workers, mapSyncChannel)
-
+func (mr *MapReduce) MakeAllWorkersIdle(workers []*RegisterArgs) {
 	for i := 0; i < len(workers); i++ {
 		workers[i].isIdle = true
 	}
+}
 
+func (mr *MapReduce) RunMaster() *list.List {
+	mapSyncChannel := make(chan string, mr.nMap)
+	reduceSyncChannel := make(chan string, mr.nReduce)
+	workers := mr.RecieveWorkers()
+	mr.DistributedMap(workers, mapSyncChannel)
+	mr.MakeAllWorkersIdle(workers)
 	mr.DistributedReduce(workers, reduceSyncChannel)
-
-	// for i := 0; i < mr.nReduce; i++ {
-	// 	index, workerName, isAvailibleWorker := getIdleWorker(workers)
-	// 	if isAvailibleWorker {
-	// 		workers[index].isIdle = false
-	// 		go mr.AssignJobToIdleWorker("Reduce", i, workerName, mr.nMap, reduceSyncChannel)
-	// 	} else {
-	// 		reduceJobDone := <-mr.ReduceJobChannel
-	// 		go mr.AssignJobToIdleWorker("Reduce", i, reduceJobDone, mr.nMap, reduceSyncChannel)
-	// 	}
-	// }
-	// <-mr.ReduceJobChannel
-
 	mr.Merge()
 	return mr.KillWorkers()
 }

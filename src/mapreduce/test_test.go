@@ -126,7 +126,6 @@ func port(suffix string) string {
 }
 
 func setup() *MapReduce {
-	//myLogger("1", "begin", "setup()", "test_test.go")
 	file := makeInput()
 	master := port("master")
 	mr := MakeMapReduce(nMap, nReduce, file, master)
@@ -143,7 +142,6 @@ func TestBasic(t *testing.T) {
 	fmt.Printf("Test: Basic mapreduce ...\n")
 	mr := setup()
 	for i := 0; i < 2; i++ {
-		//myLogger("7", "make worker", "TestBasic()", "test_test.go")
 		go RunWorker(mr.MasterAddress, port("worker"+strconv.Itoa(i)),
 			MapFunc, ReduceFunc, -1)
 	}
