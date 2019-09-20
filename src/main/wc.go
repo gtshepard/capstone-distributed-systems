@@ -65,10 +65,22 @@ func Reduce(key string, values *list.List) string {
 	return frequency
 }
 
+func myLogger(step string, msg string, call string, file string) {
+	f, err := os.OpenFile("testlogfile", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatalf("error opening file: %v", err)
+	}
+	defer f.Close()
+
+	log.SetOutput(f)
+	log.Println(step, ": ", msg, "-", call, "-", file)
+}
+
 // Can be run in 3 ways:
 // 1) Sequential (e.g., go run wc.go master x.txt sequential)
 // 2) Master (e.g., go run wc.go master x.txt localhost:7777)
 // 3) Worker (e.g., go run wc.go worker localhost:7777 localhost:7778 &)
+
 func main() {
 	if len(os.Args) != 4 {
 		fmt.Printf("%s: see usage comments in file\n", os.Args[0])
