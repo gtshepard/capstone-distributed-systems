@@ -28,7 +28,7 @@ func (mr *MapReduce) KillWorkers() *list.List {
 	return l
 }
 
-func (mr *MapReduce) AssignJobToIdleWorker(job JobType, jobNumber int, worker string, otherPhase int, c chan string) {
+func (mr *MapReduce) AssignJobToIdleWorker(job JobType, jobNumber int, worker string, otherPhase int, c chan string, f chan string) {
 
 	var reply *DoJobReply
 	args := &DoJobArgs{}
@@ -41,7 +41,8 @@ func (mr *MapReduce) AssignJobToIdleWorker(job JobType, jobNumber int, worker st
 	ok := call(worker, "Worker.DoJob", args, &reply)
 
 	if ok {
-		myLogger("RM-9", "Successful RPC call to worker", "RunMaster()", "master.go")
+		myLogger("*****************************", "Successful RPC call to worker", "RunMaster()", "master.go")
+		f <- "PIZZA"
 	} else {
 		myLogger("RM-10", "RPC call to worker failed", "RunMaster()", "master.go")
 	}
@@ -62,10 +63,10 @@ func (mr *MapReduce) DistributedMap(workers []*RegisterArgs, buffer chan string)
 		index, workerName, isAvailibleWorker := mr.getIdleWorker(workers)
 		if isAvailibleWorker {
 			workers[index].isIdle = false
-			go mr.AssignJobToIdleWorker("Map", i, workerName, mr.nReduce, buffer)
+			go mr.AssignJobToIdleWorker("Map", i, workerName, mr.nReduce, buffer, buffer)
 		} else {
 			idleWorker := <-mr.MapJobChannel
-			go mr.AssignJobToIdleWorker("Map", i, idleWorker, mr.nReduce, buffer)
+			go mr.AssignJobToIdleWorker("Map", i, idleWorker, mr.nReduce, buffer, buffer)
 		}
 	}
 	<-mr.MapJobChannel
@@ -76,10 +77,10 @@ func (mr *MapReduce) DistributedReduce(workers []*RegisterArgs, buffer chan stri
 		index, workerName, isAvailibleWorker := mr.getIdleWorker(workers)
 		if isAvailibleWorker {
 			workers[index].isIdle = false
-			go mr.AssignJobToIdleWorker("Reduce", i, workerName, mr.nMap, buffer)
+			go mr.AssignJobToIdleWorker("Reduce", i, workerName, mr.nMap, buffer, buffer)
 		} else {
 			idleWorker := <-mr.ReduceJobChannel
-			go mr.AssignJobToIdleWorker("Reduce", i, idleWorker, mr.nMap, buffer)
+			go mr.AssignJobToIdleWorker("Reduce", i, idleWorker, mr.nMap, buffer, buffer)
 		}
 	}
 	<-mr.ReduceJobChannel
@@ -96,6 +97,18 @@ func (mr *MapReduce) RecieveWorkers() []*RegisterArgs {
 		mr.Workers[worker.Worker] = info
 	}
 	return workers
+}
+
+func (mr *MapReduce) RemoveFailedWorker(worker string, workerPool []*RegisterArgs) []*RegisterArgs {
+
+	for i := 0; i < len(workerPool); i++ {
+		if workerPool[i].Worker == worker {
+			workerPool[i] = workerPool[len(workerPool)-1] // Copy last element to index i.
+			workerPool[len(workerPool)-1] = nil           // Erase last element (write zero value).
+			workerPool = workerPool[:len(workerPool)-1]   //Truncate slice.
+		}
+	}
+	return workerPool
 }
 
 func (mr *MapReduce) MakeAllWorkersIdle(workers []*RegisterArgs) {
@@ -115,20 +128,6 @@ func (mr *MapReduce) RunMaster() *list.List {
 	myLogger("RM-1", "START OF TEST", "RunMaster()", "master.go")
 	var workers []*RegisterArgs
 
-	// for i := 0; i < 2; i++ {
-	//  select {
-	//  case worker := <-mr.registerChannel:
-	//      worker.isIdle = true
-	//      myLogger("RM-2", "register worker: "+worker.Worker, "RunMaster() - register-worker", "master.go")
-	//      workers = append(workers, worker)
-	//      info := &WorkerInfo{}
-	//      info.address = worker.Worker
-	//      mr.Workers[worker.Worker] = info
-	//  default:
-	//      myLogger("RM-2", "FAIL TO REGISTER", "RunMaster() - register-worker", "master.go")
-	//  }
-	// }
-
 	//find an idle worker
 	getIdleWorker := func(s []*RegisterArgs) (int, string, bool) {
 		for i := 0; i < len(s); i++ {
@@ -142,17 +141,17 @@ func (mr *MapReduce) RunMaster() *list.List {
 		return 0, "", false
 	}
 
-	completedMapJobs := make([]string, 0)
-	completedReduceJobs := make([]string, 0)
+	//completedMapJobs := make([]string, 0)
+	//completedReduceJobs := make([]string, 0)
 	mapSyncChannel := make(chan string, mr.nMap)
 	reduceSyncChannel := make(chan string, mr.nReduce)
-
+	workerFailureChannel := make(chan string)
 	//var mapIdleWg sync.WaitGroup
 	//var mapNonIdleWg sync.WaitGroup
 	//schedule all M map jobs
 	//jobs can only be scheduled on idle workers
 
-	// select {
+	//select {
 	// case worker := <-mr.registerChannel:
 	//  worker.isIdle = true
 	//  myLogger("RM-2", "register worker: "+worker.Worker, "RunMaster() - register-worker", "master.go")
@@ -168,18 +167,16 @@ func (mr *MapReduce) RunMaster() *list.List {
 		select {
 		case worker := <-mr.registerChannel:
 			workers = append(workers, worker)
-			go mr.AssignJobToIdleWorker("Map", i, worker.Worker, mr.nReduce, mapSyncChannel)
+			go mr.AssignJobToIdleWorker("Map", i, worker.Worker, mr.nReduce, mapSyncChannel, workerFailureChannel)
+			//cant wait for response here becuase its too soon for a go routine to have made the RPC callvoulf do a
 		default:
 			mapJobDone := <-mr.MapJobChannel
-			completedMapJobs = append(completedMapJobs, mapJobDone)
-			go mr.AssignJobToIdleWorker("Map", i, mapJobDone, mr.nReduce, mapSyncChannel)
-			myLogger("RM-2", "FAIL TO REGISTER", "RunMaster() - register-worker", "master.go")
+			<-workerFailureChannel
+			go mr.AssignJobToIdleWorker("Map", i, mapJobDone, mr.nReduce, mapSyncChannel, workerFailureChannel)
 
 		}
 	}
-
-	newlyAvailibleWorker := <-mr.MapJobChannel
-	completedMapJobs = append(completedMapJobs, newlyAvailibleWorker)
+	<-mr.MapJobChannel
 
 	for i := 0; i < len(workers); i++ {
 		workers[i].isIdle = true
@@ -190,31 +187,33 @@ func (mr *MapReduce) RunMaster() *list.List {
 		select {
 		case worker := <-mr.registerChannel:
 			workers = append(workers, worker)
-			go mr.AssignJobToIdleWorker("Reduce", i, worker.Worker, mr.nMap, reduceSyncChannel)
+			go mr.AssignJobToIdleWorker("Reduce", i, worker.Worker, mr.nMap, reduceSyncChannel, workerFailureChannel)
 
 		default:
 			index, workerName, isAvailibleWorker := getIdleWorker(workers)
 			if isAvailibleWorker {
 				workers[index].isIdle = false
-				go mr.AssignJobToIdleWorker("Reduce", i, workerName, mr.nMap, reduceSyncChannel)
+				go mr.AssignJobToIdleWorker("Reduce", i, workerName, mr.nMap, reduceSyncChannel, workerFailureChannel)
 			} else {
 				reduceJobDone := <-mr.ReduceJobChannel
-				go mr.AssignJobToIdleWorker("Reduce", i, reduceJobDone, mr.nMap, reduceSyncChannel)
-				myLogger("RM-2", "FAIL TO REGISTER", "RunMaster() - register-worker", "master.go")
+				go mr.AssignJobToIdleWorker("Reduce", i, reduceJobDone, mr.nMap, reduceSyncChannel, workerFailureChannel)
 			}
 		}
 	}
-
-	Rna := <-mr.ReduceJobChannel
-	completedReduceJobs = append(completedReduceJobs, Rna)
-
-	mr.Merge()
-	return mr.KillWorkers()
+	<-mr.ReduceJobChannel
 
 	mr.Merge()
 	return mr.KillWorkers()
 }
 
 // how to handle worker failures?
-// a worker is considered failed when an RPC call is made
-// if a worker is considered failed if an RPC call fails
+// a worker is considered failed if an RPC call fails.
+// if a call fails then we must reschedule the job that we told that worker to do
+// and then remove the worker from the pool of availible workers
+// then we should continue the normal scheduling routine.
+
+// assigning a job to a worker (the RPC call happens in inside a seperate thread of execution).
+// therefore the the failure is first noticed in this seperate thread of execution. the notice must be sent
+// to the masters main thread vai a channel.
+//
+//
