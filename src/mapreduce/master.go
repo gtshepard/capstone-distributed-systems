@@ -6,8 +6,10 @@ import (
 )
 
 type WorkerInfo struct {
-	address string
-	// You can add definitions here.
+	address   string
+	IsIdle    bool
+	Number    int
+	HasFailed bool
 }
 
 // Clean up all workers by sending a Shutdown RPC to each one of them Collect
@@ -42,9 +44,10 @@ func (mr *MapReduce) AssignJobToIdleWorker(job JobType, jobNumber int, worker st
 
 	if ok {
 		myLogger("*****************************", "Successful RPC call to worker", "RunMaster()", "master.go")
-		f <- "PIZZA"
+		//f <- "PIZZA"
 	} else {
 		myLogger("RM-10", "RPC call to worker failed", "RunMaster()", "master.go")
+		f <- "PIZZA"
 	}
 	c <- worker
 }
@@ -94,7 +97,7 @@ func (mr *MapReduce) RecieveWorkers() []*RegisterArgs {
 		workers = append(workers, worker)
 		info := &WorkerInfo{}
 		info.address = worker.Worker
-		mr.Workers[worker.Worker] = info
+		//mr.Workers[worker.Worker] = info
 	}
 	return workers
 }
@@ -164,17 +167,16 @@ func (mr *MapReduce) RunMaster() *list.List {
 	// }
 
 	for i := 0; i < mr.nMap; i++ {
+
 		select {
 		case worker := <-mr.registerChannel:
 			workers = append(workers, worker)
 			go mr.AssignJobToIdleWorker("Map", i, worker.Worker, mr.nReduce, mapSyncChannel, workerFailureChannel)
-			//cant wait for response here becuase its too soon for a go routine to have made the RPC callvoulf do a
-		default:
-			mapJobDone := <-mr.MapJobChannel
-			<-workerFailureChannel
+		case mapJobDone := <-mr.MapJobChannel:
 			go mr.AssignJobToIdleWorker("Map", i, mapJobDone, mr.nReduce, mapSyncChannel, workerFailureChannel)
-
 		}
+		//put a select statement below to handle a failure ?
+
 	}
 	<-mr.MapJobChannel
 
