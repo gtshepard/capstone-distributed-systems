@@ -66,7 +66,7 @@ type MapReduce struct {
 	Workers map[int]*WorkerInfo
 
 	// add any additional state here
-	MapJobChannel    chan string
+	MapJobChannel    chan *DoJobArgs
 	ReduceJobChannel chan string
 }
 
@@ -82,7 +82,7 @@ func InitMapReduce(nmap int, nreduce int,
 	mr.registerChannel = make(chan *RegisterArgs, 2) //unbuffered channel sender blocks until value recieved
 	mr.DoneChannel = make(chan bool)                 //unbuffered channel sender blocks until value recieved
 
-	mr.MapJobChannel = make(chan string)
+	mr.MapJobChannel = make(chan *DoJobArgs)
 	mr.ReduceJobChannel = make(chan string)
 	// initialize any additional state here
 	mr.Workers = make(map[int]*WorkerInfo)
@@ -105,7 +105,7 @@ func (mr *MapReduce) Register(args *RegisterArgs, res *RegisterReply) error {
 }
 
 func (mr *MapReduce) MapJobComplete(args *DoJobArgs, res *DoJobReply) error {
-	mr.MapJobChannel <- args.Worker
+	mr.MapJobChannel <- args
 	res.OK = true
 	return nil
 }

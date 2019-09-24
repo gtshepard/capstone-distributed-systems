@@ -3,10 +3,11 @@ package mapreduce
 import (
 	"container/list"
 	"fmt"
+	"strconv"
 )
 
 type WorkerInfo struct {
-	address   string
+	Address   string
 	IsIdle    bool
 	Number    int
 	HasFailed bool
@@ -17,12 +18,12 @@ type WorkerInfo struct {
 func (mr *MapReduce) KillWorkers() *list.List {
 	l := list.New()
 	for _, w := range mr.Workers {
-		DPrintf("DoWork: shutdown %s\n", w.address)
+		DPrintf("DoWork: shutdown %s\n", w.Address)
 		args := &ShutdownArgs{}
 		var reply ShutdownReply
-		ok := call(w.address, "Worker.Shutdown", args, &reply)
+		ok := call(w.Address, "Worker.Shutdown", args, &reply)
 		if ok == false {
-			fmt.Printf("DoWork: RPC %s shutdown error\n", w.address)
+			fmt.Printf("DoWork: RPC %s shutdown error\n", w.Address)
 		} else {
 			l.PushBack(reply.Njobs)
 		}
@@ -69,7 +70,7 @@ func (mr *MapReduce) DistributedMap(workers []*RegisterArgs, buffer chan string)
 			go mr.AssignJobToIdleWorker("Map", i, workerName, mr.nReduce, buffer, buffer)
 		} else {
 			idleWorker := <-mr.MapJobChannel
-			go mr.AssignJobToIdleWorker("Map", i, idleWorker, mr.nReduce, buffer, buffer)
+			go mr.AssignJobToIdleWorker("Map", i, idleWorker.Worker, mr.nReduce, buffer, buffer)
 		}
 	}
 	<-mr.MapJobChannel
@@ -96,7 +97,7 @@ func (mr *MapReduce) RecieveWorkers() []*RegisterArgs {
 		worker.isIdle = true
 		workers = append(workers, worker)
 		info := &WorkerInfo{}
-		info.address = worker.Worker
+		info.Address = worker.Worker
 		//mr.Workers[worker.Worker] = info
 	}
 	return workers
@@ -144,6 +145,24 @@ func (mr *MapReduce) RunMaster() *list.List {
 		return 0, "", false
 	}
 
+	IsIdleWorker := func() bool {
+		for i := 0; i < len(mr.Workers); i++ {
+			if mr.Workers[i].IsIdle {
+				return true
+			}
+		}
+		return false
+	}
+
+	getAnIdleWorker := func() *WorkerInfo {
+		for i := 0; i < len(mr.Workers); i++ {
+			if mr.Workers[i].IsIdle {
+				return mr.Workers[i]
+			}
+		}
+		return nil
+	}
+
 	//completedMapJobs := make([]string, 0)
 	//completedReduceJobs := make([]string, 0)
 	mapSyncChannel := make(chan string, mr.nMap)
@@ -169,15 +188,44 @@ func (mr *MapReduce) RunMaster() *list.List {
 	for i := 0; i < mr.nMap; i++ {
 
 		select {
-		case worker := <-mr.registerChannel:
-			workers = append(workers, worker)
-			go mr.AssignJobToIdleWorker("Map", i, worker.Worker, mr.nReduce, mapSyncChannel, workerFailureChannel)
-		case mapJobDone := <-mr.MapJobChannel:
-			go mr.AssignJobToIdleWorker("Map", i, mapJobDone, mr.nReduce, mapSyncChannel, workerFailureChannel)
-		}
-		//put a select statement below to handle a failure ?
+		case newWorker := <-mr.registerChannel:
+			l := len(newWorker.Worker)
+			last, err := strconv.Atoi(newWorker.Worker[l-1 : l])
+			if err != nil {
+				myLogger("*********", "STR ERROR", "RunMaster()", "master.go")
+			}
+			worker := &WorkerInfo{}
+			worker.Address = newWorker.Worker
+			worker.IsIdle = true
+			worker.Number = last
+			myLogger("&&&&&&&&&&&&&&&WNUMBER&&&&&&&&&&&&&&&&&&&&&&", strconv.Itoa(worker.Number), "RunMaster()", "master.go")
+			mr.Workers[worker.Number] = worker
+			workers = append(workers, newWorker)
+			//go mr.AssignJobToIdleWorker("Map", i, newWorker.Worker, mr.nReduce, mapSyncChannel, workerFailureChannel)
 
+		default:
+			myLogger("-", "no registration", "RunMaster()", "master.go")
+		}
+
+		if IsIdleWorker() {
+			worker := getAnIdleWorker()
+			go mr.AssignJobToIdleWorker("Map", i, worker.Address, mr.nReduce, mapSyncChannel, workerFailureChannel)
+			myLogger("iiiiiiiiiii", "I AM IDLE ", "RunMaster()", "master.go")
+		} else {
+			myLogger("nininiiniinininininin", "I AM NOT IDLE ", "RunMaster()", "master.go")
+		}
+
+		select {
+		case mapJobDone := <-mr.MapJobChannel:
+			worker := &WorkerInfo{}
+			worker.Address = mapJobDone.Worker
+			worker.Number = mapJobDone.JobNumber
+			worker.IsIdle = true
+			mr.Workers[worker.Number] = worker
+			//go mr.AssignJobToIdleWorker("Map", i, worker.Address, mr.nReduce, mapSyncChannel, workerFailureChannel)
+		}
 	}
+
 	<-mr.MapJobChannel
 
 	for i := 0; i < len(workers); i++ {

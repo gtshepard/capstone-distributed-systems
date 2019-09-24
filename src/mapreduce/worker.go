@@ -95,6 +95,7 @@ func RunWorker(MasterAddress string, me string,
 	MapFunc func(string) *list.List,
 	ReduceFunc func(string, *list.List) string, nRPC int) {
 	DPrintf("RunWorker %s\n", me)
+	myLogger("-------WNUMBER-------", me, "RunMaster()", "master.go")
 	//make new worker and give it the values it needs
 	wk := new(Worker)
 	wk.name = me
