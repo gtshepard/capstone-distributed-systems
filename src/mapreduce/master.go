@@ -4,6 +4,7 @@ import (
 	"container/list"
 	"fmt"
 	"strconv"
+	"time"
 )
 
 type WorkerInfo struct {
@@ -48,7 +49,7 @@ func (mr *MapReduce) AssignJobToIdleWorker(job JobType, jobNumber int, worker st
 		args.DidFail = false
 		f <- args
 	} else {
-		myLogger("RM-10", "RPC call to worker failed", "RunMaster()", "master.go")
+		myLogger("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", "RPC call to worker failed", "RunMaster()", "master.go")
 		args.DidFail = true
 		f <- args
 	}
@@ -131,7 +132,6 @@ func (mr *MapReduce) RunMaster() *list.List {
 	// mr.MakeAllWorkersIdle(workers)
 	// mr.DistributedReduce(workers, reduceSyncChannel)
 	//register workers and set them to idle
-	myLogger("RM-1", "START OF TEST", "RunMaster()", "master.go")
 	var workers []*RegisterArgs
 
 	//find an idle worker
@@ -147,111 +147,121 @@ func (mr *MapReduce) RunMaster() *list.List {
 		return 0, "", false
 	}
 
-	//completedMapJobs := make([]string, 0)
-	//completedReduceJobs := make([]string, 0)
 	mapSyncChannel := make(chan string, mr.nMap)
 	reduceSyncChannel := make(chan string, mr.nReduce)
 	mapWorkerFailureChannel := make(chan *DoJobArgs)
 	reduceWorkerFailureChannel := make(chan *DoJobArgs)
-	//var mapIdleWg sync.WaitGroup
-	//var mapNonIdleWg sync.WaitGroup
-	//schedule all M map jobs
-	//jobs can only be scheduled on idle workers
-
-	//select {
-	// case worker := <-mr.registerChannel:
-	//  worker.isIdle = true
-	//  myLogger("RM-2", "register worker: "+worker.Worker, "RunMaster() - register-worker", "master.go")
-	//  workers = append(workers, worker)
-	//  info := &WorkerInfo{}
-	//  info.address = worker.Worker
-	//  mr.Workers[worker.Worker] = info
-	// default:
-	//  myLogger("RM-2", "FAIL TO REGISTER", "RunMaster() - register-worker", "master.go")
-	// }
-
+	j := 0
+	k := 0
+	l := 0
+	m := 0
+	n := 0
+	o := 0
 	for i := 0; i < mr.nMap; i++ {
 		select {
 		case worker := <-mr.registerChannel:
+			j++
 			workers = append(workers, worker)
 			go mr.AssignJobToIdleWorker("Map", i, worker.Worker, mr.nReduce, mapSyncChannel, mapWorkerFailureChannel)
 			//cant wait for response here becuase its too soon for a go routine to have made the RPC callvoulf do a
+			myLogger("DEBUG: ", "j = "+strconv.Itoa(j), "RunMaster()", "master.go")
 		default:
+			k++
 			mapJobDone := <-mr.MapJobChannel
-			//workerHealthStatus := <-mapWorkerFailureChannel
-			//  if workerHealthStatus.DidFail { // rpc failed
-			//      myLogger("INSIDE FAILURE CALL", "START OF TEST", "RunMaster()", "master.go")
-			//      go mr.AssignJobToIdleWorker("Map", workerHealthStatus.JobNumber, mapJobDone, mr.nReduce, mapSyncChannel, mapWorkerFailureChannel)
-			//  idleWorker := <-mr.MapJobChannel
-			//  go mr.AssignJobToIdleWorker("Map", i, idleWorker, mr.nReduce, mapSyncChannel, mapWorkerFailureChannel)
-
-			//  } else {
 			go mr.AssignJobToIdleWorker("Map", i, mapJobDone.Worker, mr.nReduce, mapSyncChannel, mapWorkerFailureChannel)
-			//}
-			//if failed
-			// reschedule
-			// then shceudle this iterations job
-			// else
+			myLogger("DEBUG: ", "k = "+strconv.Itoa(k), "RunMaster()", "master.go")
 		}
 		select {
 		case workerHealthStatus := <-mapWorkerFailureChannel:
+			l++
+			myLogger("DEBUG: ", "l = "+strconv.Itoa(l), "RunMaster()", "master.go")
 			if workerHealthStatus.DidFail {
+				m++ //never called
 				mapJobDone := <-mr.MapJobChannel
 				go mr.AssignJobToIdleWorker("Map", workerHealthStatus.JobNumber, mapJobDone.Worker, mr.nReduce, mapSyncChannel, mapWorkerFailureChannel)
+				myLogger("DEBUG: ", "m = "+strconv.Itoa(m), "RunMaster()", "master.go")
 				myLogger("&&&&&&&&&&&___________&&&&&&&&&&&&", "HEALTH STATUS - WORKER FAIL - JOB: "+strconv.Itoa(workerHealthStatus.JobNumber), workerHealthStatus.Worker, "master.go")
 			} else {
-
+				n++
 				free := <-mr.MapJobChannel
 				go mr.AssignJobToIdleWorker("Map", i, free.Worker, mr.nReduce, mapSyncChannel, mapWorkerFailureChannel)
+				myLogger("DEBUG: ", "n = "+strconv.Itoa(n), "RunMaster()", "master.go")
 				myLogger("@@@@@@@@@@@@@@@@@@@@@@@@", "HEALTH STATUS - WORKER HEALTHY - JOB: "+strconv.Itoa(workerHealthStatus.JobNumber), workerHealthStatus.Worker, "master.go")
 			}
 		default:
+			o++
+			myLogger("DEBUG: ", "o = "+strconv.Itoa(o), "RunMaster()", "master.go")
 			myLogger("~~~~~~~~~~~~~~~~", "NO HEALTH STATUS MESSAGE", "RunMaster()", "master.go")
-
+			mapJobDone := <-mr.MapJobChannel
+			go mr.AssignJobToIdleWorker("Map", i, mapJobDone.Worker, mr.nReduce, mapSyncChannel, mapWorkerFailureChannel)
 		}
 
 	}
+
 	<-mr.MapJobChannel
 
 	for i := 0; i < len(workers); i++ {
 		workers[i].isIdle = true
 	}
-
+	p := 0
+	q := 0
+	r := 0
+	s := 0
+	t := 0
+	u := 0
+	v := 0
+	w := 0
+	x := 0
+	y := 0
 	for i := 0; i < mr.nReduce; i++ {
 		select {
 		case worker := <-mr.registerChannel:
-
+			p++
 			workers = append(workers, worker)
 			go mr.AssignJobToIdleWorker("Reduce", i, worker.Worker, mr.nMap, reduceSyncChannel, reduceWorkerFailureChannel)
-
+			myLogger("DEBUG: ", "p = "+strconv.Itoa(p), "RunMaster()", "master.go")
 		default:
+			q++
+			myLogger("DEBUG: ", "q = "+strconv.Itoa(q), "RunMaster()", "master.go")
 			index, workerName, isAvailibleWorker := getIdleWorker(workers)
 			if isAvailibleWorker {
+				r++
 				workers[index].isIdle = false
 				go mr.AssignJobToIdleWorker("Reduce", i, workerName, mr.nMap, reduceSyncChannel, reduceWorkerFailureChannel)
+				myLogger("DEBUG: ", "r = "+strconv.Itoa(r), "RunMaster()", "master.go")
 			} else {
+				s++
 				reduceJobDone := <-mr.ReduceJobChannel
 				go mr.AssignJobToIdleWorker("Reduce", i, reduceJobDone.Worker, mr.nMap, reduceSyncChannel, reduceWorkerFailureChannel)
+				myLogger("DEBUG: ", "s = "+strconv.Itoa(s), "RunMaster()", "master.go")
 			}
 		}
 
 		select {
 		case workerHealthStatus := <-reduceWorkerFailureChannel:
+			t++
+			myLogger("DEBUG: ", "t = "+strconv.Itoa(t), "RunMaster()", "master.go")
 			if workerHealthStatus.DidFail {
 				reduceJobDone := <-mr.ReduceJobChannel
+				u++ // never called (tests fault)
 				go mr.AssignJobToIdleWorker("Reduce", workerHealthStatus.JobNumber, reduceJobDone.Worker, mr.nMap, reduceSyncChannel, reduceWorkerFailureChannel)
+				myLogger("DEBUG: ", "u = "+strconv.Itoa(u), "RunMaster()", "master.go")
 				myLogger("&&&&&&&&&&&___________&&&&&&&&&&&&", "R-HEALTH STATUS - WORKER FAIL"+strconv.Itoa(workerHealthStatus.JobNumber), "RunMaster()", "master.go")
 
 			} else {
 
-				index, workerName, isAvailibleWorker := getIdleWorker(workers)
-				if isAvailibleWorker {
-					workers[index].isIdle = false
-					go mr.AssignJobToIdleWorker("Reduce", i, workerName, mr.nMap, reduceSyncChannel, reduceWorkerFailureChannel)
-				} else {
-					free := <-mr.ReduceJobChannel
-					go mr.AssignJobToIdleWorker("Reduce", i, free.Worker, mr.nMap, reduceSyncChannel, reduceWorkerFailureChannel)
-				}
+				// index, workerName, isAvailibleWorker := getIdleWorker(workers)
+				// if isAvailibleWorker {
+				// 	w++ // never called
+				// 	workers[index].isIdle = false
+				// 	go mr.AssignJobToIdleWorker("Reduce", i, workerName, mr.nMap, reduceSyncChannel, reduceWorkerFailureChannel)
+				// 	myLogger("DEBUG: ", "w = "+strconv.Itoa(w), "RunMaster()", "master.go")
+				// } else {
+				v++
+				free := <-mr.ReduceJobChannel
+				go mr.AssignJobToIdleWorker("Reduce", i, free.Worker, mr.nMap, reduceSyncChannel, reduceWorkerFailureChannel)
+				myLogger("DEBUG: ", "v = "+strconv.Itoa(v), "RunMaster()", "master.go")
+				//}
 
 			}
 		default:
@@ -259,16 +269,38 @@ func (mr *MapReduce) RunMaster() *list.List {
 
 			index, workerName, isAvailibleWorker := getIdleWorker(workers)
 			if isAvailibleWorker {
+				x++
 				workers[index].isIdle = false
 				go mr.AssignJobToIdleWorker("Reduce", i, workerName, mr.nMap, reduceSyncChannel, reduceWorkerFailureChannel)
+				myLogger("DEBUG: ", "x = "+strconv.Itoa(x), "RunMaster()", "master.go")
 			} else {
+				y++
 				free := <-mr.ReduceJobChannel
 				go mr.AssignJobToIdleWorker("Reduce", i, free.Worker, mr.nMap, reduceSyncChannel, reduceWorkerFailureChannel)
+				myLogger("DEBUG: ", "y = "+strconv.Itoa(y), "RunMaster()", "master.go")
 			}
 		}
 	}
 	<-mr.ReduceJobChannel
-
+	//map
+	myLogger("DEBUG: ", "j = "+strconv.Itoa(j), "RunMaster()", "master.go")
+	myLogger("DEBUG: ", "k = "+strconv.Itoa(k), "RunMaster()", "master.go")
+	myLogger("DEBUG: ", "l = "+strconv.Itoa(l), "RunMaster()", "master.go")
+	myLogger("DEBUG: ", "m = "+strconv.Itoa(m), "RunMaster()", "master.go")
+	myLogger("DEBUG: ", "n = "+strconv.Itoa(n), "RunMaster()", "master.go")
+	myLogger("DEBUG: ", "o = "+strconv.Itoa(o), "RunMaster()", "master.go")
+	//reduce
+	myLogger("DEBUG: ", "p = "+strconv.Itoa(p), "RunMaster()", "master.go")
+	myLogger("DEBUG: ", "q = "+strconv.Itoa(q), "RunMaster()", "master.go")
+	myLogger("DEBUG: ", "r = "+strconv.Itoa(r), "RunMaster()", "master.go")
+	myLogger("DEBUG: ", "s = "+strconv.Itoa(s), "RunMaster()", "master.go")
+	myLogger("DEBUG: ", "t = "+strconv.Itoa(t), "RunMaster()", "master.go")
+	myLogger("DEBUG: ", "u = "+strconv.Itoa(u), "RunMaster()", "master.go")
+	myLogger("DEBUG: ", "v = "+strconv.Itoa(v), "RunMaster()", "master.go")
+	myLogger("DEBUG: ", "w = "+strconv.Itoa(w), "RunMaster()", "master.go")
+	myLogger("DEBUG: ", "x = "+strconv.Itoa(x), "RunMaster()", "master.go")
+	myLogger("DEBUG: ", "y = "+strconv.Itoa(y), "RunMaster()", "master.go")
+	time.Sleep(2 * time.Second)
 	mr.Merge()
 	return mr.KillWorkers()
 }
