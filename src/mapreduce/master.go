@@ -31,7 +31,7 @@ func (mr *MapReduce) KillWorkers() *list.List {
 	return l
 }
 
-func (mr *MapReduce) AssignJobToIdleWorker(job JobType, jobNumber int, worker string, otherPhase int, c chan string, f chan string) {
+func (mr *MapReduce) AssignJobToIdleWorker(job JobType, jobNumber int, worker string, otherPhase int, c chan string, f chan *DoJobArgs) {
 
 	var reply *DoJobReply
 	args := &DoJobArgs{}
@@ -45,10 +45,12 @@ func (mr *MapReduce) AssignJobToIdleWorker(job JobType, jobNumber int, worker st
 
 	if ok {
 		myLogger("*****************************", "Successful RPC call to worker", "RunMaster()", "master.go")
-		//f <- "PIZZA"
+		args.DidFail = false
+		f <- args
 	} else {
 		myLogger("RM-10", "RPC call to worker failed", "RunMaster()", "master.go")
-		f <- "PIZZA"
+		args.DidFail = true
+		f <- args
 	}
 	c <- worker
 }
@@ -62,33 +64,33 @@ func (mr *MapReduce) getIdleWorker(workers []*RegisterArgs) (int, string, bool) 
 	return 0, "", false
 }
 
-func (mr *MapReduce) DistributedMap(workers []*RegisterArgs, buffer chan string) {
-	for i := 0; i < mr.nMap; i++ {
-		index, workerName, isAvailibleWorker := mr.getIdleWorker(workers)
-		if isAvailibleWorker {
-			workers[index].isIdle = false
-			go mr.AssignJobToIdleWorker("Map", i, workerName, mr.nReduce, buffer, buffer)
-		} else {
-			idleWorker := <-mr.MapJobChannel
-			go mr.AssignJobToIdleWorker("Map", i, idleWorker.Worker, mr.nReduce, buffer, buffer)
-		}
-	}
-	<-mr.MapJobChannel
-}
+// func (mr *MapReduce) DistributedMap(workers []*RegisterArgs, buffer chan string) {
+// 	for i := 0; i < mr.nMap; i++ {
+// 		index, workerName, isAvailibleWorker := mr.getIdleWorker(workers)
+// 		if isAvailibleWorker {
+// 			workers[index].isIdle = false
+// 			go mr.AssignJobToIdleWorker("Map", i, workerName, mr.nReduce, buffer, buffer)
+// 		} else {
+// 			idleWorker := <-mr.MapJobChannel
+// 			go mr.AssignJobToIdleWorker("Map", i, idleWorker.Worker, mr.nReduce, buffer, buffer)
+// 		}
+// 	}
+// 	<-mr.MapJobChannel
+// }
 
-func (mr *MapReduce) DistributedReduce(workers []*RegisterArgs, buffer chan string) {
-	for i := 0; i < mr.nReduce; i++ {
-		index, workerName, isAvailibleWorker := mr.getIdleWorker(workers)
-		if isAvailibleWorker {
-			workers[index].isIdle = false
-			go mr.AssignJobToIdleWorker("Reduce", i, workerName, mr.nMap, buffer, buffer)
-		} else {
-			idleWorker := <-mr.ReduceJobChannel
-			go mr.AssignJobToIdleWorker("Reduce", i, idleWorker, mr.nMap, buffer, buffer)
-		}
-	}
-	<-mr.ReduceJobChannel
-}
+// func (mr *MapReduce) DistributedReduce(workers []*RegisterArgs, buffer chan string) {
+// 	for i := 0; i < mr.nReduce; i++ {
+// 		index, workerName, isAvailibleWorker := mr.getIdleWorker(workers)
+// 		if isAvailibleWorker {
+// 			workers[index].isIdle = false
+// 			go mr.AssignJobToIdleWorker("Reduce", i, workerName, mr.nMap, buffer, buffer)
+// 		} else {
+// 			idleWorker := <-mr.ReduceJobChannel
+// 			go mr.AssignJobToIdleWorker("Reduce", i, idleWorker, mr.nMap, buffer, buffer)
+// 		}
+// 	}
+// 	<-mr.ReduceJobChannel
+// }
 func (mr *MapReduce) RecieveWorkers() []*RegisterArgs {
 	var workers []*RegisterArgs
 
@@ -145,29 +147,12 @@ func (mr *MapReduce) RunMaster() *list.List {
 		return 0, "", false
 	}
 
-	IsIdleWorker := func() bool {
-		for i := 0; i < len(mr.Workers); i++ {
-			if mr.Workers[i].IsIdle {
-				return true
-			}
-		}
-		return false
-	}
-
-	getAnIdleWorker := func() *WorkerInfo {
-		for i := 0; i < len(mr.Workers); i++ {
-			if mr.Workers[i].IsIdle {
-				return mr.Workers[i]
-			}
-		}
-		return nil
-	}
-
 	//completedMapJobs := make([]string, 0)
 	//completedReduceJobs := make([]string, 0)
 	mapSyncChannel := make(chan string, mr.nMap)
 	reduceSyncChannel := make(chan string, mr.nReduce)
-	workerFailureChannel := make(chan string)
+	mapWorkerFailureChannel := make(chan *DoJobArgs)
+	reduceWorkerFailureChannel := make(chan *DoJobArgs)
 	//var mapIdleWg sync.WaitGroup
 	//var mapNonIdleWg sync.WaitGroup
 	//schedule all M map jobs
@@ -186,46 +171,46 @@ func (mr *MapReduce) RunMaster() *list.List {
 	// }
 
 	for i := 0; i < mr.nMap; i++ {
-
 		select {
-		case newWorker := <-mr.registerChannel:
-			l := len(newWorker.Worker)
-			last, err := strconv.Atoi(newWorker.Worker[l-1 : l])
-			if err != nil {
-				myLogger("*********", "STR ERROR", "RunMaster()", "master.go")
-			}
-			worker := &WorkerInfo{}
-			worker.Address = newWorker.Worker
-			worker.IsIdle = true
-			worker.Number = last
-			myLogger("&&&&&&&&&&&&&&&WNUMBER&&&&&&&&&&&&&&&&&&&&&&", strconv.Itoa(worker.Number), "RunMaster()", "master.go")
-			mr.Workers[worker.Number] = worker
-			workers = append(workers, newWorker)
-			//go mr.AssignJobToIdleWorker("Map", i, newWorker.Worker, mr.nReduce, mapSyncChannel, workerFailureChannel)
-
+		case worker := <-mr.registerChannel:
+			workers = append(workers, worker)
+			go mr.AssignJobToIdleWorker("Map", i, worker.Worker, mr.nReduce, mapSyncChannel, mapWorkerFailureChannel)
+			//cant wait for response here becuase its too soon for a go routine to have made the RPC callvoulf do a
 		default:
-			myLogger("-", "no registration", "RunMaster()", "master.go")
-		}
+			mapJobDone := <-mr.MapJobChannel
+			//workerHealthStatus := <-mapWorkerFailureChannel
+			//  if workerHealthStatus.DidFail { // rpc failed
+			//      myLogger("INSIDE FAILURE CALL", "START OF TEST", "RunMaster()", "master.go")
+			//      go mr.AssignJobToIdleWorker("Map", workerHealthStatus.JobNumber, mapJobDone, mr.nReduce, mapSyncChannel, mapWorkerFailureChannel)
+			//  idleWorker := <-mr.MapJobChannel
+			//  go mr.AssignJobToIdleWorker("Map", i, idleWorker, mr.nReduce, mapSyncChannel, mapWorkerFailureChannel)
 
-		if IsIdleWorker() {
-			worker := getAnIdleWorker()
-			go mr.AssignJobToIdleWorker("Map", i, worker.Address, mr.nReduce, mapSyncChannel, workerFailureChannel)
-			myLogger("iiiiiiiiiii", "I AM IDLE ", "RunMaster()", "master.go")
-		} else {
-			myLogger("nininiiniinininininin", "I AM NOT IDLE ", "RunMaster()", "master.go")
+			//  } else {
+			go mr.AssignJobToIdleWorker("Map", i, mapJobDone.Worker, mr.nReduce, mapSyncChannel, mapWorkerFailureChannel)
+			//}
+			//if failed
+			// reschedule
+			// then shceudle this iterations job
+			// else
 		}
-
 		select {
-		case mapJobDone := <-mr.MapJobChannel:
-			worker := &WorkerInfo{}
-			worker.Address = mapJobDone.Worker
-			worker.Number = mapJobDone.JobNumber
-			worker.IsIdle = true
-			mr.Workers[worker.Number] = worker
-			//go mr.AssignJobToIdleWorker("Map", i, worker.Address, mr.nReduce, mapSyncChannel, workerFailureChannel)
-		}
-	}
+		case workerHealthStatus := <-mapWorkerFailureChannel:
+			if workerHealthStatus.DidFail {
+				mapJobDone := <-mr.MapJobChannel
+				go mr.AssignJobToIdleWorker("Map", workerHealthStatus.JobNumber, mapJobDone.Worker, mr.nReduce, mapSyncChannel, mapWorkerFailureChannel)
+				myLogger("&&&&&&&&&&&___________&&&&&&&&&&&&", "HEALTH STATUS - WORKER FAIL - JOB: "+strconv.Itoa(workerHealthStatus.JobNumber), workerHealthStatus.Worker, "master.go")
+			} else {
 
+				free := <-mr.MapJobChannel
+				go mr.AssignJobToIdleWorker("Map", i, free.Worker, mr.nReduce, mapSyncChannel, mapWorkerFailureChannel)
+				myLogger("@@@@@@@@@@@@@@@@@@@@@@@@", "HEALTH STATUS - WORKER HEALTHY - JOB: "+strconv.Itoa(workerHealthStatus.JobNumber), workerHealthStatus.Worker, "master.go")
+			}
+		default:
+			myLogger("~~~~~~~~~~~~~~~~", "NO HEALTH STATUS MESSAGE", "RunMaster()", "master.go")
+
+		}
+
+	}
 	<-mr.MapJobChannel
 
 	for i := 0; i < len(workers); i++ {
@@ -233,20 +218,52 @@ func (mr *MapReduce) RunMaster() *list.List {
 	}
 
 	for i := 0; i < mr.nReduce; i++ {
-
 		select {
 		case worker := <-mr.registerChannel:
+
 			workers = append(workers, worker)
-			go mr.AssignJobToIdleWorker("Reduce", i, worker.Worker, mr.nMap, reduceSyncChannel, workerFailureChannel)
+			go mr.AssignJobToIdleWorker("Reduce", i, worker.Worker, mr.nMap, reduceSyncChannel, reduceWorkerFailureChannel)
 
 		default:
 			index, workerName, isAvailibleWorker := getIdleWorker(workers)
 			if isAvailibleWorker {
 				workers[index].isIdle = false
-				go mr.AssignJobToIdleWorker("Reduce", i, workerName, mr.nMap, reduceSyncChannel, workerFailureChannel)
+				go mr.AssignJobToIdleWorker("Reduce", i, workerName, mr.nMap, reduceSyncChannel, reduceWorkerFailureChannel)
 			} else {
 				reduceJobDone := <-mr.ReduceJobChannel
-				go mr.AssignJobToIdleWorker("Reduce", i, reduceJobDone, mr.nMap, reduceSyncChannel, workerFailureChannel)
+				go mr.AssignJobToIdleWorker("Reduce", i, reduceJobDone.Worker, mr.nMap, reduceSyncChannel, reduceWorkerFailureChannel)
+			}
+		}
+
+		select {
+		case workerHealthStatus := <-reduceWorkerFailureChannel:
+			if workerHealthStatus.DidFail {
+				reduceJobDone := <-mr.ReduceJobChannel
+				go mr.AssignJobToIdleWorker("Reduce", workerHealthStatus.JobNumber, reduceJobDone.Worker, mr.nMap, reduceSyncChannel, reduceWorkerFailureChannel)
+				myLogger("&&&&&&&&&&&___________&&&&&&&&&&&&", "R-HEALTH STATUS - WORKER FAIL"+strconv.Itoa(workerHealthStatus.JobNumber), "RunMaster()", "master.go")
+
+			} else {
+
+				index, workerName, isAvailibleWorker := getIdleWorker(workers)
+				if isAvailibleWorker {
+					workers[index].isIdle = false
+					go mr.AssignJobToIdleWorker("Reduce", i, workerName, mr.nMap, reduceSyncChannel, reduceWorkerFailureChannel)
+				} else {
+					free := <-mr.ReduceJobChannel
+					go mr.AssignJobToIdleWorker("Reduce", i, free.Worker, mr.nMap, reduceSyncChannel, reduceWorkerFailureChannel)
+				}
+
+			}
+		default:
+			myLogger("~~~~~~~~~~~~~~~~", "R-NO HEALTH STATUS MESSAGE", "RunMaster()", "master.go")
+
+			index, workerName, isAvailibleWorker := getIdleWorker(workers)
+			if isAvailibleWorker {
+				workers[index].isIdle = false
+				go mr.AssignJobToIdleWorker("Reduce", i, workerName, mr.nMap, reduceSyncChannel, reduceWorkerFailureChannel)
+			} else {
+				free := <-mr.ReduceJobChannel
+				go mr.AssignJobToIdleWorker("Reduce", i, free.Worker, mr.nMap, reduceSyncChannel, reduceWorkerFailureChannel)
 			}
 		}
 	}

@@ -24,6 +24,7 @@ type DoJobArgs struct {
 	NumOtherPhase int // total number of jobs in other phase (map or reduce)
 	Master        string
 	Worker        string
+	DidFail       bool
 }
 
 type DoJobReply struct {
