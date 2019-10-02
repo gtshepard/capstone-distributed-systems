@@ -105,7 +105,7 @@ func Test1(t *testing.T) {
 			if view.Backup == ck2.me {
 				break
 			}
-			//wait 100ms (wait for ping to finish)
+			//severs send a  ping once per ping interval
 			time.Sleep(PingInterval)
 		}
 		//test assertion, is backup
@@ -128,7 +128,7 @@ func Test1(t *testing.T) {
 			if v.Primary == ck2.me && v.Backup == "" {
 				break
 			}
-			//wait for ping to complete
+			//severs send a  ping once per ping interval
 			time.Sleep(PingInterval)
 		}
 		//test assertion, backup did take over for primary
@@ -163,7 +163,7 @@ func Test1(t *testing.T) {
 			if v.Primary == ck2.me && v.Backup == ck1.me {
 				break
 			}
-			//wait for ping to complete
+			//severs send a  ping once per ping interval
 			time.Sleep(PingInterval)
 		}
 		//test assertion, restarted did become backup
@@ -200,7 +200,7 @@ func Test1(t *testing.T) {
 				break
 			}
 			vx = v
-			//wait for ping to complete
+			//severs send a  ping once per ping interval
 			time.Sleep(PingInterval)
 		}
 		//test assertion, back up did become primary and idle did become backup
@@ -237,7 +237,7 @@ func Test1(t *testing.T) {
 			if v.Primary != ck1.me {
 				break
 			}
-			//wait for ping to complete
+			//severs send a  ping once per ping interval
 			time.Sleep(PingInterval)
 		}
 		// get view information from view service
@@ -257,7 +257,7 @@ func Test1(t *testing.T) {
 			vx, _ := ck3.Get()
 			//ping view service (THIS MIGHT BE AN ACK)
 			ck3.Ping(vx.Viewnum)
-			//wait for ping to complete
+			//severs send a  ping once per ping interval
 			time.Sleep(PingInterval)
 		}
 		//get view info from view service
@@ -292,7 +292,7 @@ func Test1(t *testing.T) {
 			if v.Viewnum > vx.Viewnum {
 				break
 			}
-			//wait for ping to complete
+			//severs send a  ping once per ping interval
 			time.Sleep(PingInterval)
 		}
 		//test assertion, view service did wait for ACK
@@ -309,7 +309,7 @@ func Test1(t *testing.T) {
 			if v.Viewnum > vy.Viewnum {
 				break
 			}
-			//wait for ping to complete
+			//severs send a  ping once per ping interval
 			time.Sleep(PingInterval)
 		}
 		//test assseriton CK1 was not promoted
@@ -336,7 +336,7 @@ func Test1(t *testing.T) {
 			//2. informs view service of most recent view that k/v server knows about
 			//3. k/v server learns the newest view from the view service
 			ck3.Ping(v.Viewnum)
-			//wait for pings to complete
+			//severs send a  ping once per ping interval
 			time.Sleep(PingInterval)
 		}
 
