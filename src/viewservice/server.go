@@ -69,7 +69,7 @@ func (vs *ViewServer) Get(args *GetArgs, reply *GetReply) error {
 
 	// Your code here.
 	//retrieve the most current view
-
+	reply.View = vs.currentView
 	return nil
 }
 
