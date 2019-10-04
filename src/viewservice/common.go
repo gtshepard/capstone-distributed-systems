@@ -1,6 +1,10 @@
 package viewservice
 
-import "time"
+import (
+	"log"
+	"os"
+	"time"
+)
 
 //
 // This is a non-replicated view service for a simple
@@ -47,7 +51,6 @@ const PingInterval = time.Millisecond * 100
 // this many Ping RPCs in a row.
 const DeadPings = 5
 
-//
 // Ping(): called by a primary/backup server to tell the
 // view service it is alive, to indicate whether p/b server
 // has seen the latest view, and for p/b server to learn
@@ -56,7 +59,7 @@ const DeadPings = 5
 // If Viewnum is zero, the caller is signalling that it is
 // alive and could become backup if needed.
 //
-
+//ping args passed in an RPC call
 type PingArgs struct {
 	Me      string // "host:port"
 	Viewnum uint   // caller's notion of current view #
@@ -70,7 +73,6 @@ type PingReply struct {
 // Get(): fetch the current view, without volunteering
 // to be a server. mostly for clients of the p/b service,
 // and for testing.
-//
 
 type GetArgs struct {
 }
@@ -78,4 +80,15 @@ type GetArgs struct {
 //reponse from a Get()
 type GetReply struct {
 	View View
+}
+
+func myLogger(step string, msg string, call string, file string) {
+	f, err := os.OpenFile("testlogfile", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatalf("error opening file: %v", err)
+	}
+	defer f.Close()
+
+	log.SetOutput(f)
+	log.Println(step, ": ", msg, "-", call, "-", file)
 }

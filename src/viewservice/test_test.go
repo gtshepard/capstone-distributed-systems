@@ -70,23 +70,26 @@ func Test1(t *testing.T) {
 	fmt.Printf("Test: First primary ...\n")
 
 	for i := 0; i < DeadPings*2; i++ {
-		//primary should be elected. times out after 10 attempts
-		//kv server 1 restarted
+		// primary should be elected. times out after 10 attempts
+		// kv server 1 restarted
 		view, _ := ck1.Ping(0)
+
 		//verifies priamry has been elected
 		if view.Primary == ck1.me {
+			myLogger("T-Primary", "IS PRIMARY: "+ck1.me, "test1", "test_test.go")
 			break
 		}
-		//waits 100ms (wait for ping to finish)
+
+		//ping called once per ping interval
 		time.Sleep(PingInterval)
 	}
+
 	//test assertion, is primary
 	check(t, ck1, ck1.me, "", 1)
 	fmt.Printf("  ... Passed\n")
 
 	// very first backup
 	fmt.Printf("Test: First backup ...\n")
-
 	//explicitly define scope with code block
 	{
 		//get the primaries info for the check
