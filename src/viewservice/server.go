@@ -48,17 +48,16 @@ func (vs *ViewServer) Ping(args *PingArgs, reply *PingReply) error {
 
 	// Your code here.
 	srvMsg := &SrvMsg{}
-	//	srvMsg.timeStamp = time.Now()
+	srvMsg.timeStamp = time.Now()
 	srvMsg.name = args.Me
+
+	//send reply
 	reply.View = vs.currentView
+	//send message to Ticker thread
 	vs.ping <- srvMsg
 	vs.testCount += 1
 
-	//	clientMsg := <-vs.clientMsg
-	//	myLogger("2", "MSG: "+clientMsg.Primary, "Ping()", "ViewService.go")
-	//	reply.View = clientMsg
-
-	myLogger("3", "END: "+srvMsg.name, "Ping()", "ViewService.go")
+	myLogger("3", "END OF PING CALL"+srvMsg.name, "Ping()", "ViewService.go")
 	return nil
 }
 
@@ -83,17 +82,25 @@ func (vs *ViewServer) tick() {
 	// THIS FUCNTION IS GOOD FOR PERIODIC DECISISONS
 	// I.E to promote the backup, backup if the the view service has missed N pings (N = deadpings) from the primary
 	// this fucntion Tick is called once per pinginterval
-
+	myLogger("", "WAITING TO RECIEVE PING MSG", "Tick()", "ViewService.go")
 	srvMsg := <-vs.ping
-	myLogger("2", "result: "+srvMsg.name+"ping count: "+strconv.Itoa(vs.testCount), "Tick()", "ViewService.go")
+	//	myLogger("2", "ATTEMPT FIRST PRIMARY "+srvMsg.name+"ping count: "+strconv.Itoa(vs.testCount), "Tick()", "ViewService.go")
 	if vs.currentView.Primary == "" && len(vs.servers) == 0 {
 		vs.currentView.Primary = srvMsg.name
 		vs.servers[srvMsg.name] = srvMsg
 		myLogger("3", "Primary Elected: "+srvMsg.name, "Tick()", "ViewService.go")
-	} else {
-		myLogger("3", "No Election ", "Tick()", "ViewService.go")
+		myLogger("3", "MAP SIZE: "+strconv.Itoa(len(vs.servers)), "Tick()", "ViewService.go")
 	}
 
+	//myLogger("2", "ATTEMPT FIRST BACKUP : "+srvMsg.name+"ping count: "+strconv.Itoa(vs.testCount), "Tick()", "ViewService.go")
+
+	if vs.currentView.Backup == "" && len(vs.servers) == 1 {
+		if val, ok := vs.servers[srvMsg.name]; !ok {
+			vs.currentView.Backup = srvMsg.name
+			vs.servers[srvMsg.name] = srvMsg
+			myLogger("3", "FIRST BACKUP ELECTED : "+val.name, "Tick()", "ViewService.go")
+		}
+	}
 }
 
 //

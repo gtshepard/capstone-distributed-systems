@@ -76,7 +76,7 @@ func Test1(t *testing.T) {
 
 		//verifies priamry has been elected
 		if view.Primary == ck1.me {
-			myLogger("T-Primary", "IS PRIMARY: "+ck1.me, "test1", "test_test.go")
+			myLogger("FROM_TEST", "IS PRIMARY: "+ck1.me, "test1", "test_test.go")
 			break
 		}
 
@@ -87,11 +87,13 @@ func Test1(t *testing.T) {
 	//test assertion, is primary
 	check(t, ck1, ck1.me, "", 1)
 	fmt.Printf("  ... Passed\n")
+	myLogger("FROM_TEST", "...Passed First Primary ", "test1", "test_test.go")
 
 	// very first backup
 	fmt.Printf("Test: First backup ...\n")
 	//explicitly define scope with code block
 	{
+		myLogger("FROM_TEST", "Test: First Backup", "test1", "test_test.go")
 		//get the primaries info for the check
 		vx, _ := ck1.Get()
 		for i := 0; i < DeadPings*2; i++ {
