@@ -123,15 +123,14 @@ func Test1(t *testing.T) {
 	fmt.Printf("Test: Backup takes over if primary fails ...\n")
 
 	{
-		// view  number 2 this is the most recent view the k/v 1 server knows about
 		ck1.Ping(2)
-		// view  number 2 this is the most recent view the k/v 2 server knows about
-		//vx is latest view, (learns from the view service )
 		vx, _ := ck2.Ping(2)
 
 		for i := 0; i < DeadPings*2; i++ {
+			// ck1 will not send pings this entire time. our view service considers any server
+			// that fails to send a ping for N ping intervals where N = deadping constant to be
+			// have crashed.
 			v, _ := ck2.Ping(vx.Viewnum)
-			//the back up now will now be the primary. and there is no back up
 			if v.Primary == ck2.me && v.Backup == "" {
 				break
 			}
