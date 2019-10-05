@@ -96,8 +96,10 @@ func Test1(t *testing.T) {
 		myLogger("FROM_TEST", "Test: First Backup", "test1", "test_test.go")
 		//get the primaries info for the check
 		vx, _ := ck1.Get()
+
 		for i := 0; i < DeadPings*2; i++ {
 			//ping primary
+			myLogger("FROM_TEST", "Test: First Backup", "test1", "test_test.go")
 			ck1.Ping(1)
 			// back up should be elected. times out after 10 attempts
 			// k/v server 2 restarted.

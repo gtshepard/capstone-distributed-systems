@@ -86,6 +86,7 @@ func (vs *ViewServer) tick() {
 	srvMsg := <-vs.ping
 	//	myLogger("2", "ATTEMPT FIRST PRIMARY "+srvMsg.name+"ping count: "+strconv.Itoa(vs.testCount), "Tick()", "ViewService.go")
 	if vs.currentView.Primary == "" && len(vs.servers) == 0 {
+		//vs.currentView.Viewnum += 1
 		vs.currentView.Primary = srvMsg.name
 		vs.servers[srvMsg.name] = srvMsg
 		myLogger("3", "Primary Elected: "+srvMsg.name, "Tick()", "ViewService.go")
@@ -95,9 +96,18 @@ func (vs *ViewServer) tick() {
 	//myLogger("2", "ATTEMPT FIRST BACKUP : "+srvMsg.name+"ping count: "+strconv.Itoa(vs.testCount), "Tick()", "ViewService.go")
 
 	if vs.currentView.Backup == "" && len(vs.servers) == 1 {
+		myLogger("", "TRY BACKUP", "Tick()", "ViewService.go")
+		srvMsg := <-vs.ping
+		myLogger("", "SEND PING", "Tick()", "ViewService.go")
 		if val, ok := vs.servers[srvMsg.name]; !ok {
+			myLogger("", "GET BACKUP", "Tick()", "ViewService.go")
+			vs.currentView.Viewnum += 1
 			vs.currentView.Backup = srvMsg.name
+			myLogger("", "SET BACKUP", "Tick()", "ViewService.go")
 			vs.servers[srvMsg.name] = srvMsg
+			myLogger("", "BACKUP FINE BACKUP", "Tick()", "ViewService.go")
+			//myLogger("3", "FIRST BACKUP ELECTED : "+*(val).name, "Tick()", "ViewService.go")
+		} else {
 			myLogger("3", "FIRST BACKUP ELECTED : "+val.name, "Tick()", "ViewService.go")
 		}
 	}
