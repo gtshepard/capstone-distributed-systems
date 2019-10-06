@@ -138,9 +138,7 @@ func (vs *ViewServer) tick() {
 				vs.currentView.Backup = ""
 				//if backup not alive
 			}
-			// } else if key == vs.currentView.Backup {
-			//
-			// }
+
 			delete(vs.servers, key)
 		}
 	}

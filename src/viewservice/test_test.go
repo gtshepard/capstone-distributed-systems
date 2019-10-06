@@ -183,34 +183,22 @@ func Test1(t *testing.T) {
 	{
 		//reritve primary k/v view information
 		vx, _ := ck1.Get()
-		//ping the view view service, pings do 3 things
-		//1. inform the view service the that the k/v server is still alive
-		//2. inform the view service of the most recent view the k/v server knows about
-		//3. k/v server learns the  newest view from the view service
 		ck1.Ping(vx.Viewnum)
 
 		for i := 0; i < DeadPings*2; i++ {
-			//restart primary
+
 			ck1.Ping(0)
-
-			// backup sends ping to view service, pings do 3 things
-			// 1. inform the view service that the key value service is still alive
-			// 2. inform the view service of the most recent view the k/v server knows about
-			// 3. k/v server learns the newest view from the view service
 			ck3.Ping(vx.Viewnum)
-
-			//get view information from view service
 			v, _ := ck3.Get()
-			//ck1 is not longer primary, treated as dead.
+
 			if v.Primary != ck1.me {
 				break
 			}
-			//severs send a  ping once per ping interval
 			time.Sleep(PingInterval)
 		}
-		// get view information from view service
+
 		vy, _ := ck3.Get()
-		//test assertion CK3 did become primary
+
 		if vy.Primary != ck3.me {
 			t.Fatalf("expected primary=%v, got %v\n", ck3.me, vy.Primary)
 		}
@@ -225,7 +213,6 @@ func Test1(t *testing.T) {
 			vx, _ := ck3.Get()
 			//ping view service (THIS MIGHT BE AN ACK)
 			ck3.Ping(vx.Viewnum)
-			//severs send a  ping once per ping interval
 			time.Sleep(PingInterval)
 		}
 		//get view info from view service
@@ -236,8 +223,6 @@ func Test1(t *testing.T) {
 		}
 	}
 
-	// does viewserver wait for ack of previous view before
-	// starting the next one?
 	fmt.Printf("Test: Viewserver waits for primary to ack view ...\n")
 
 	{
@@ -246,13 +231,7 @@ func Test1(t *testing.T) {
 		vx, _ := ck1.Get()
 
 		for i := 0; i < DeadPings*3; i++ {
-			//back up resetarts or crashed
 			ck1.Ping(0)
-			//CK3 is primary
-			//pings do 3 things
-			//1. informs view service server is still alive
-			//2. informs view service of most recent view k/v server knows about
-			//3. k/v server learns the newest view from view service
 			ck3.Ping(vx.Viewnum)
 			//get view information from view service
 			v, _ := ck1.Get()
@@ -266,12 +245,11 @@ func Test1(t *testing.T) {
 		//test assertion, view service did wait for ACK
 		check(t, ck1, ck3.me, ck1.me, vx.Viewnum+1)
 		vy, _ := ck1.Get()
+
 		// ck3 is the primary, but it never acked.
 		// let ck3 die. check that ck1 is not promoted.
 		for i := 0; i < DeadPings*3; i++ {
-			//pings do 3 things
-			//1. informs view service that server is still alive
-			//2. informs view service of the most recent view k/v server knows about
+
 			v, _ := ck1.Ping(vy.Viewnum)
 			//if CK1 is promoted break (we do not want it to be )
 			if v.Viewnum > vy.Viewnum {
@@ -280,7 +258,6 @@ func Test1(t *testing.T) {
 			//severs send a  ping once per ping interval
 			time.Sleep(PingInterval)
 		}
-		//test assseriton CK1 was not promoted
 		check(t, ck2, ck3.me, ck1.me, vy.Viewnum)
 	}
 	fmt.Printf("  ... Passed\n")
