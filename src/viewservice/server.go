@@ -86,8 +86,6 @@ func (vs *ViewServer) tick() {
 	// this fucntion Tick is called once per pinginterval
 
 	srvMsg := <-vs.ping
-
-	//update ttl for each server
 	for key := range vs.servers {
 		vs.servers[key].ttl -= 1
 		ttl := strconv.Itoa(vs.servers[key].ttl)
@@ -98,7 +96,7 @@ func (vs *ViewServer) tick() {
 
 		vs.currentView.Primary = srvMsg.name
 		vs.servers[srvMsg.name] = srvMsg
-		//vs.servers[srvMsg.name].ttl = DeadPings
+		vs.servers[srvMsg.name].ttl = DeadPings
 		vs.isFirstElection = false
 		myLogger("", "ELECTED FIRST PRIMARY", "Tick()", "ViewService.go")
 		//myLogger("3", "Primary Elected: "+srvMsg.name, "Tick()", "ViewService.go")
@@ -110,21 +108,25 @@ func (vs *ViewServer) tick() {
 			vs.currentView.Viewnum += 1
 			vs.currentView.Backup = srvMsg.name
 			vs.servers[srvMsg.name] = srvMsg
-			//vs.servers[srvMsg.name].ttl = DeadPings
+			vs.servers[srvMsg.name].ttl = DeadPings
 			myLogger("", "ELECTED BACKUP: "+srvMsg.name, "Tick()", "ViewService.go")
 		}
 		//what other case activates this
 		//restart with idle server
 
+	} else if srvMsg.name == vs.currentView.Primary && srvMsg.oldViewNum < uint(1) {
+		myLogger("", "PRIMARY RESTART "+srvMsg.name, "Tick()", "ViewService.go")
+		//treat primary restart as dead
+		vs.servers[srvMsg.name].ttl = 0
 	} else {
-		//myLogger("NO ELECTIONS", "", "Tick()", "ViewService.go")
+
 		vs.servers[srvMsg.name] = srvMsg
-		//vs.servers[srvMsg.name].ttl = DeadPings
+		vs.servers[srvMsg.name].ttl = DeadPings
 		dp := strconv.Itoa(DeadPings)
 		myLogger("3", "RESTORE TTL  : "+srvMsg.name+":"+dp, "Tick()", "ViewService.go")
 	}
 	//reset TTL for pinging SRV
-	vs.servers[srvMsg.name].ttl = DeadPings
+
 	//promote back up and prune dead servers
 	for key := range vs.servers {
 		if vs.servers[key].ttl <= 0 {
