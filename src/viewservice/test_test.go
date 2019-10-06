@@ -174,7 +174,7 @@ func Test1(t *testing.T) {
 		check(t, ck1, ck1.me, ck3.me, vx.Viewnum+1)
 	}
 	fmt.Printf("  ... Passed\n")
-	myLogger("FROM_TEST", "...Passed Idle Server Takes over if Backup Fails ", "test1", "test_test.go")
+	myLogger("FROM_TEST", "...Passed Idle Server Takes over if Primary Fails ", "test1", "test_test.go")
 
 	// kill and immediately restart the primary -- does viewservice
 	// conclude primary is down even though it's pinging?

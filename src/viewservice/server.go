@@ -86,6 +86,7 @@ func (vs *ViewServer) tick() {
 	// this fucntion Tick is called once per pinginterval
 
 	srvMsg := <-vs.ping
+
 	//update ttl for each server
 	for key := range vs.servers {
 		vs.servers[key].ttl -= 1
@@ -97,7 +98,7 @@ func (vs *ViewServer) tick() {
 
 		vs.currentView.Primary = srvMsg.name
 		vs.servers[srvMsg.name] = srvMsg
-		vs.servers[srvMsg.name].ttl = DeadPings
+		//vs.servers[srvMsg.name].ttl = DeadPings
 		vs.isFirstElection = false
 		myLogger("", "ELECTED FIRST PRIMARY", "Tick()", "ViewService.go")
 		//myLogger("3", "Primary Elected: "+srvMsg.name, "Tick()", "ViewService.go")
@@ -105,31 +106,25 @@ func (vs *ViewServer) tick() {
 
 	} else if vs.currentView.Backup == "" && srvMsg.oldViewNum < uint(1) {
 
-		// if val, ok := vs.servers[srvMsg.name]; !ok {
-		// 	//myLogger("", "GET BACKUP", "Tick()", "ViewService.go")
-		// 	vs.currentView.Viewnum += 1
-		// 	vs.currentView.Backup = srvMsg.name
-		// 	vs.servers[srvMsg.name] = srvMsg
-		// 	vs.servers[srvMsg.name].ttl = DeadPings
-
-		// } else {
-		// 	myLogger("3", "NOT ADDED NO REDUNDANT BACKUPS : "+val.name, "Tick()", "ViewService.go")
-		// }
 		if srvMsg.name != vs.currentView.Primary {
 			vs.currentView.Viewnum += 1
 			vs.currentView.Backup = srvMsg.name
 			vs.servers[srvMsg.name] = srvMsg
-			vs.servers[srvMsg.name].ttl = DeadPings
+			//vs.servers[srvMsg.name].ttl = DeadPings
+			myLogger("", "ELECTED BACKUP: "+srvMsg.name, "Tick()", "ViewService.go")
 		}
+		//what other case activates this
+		//restart with idle server
 
 	} else {
 		//myLogger("NO ELECTIONS", "", "Tick()", "ViewService.go")
 		vs.servers[srvMsg.name] = srvMsg
-		vs.servers[srvMsg.name].ttl = DeadPings
+		//vs.servers[srvMsg.name].ttl = DeadPings
 		dp := strconv.Itoa(DeadPings)
 		myLogger("3", "RESTORE TTL  : "+srvMsg.name+":"+dp, "Tick()", "ViewService.go")
 	}
-
+	//reset TTL for pinging SRV
+	vs.servers[srvMsg.name].ttl = DeadPings
 	//promote back up and prune dead servers
 	for key := range vs.servers {
 		if vs.servers[key].ttl <= 0 {
