@@ -70,56 +70,42 @@ func Test1(t *testing.T) {
 	fmt.Printf("Test: First primary ...\n")
 
 	for i := 0; i < DeadPings*2; i++ {
-		// primary should be elected. times out after 10 attempts
-		// kv server 1 restarted
+
 		view, _ := ck1.Ping(0)
 
-		//verifies priamry has been elected
 		if view.Primary == ck1.me {
-			myLogger("FROM_TEST", "IS PRIMARY: "+ck1.me, "test1", "test_test.go")
+
 			break
 		}
-
-		//ping called once per ping interval
 		time.Sleep(PingInterval)
 	}
 
-	//test assertion, is primary
 	check(t, ck1, ck1.me, "", 1)
 	fmt.Printf("  ... Passed\n")
 	myLogger("FROM_TEST", "...Passed First Primary ", "test1", "test_test.go")
 
-	// very first backup
 	fmt.Printf("Test: First backup ...\n")
-	//explicitly define scope with code block
+
 	{
 		myLogger("FROM_TEST", "Test: First Backup", "test1", "test_test.go")
 		//get the primaries info for the check
 		vx, _ := ck1.Get()
 
 		for i := 0; i < DeadPings*2; i++ {
-			//ping primary
-			myLogger("FROM_TEST", "Test: First Backup", "test1", "test_test.go")
 			ck1.Ping(1)
-			// back up should be elected. times out after 10 attempts
-			// k/v server 2 restarted.
-			// pings do 3 things
-			// 1. tell view service that it that pinging k/v server is alive
-			// 2. informs the k/v server kf the current view
-			// 3. informs the view service of the most recent view the k/v service knows about
 			view, _ := ck2.Ping(0)
-			//verify backup has been elected
+
 			if view.Backup == ck2.me {
 				break
 			}
-			//severs send a  ping once per ping interval
+
 			time.Sleep(PingInterval)
 		}
-		//test assertion, is backup
 		check(t, ck1, ck1.me, ck2.me, vx.Viewnum+1)
 	}
 	fmt.Printf("  ... Passed\n")
-	// primary dies, backup should take over
+	myLogger("FROM_TEST", "...Passed First Backup ", "test1", "test_test.go")
+
 	fmt.Printf("Test: Backup takes over if primary fails ...\n")
 
 	{
@@ -134,71 +120,46 @@ func Test1(t *testing.T) {
 			if v.Primary == ck2.me && v.Backup == "" {
 				break
 			}
-			//severs send a  ping once per ping interval
 			time.Sleep(PingInterval)
 		}
-		//test assertion, backup did take over for primary
 		check(t, ck2, ck2.me, "", vx.Viewnum+1)
 	}
-	fmt.Printf("  ... Passed\n")
 
+	fmt.Printf("  ... Passed\n")
+	myLogger("FROM_TEST", "...Passed Backup Takes Over If Primary Fails ", "test1", "test_test.go")
 	fmt.Printf("Test: Restarted server becomes backup ...\n")
 
 	{
-		//note pings keep the severs in sync, so when evetns happend like a sever crash,
-		//the servers will perform taks beased on the repsone or lack of reposne form th pjngs
-
-		//get the latest view k/v server knows about
 		vx, _ := ck2.Get()
-		//ping the view service. pings do 3 things
-		//1. informs view service that k/v server is stil alive
-		//2. informs the view service of the most recent view the k/v server knows about
-		//3. k/v server learns the newest view from the View Service
 		ck2.Ping(vx.Viewnum)
 
 		for i := 0; i < DeadPings*2; i++ {
-			//indicates server crash or restart
-			ck1.Ping(0)
 
-			//pings the view service, pings do 3 things
-			//1. informs the view service that k/v server is still alive
-			//2. informs the view service of the most recent view the k/v server knows about
-			//3. k/v server learns the newest view from the view service.
+			ck1.Ping(0)
 			v, _ := ck2.Ping(vx.Viewnum)
-			//restarted server is elected as back up, (at most ten attempts)
+
 			if v.Primary == ck2.me && v.Backup == ck1.me {
 				break
 			}
-			//severs send a  ping once per ping interval
+
 			time.Sleep(PingInterval)
 		}
 		//test assertion, restarted did become backup
 		check(t, ck2, ck2.me, ck1.me, vx.Viewnum+1)
 	}
-	fmt.Printf("  ... Passed\n")
 
-	// start ck3, kill the primary (ck2), the previous backup (ck1)
-	// should become the server, and ck3 the backup
+	fmt.Printf("  ... Passed\n")
+	myLogger("FROM_TEST", "...Passed Restarted Server Becomes Backup ", "test1", "test_test.go")
+
 	fmt.Printf("Test: Idle third server becomes backup if primary fails ...\n")
 
 	{
-		//get most recent view for k/v primary
 		vx, _ := ck2.Get()
-		//ping view service, pings do 3 things
-		//1. informs the the view service the k/v server is still alive
-		//2. informs the view service of the most recent view the k/v server knows about
-		//3. k/v server learns the newest view from the view service
-		//remember CK2 is primary at this point
 		ck2.Ping(vx.Viewnum)
 
 		for i := 0; i < DeadPings*2; i++ {
 			//restart the idle server
 			ck3.Ping(0)
-			//pings do 3 things
-			//1. informs the view service the k/v server is still alive
-			//2. informs the view service of the most recent view the k/v server knows about
-			//3. k/v server learns the newest view from the view service
-			//CK1 is the backup in the beginning, becimes primary here
 			v, _ := ck1.Ping(vx.Viewnum)
 
 			//CK1 has been elected primary, and CK3 has been elected backup
@@ -213,6 +174,7 @@ func Test1(t *testing.T) {
 		check(t, ck1, ck1.me, ck3.me, vx.Viewnum+1)
 	}
 	fmt.Printf("  ... Passed\n")
+	myLogger("FROM_TEST", "...Passed Idle Server Takes over if Backup Fails ", "test1", "test_test.go")
 
 	// kill and immediately restart the primary -- does viewservice
 	// conclude primary is down even though it's pinging?

@@ -6,14 +6,16 @@ import (
 	"net"
 	"net/rpc"
 	"os"
+	"strconv"
 	"sync"
 	"time"
 )
 
 type SrvMsg struct {
-	timeStamp time.Time
-	name      string
-	ttl       int
+	timeStamp  time.Time
+	name       string
+	ttl        int
+	oldViewNum uint
 }
 
 type ViewServer struct {
@@ -28,7 +30,8 @@ type ViewServer struct {
 	// most recent ping heard from the server
 	servers map[string]*SrvMsg
 	//CURRENT VIEW
-	currentView View
+	currentView     View
+	isFirstElection bool
 	// the view that the view service is currently using
 	//Channel
 
@@ -49,14 +52,14 @@ func (vs *ViewServer) Ping(args *PingArgs, reply *PingReply) error {
 	srvMsg := &SrvMsg{}
 	srvMsg.timeStamp = time.Now()
 	srvMsg.name = args.Me
+	srvMsg.oldViewNum = args.Viewnum
 
 	//send reply
 	reply.View = vs.currentView
 	//send message to Ticker thread
-	vs.ping <- srvMsg
-	vs.testCount += 1
 
-	myLogger("3", "END OF PING CALL"+srvMsg.name, "Ping()", "ViewService.go")
+	vs.ping <- srvMsg
+	//myLogger("3", "END OF PING CALL"+srvMsg.name+": "+t, "Ping()", "ViewService.go")
 	return nil
 }
 
@@ -83,53 +86,65 @@ func (vs *ViewServer) tick() {
 	// this fucntion Tick is called once per pinginterval
 
 	srvMsg := <-vs.ping
-	myLogger("3", "SERVER SENDING PING: "+srvMsg.name, "Tick()", "ViewService.go")
-	if vs.currentView.Primary == "" && len(vs.servers) == 0 {
+	//update ttl for each server
+	for key := range vs.servers {
+		vs.servers[key].ttl -= 1
+		ttl := strconv.Itoa(vs.servers[key].ttl)
+		myLogger("3", "TTL FOR SRV : "+key+":"+ttl, "Tick()", "ViewService.go")
+	}
+
+	if vs.currentView.Primary == "" && vs.isFirstElection {
 
 		vs.currentView.Primary = srvMsg.name
 		vs.servers[srvMsg.name] = srvMsg
 		vs.servers[srvMsg.name].ttl = DeadPings
+		vs.isFirstElection = false
+		myLogger("", "ELECTED FIRST PRIMARY", "Tick()", "ViewService.go")
 		//myLogger("3", "Primary Elected: "+srvMsg.name, "Tick()", "ViewService.go")
 		//myLogger("3", "MAP SIZE: "+strconv.Itoa(len(vs.servers)), "Tick()", "ViewService.go")
 
-	} else if vs.currentView.Backup == "" && len(vs.servers) == 1 {
-		myLogger("", "TRY BACKUP", "Tick()", "ViewService.go")
-		if val, ok := vs.servers[srvMsg.name]; !ok {
-			//myLogger("", "GET BACKUP", "Tick()", "ViewService.go")
+	} else if vs.currentView.Backup == "" && srvMsg.oldViewNum < uint(1) {
 
+		// if val, ok := vs.servers[srvMsg.name]; !ok {
+		// 	//myLogger("", "GET BACKUP", "Tick()", "ViewService.go")
+		// 	vs.currentView.Viewnum += 1
+		// 	vs.currentView.Backup = srvMsg.name
+		// 	vs.servers[srvMsg.name] = srvMsg
+		// 	vs.servers[srvMsg.name].ttl = DeadPings
+
+		// } else {
+		// 	myLogger("3", "NOT ADDED NO REDUNDANT BACKUPS : "+val.name, "Tick()", "ViewService.go")
+		// }
+		if srvMsg.name != vs.currentView.Primary {
 			vs.currentView.Viewnum += 1
 			vs.currentView.Backup = srvMsg.name
-
-			//myLogger("", "SET BACKUP", "Tick()", "ViewService.go")
 			vs.servers[srvMsg.name] = srvMsg
 			vs.servers[srvMsg.name].ttl = DeadPings
-			//	myLogger("", "BACKUP FINE BACKUP", "Tick()", "ViewService.go")
-
-		} else {
-			myLogger("3", "FIRST BACKUP ELECTED : "+val.name, "Tick()", "ViewService.go")
 		}
+
 	} else {
 		//myLogger("NO ELECTIONS", "", "Tick()", "ViewService.go")
+		vs.servers[srvMsg.name] = srvMsg
 		vs.servers[srvMsg.name].ttl = DeadPings
+		dp := strconv.Itoa(DeadPings)
+		myLogger("3", "RESTORE TTL  : "+srvMsg.name+":"+dp, "Tick()", "ViewService.go")
 	}
 
-	//for key in map:
-	//     if key != srv:
-	//      srvPair = map[key]
-	//      map[key] = (srvPair[0], srvPair[1] - 1)
-	for key := range vs.servers {
-		vs.servers[key].ttl -= 1
-	}
-
-	//remove dead servers
+	//promote back up and prune dead servers
 	for key := range vs.servers {
 		if vs.servers[key].ttl <= 0 {
+			//if primary not alive
 			if key == vs.currentView.Primary {
 				myLogger("", "PRIMARY NOT ALIVE PROMOTE BACK UP: "+key, "Tick()", "ViewService.go")
 				vs.currentView.Viewnum += 1
 				vs.currentView.Primary = vs.currentView.Backup
 				vs.currentView.Backup = ""
+				//if backup not alive
 			}
+			// } else if key == vs.currentView.Backup {
+			//
+			// }
+			delete(vs.servers, key)
 		}
 	}
 
@@ -157,6 +172,7 @@ func StartServer(me string) *ViewServer {
 
 	vs.testCount = 0
 	vs.currentView.Viewnum = 1
+	vs.isFirstElection = true
 	// tell net/rpc about our RPC server and handlers.
 	rpcs := rpc.NewServer()
 	rpcs.Register(vs)
