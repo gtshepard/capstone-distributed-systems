@@ -128,23 +128,30 @@ func (vs *ViewServer) tick() {
 	//reset TTL for pinging SRV
 
 	//promote back up and prune dead servers
+
 	for key := range vs.servers {
 		if vs.servers[key].ttl <= 0 {
 			//if primary not alive
 			if key == vs.currentView.Primary {
 				myLogger("", "PRIMARY NOT ALIVE PROMOTE BACK UP: "+key, "Tick()", "ViewService.go")
-				vs.currentView.Viewnum += 1
-				vs.currentView.Primary = vs.currentView.Backup
-				vs.currentView.Backup = ""
-				//if backup not alive
+				//wait for ack to change views
+				if vs.servers[key].oldViewNum == vs.currentView.Viewnum {
+					vs.currentView.Viewnum += 1
+					vs.currentView.Primary = vs.currentView.Backup
+					vs.currentView.Backup = ""
+					delete(vs.servers, key)
+				}
 			}
-
-			delete(vs.servers, key)
 		}
 	}
 
-	//promote backup
-
+	for key := range vs.servers {
+		if vs.servers[key].ttl <= 0 {
+			if key != vs.currentView.Primary {
+				delete(vs.servers, key)
+			}
+		}
+	}
 }
 
 //
