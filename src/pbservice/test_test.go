@@ -17,10 +17,11 @@ import (
 //check if k/v service grabs the correct value
 func check(ck *Clerk, key string, value string) {
 	v := ck.Get(key)
-	myLogger("TT", v, "TT", "TT")
 	if v != value {
+		myLogger("ERROR", v, "TT", "TT")
 		log.Fatalf("Get(%v) -> %v, expected %v", key, v, value)
 	}
+	myLogger("FINISH", v, "TT", "TT")
 }
 
 //create port for server to establish connection
@@ -63,9 +64,9 @@ func TestBasicFail(t *testing.T) {
 	}
 	//insert value into key/value data base
 	ck.Put("111", "v1")
-	//check to see if the database has the correct value
+	//check to see if the database the correct value
 	check(ck, "111", "v1")
-
+	myLogger("Passed First Put", "PASS", "TT", "TT")
 	ck.Put("2", "v2")
 	check(ck, "2", "v2")
 

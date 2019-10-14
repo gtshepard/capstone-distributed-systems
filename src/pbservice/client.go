@@ -76,7 +76,7 @@ func (ck *Clerk) Get(key string) string {
 	ok := call(view.Primary, "PBServer.Get", args, &reply)
 
 	if ok {
-		return key
+		return reply.Value
 	} else {
 		return ""
 	}

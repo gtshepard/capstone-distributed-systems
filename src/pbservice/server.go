@@ -76,9 +76,17 @@ func (pb *PBServer) tick() {
 	//handle requests
 	view, _ := pb.vs.Get()
 
-	if view.Primary == "" || view.Backup == "" {
+	if view.Viewnum < 3 {
 		pb.vs.Ping(0)
+	} else {
+		pb.vs.Ping(view.Viewnum)
 	}
+
+	//3 servers are made
+	// server 1 is elected primary
+	// server 2 is elected backup up
+	//from then on they keep learning the newest view
+	// server 3 is made but view is < 3, it wil just learn the newest view
 
 	//handle put/get request for primary
 	select {
