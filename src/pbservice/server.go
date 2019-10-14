@@ -24,6 +24,10 @@ func DPrintf(format string, a ...interface{}) (n int, err error) {
 	return
 }
 
+type PutClientMsgs struct {
+	Key   string
+	Value string
+}
 type PBServer struct {
 	l          net.Listener
 	dead       bool // for testing
@@ -32,12 +36,15 @@ type PBServer struct {
 	vs         *viewservice.Clerk
 	done       sync.WaitGroup
 	finish     chan interface{}
+	putsIn     chan string
 	// Your declarations here.
-	view View
 }
 
 func (pb *PBServer) Put(args *PutArgs, reply *PutReply) error {
 	// Your code here.
+	myLogger("RPC SUCCESS", "BEFORE SEND", "Tick", "Server.go")
+	pb.putsIn <- "hello"
+	myLogger("RPC SUCCESS", "AFTER SEND", "Tick", "Server.go")
 	return nil
 }
 
@@ -50,14 +57,14 @@ func (pb *PBServer) Get(args *GetArgs, reply *GetReply) error {
 func (pb *PBServer) tick() {
 
 	//server learns its role from view service, p/b/i
-	if pb.view == "" {
-		pb.vs.Ping(0)
-	} else {
-		pb.vs.Ping(view)
-	}
-
 	//handle requests
-
+	myLogger("BEFORE PING", "BEFORE PING", "Tick", "Server.go")
+	pb.vs.Ping(0)
+	myLogger("AFTER PING", "AFTER PING", "Tick", "Server.go")
+	time.Sleep(time.Second * 5)
+	myLogger("Before Recieve", "Before RECIEVE", "Tick", "Server.go")
+	apples := <-pb.putsIn
+	myLogger("After Recieve", apples, "Tick", "Server.go")
 }
 
 // tell the server to shut itself down.
@@ -72,10 +79,9 @@ func StartServer(vshost string, me string) *PBServer {
 	pb.me = me
 	pb.vs = viewservice.MakeClerk(me, vshost)
 	pb.finish = make(chan interface{})
-	// Your pb.* initializations here.\
+	pb.putsIn = make(chan string)
 
-	//all servers start with out a view
-	pb.view = ""
+	// Your pb.* initializations here.\
 
 	rpcs := rpc.NewServer()
 	rpcs.Register(pb)

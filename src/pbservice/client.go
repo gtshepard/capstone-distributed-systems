@@ -76,10 +76,20 @@ func (ck *Clerk) Get(key string) string {
 //
 func (ck *Clerk) PutExt(key string, value string, dohash bool) string {
 
-	//should always call vs.Get() to make sure view is learned so data is grabbed from correct primary
-	//possibly RPC call to VCK
 	// Your code here.
-	return "???"
+	view, _ := ck.vs.Get()
+	args := &PutArgs{}
+	args.Key = key
+	args.Value = value
+	var reply *PutReply
+
+	ok := call(view.Primary, "PBServer.Put", args, &reply)
+
+	if ok {
+		return key
+	} else {
+		return "???"
+	}
 }
 
 func (ck *Clerk) Put(key string, value string) {
