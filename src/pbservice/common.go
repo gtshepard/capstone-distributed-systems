@@ -23,6 +23,10 @@ type PutArgs struct {
 	// Field names must start with capital letters,
 	// otherwise RPC will break.
 }
+type ClientMsg struct {
+	Key   string
+	Value string
+}
 
 type PutReply struct {
 	Err           Err

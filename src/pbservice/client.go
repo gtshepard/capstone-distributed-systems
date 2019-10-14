@@ -67,7 +67,19 @@ func (ck *Clerk) Get(key string) string {
 	// Your code here.
 	//should always call vs.Get() to make sure view is learned so data is grabbed from correct primary
 
-	return "???"
+	// Your code here.
+	view, _ := ck.vs.Get()
+	args := &GetArgs{}
+	args.Key = key
+	var reply *GetReply
+
+	ok := call(view.Primary, "PBServer.Get", args, &reply)
+
+	if ok {
+		return key
+	} else {
+		return ""
+	}
 }
 
 //

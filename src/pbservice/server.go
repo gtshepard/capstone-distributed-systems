@@ -28,6 +28,7 @@ type PutClientMsgs struct {
 	Key   string
 	Value string
 }
+
 type PBServer struct {
 	l          net.Listener
 	dead       bool // for testing
@@ -36,21 +37,35 @@ type PBServer struct {
 	vs         *viewservice.Clerk
 	done       sync.WaitGroup
 	finish     chan interface{}
-	putter     chan *PutArgs
+	writer     chan *ClientMsg
+	reader     chan *ClientMsg
 	// Your declarations here.
 	db map[string]string
 }
 
 func (pb *PBServer) Put(args *PutArgs, reply *PutReply) error {
 	// Your code here.
-	myLogger("RPC SUCCESS", "BEFORE SEND", "Tick", "Server.go")
-	pb.putter <- args
-	myLogger("RPC SUCCESS", "AFTER SEND", "Tick", "Server.go")
+	//myLogger("RPC SUCCESS", "BEFORE SEND", "Tick", "Server.go")
+	msg := &ClientMsg{}
+	msg.Key = args.Key
+	msg.Value = args.Value
+	pb.writer <- msg
+	//myLogger("RPC SUCCESS", "AFTER SEND", "Tick", "Server.go")
 	return nil
 }
 
 func (pb *PBServer) Get(args *GetArgs, reply *GetReply) error {
 	// Your code here.
+	myLogger("GET", "BEFORE SEND", "GET", "Server.go")
+	//make request to db
+	msg := &ClientMsg{}
+	msg.Key = args.Key
+	pb.reader <- msg
+
+	//get reply
+	rep := <-pb.reader
+	reply.Value = rep.Value
+	myLogger("GET", "AFTER VAL", "Tick", "Server.go")
 	return nil
 }
 
@@ -59,13 +74,80 @@ func (pb *PBServer) tick() {
 
 	//server learns its role from view service, p/b/i
 	//handle requests
-	myLogger("BEFORE PING", "BEFORE PING", "Tick", "Server.go")
-	pb.vs.Ping(0)
-	myLogger("AFTER PING", "AFTER PING", "Tick", "Server.go")
-	myLogger("Before Recieve", "Before RECIEVE", "Tick", "Server.go")
-	pair := <-pb.putter
-	pb.db[pair.Key] = pair.Value
-	myLogger("After Recieve", pb.db[pair.Key], "Tick", "Server.go")
+	view, _ := pb.vs.Get()
+
+	if view.Primary == "" || view.Backup == "" {
+		pb.vs.Ping(0)
+	}
+
+	//handle put/get request for primary
+	select {
+	case read := <-pb.reader:
+
+		msg := &ClientMsg{}
+		msg.Key = read.Key
+		msg.Value = pb.db[read.Key]
+		pb.reader <- msg
+
+	case write := <-pb.writer:
+		pb.db[write.Key] = write.Value
+		myLogger("After Recieve", pb.db[write.Key], "Tick", "Server.go")
+	}
+
+	// Tick():
+	//	 //determine server role
+	//	 //set just promoted flag in event server was just promoted
+	//	 //how does one know sevrer was promoted
+	//
+	//   //only primary handles incoming requests
+	//	if pb.me == v.p && JustPromoted:
+	//		CopyArg.db = map
+	//		call(v.b,"Server.RecieveCopy", CopyArg, CopyReply)
+	//		<-WaitForBackUpAck
+	//
+	//	if pb.me == v.p:
+	//		select:
+	//			case read := <- reads:
+	//				if !success.contains(read.key):
+	//					if db.contains(read.group_id):
+	//						read.resp <- map[read.key]
+	//						success[read.group_id] = read.group_id
+	//						call(client, "Client.ReicveBroadcastedAck", AckArgs, AckReply)
+	//					else:
+	//						print("key doesnt exist in db")
+	//						//how do we notify client in this event to stop making gets?
+	//				else:
+	//					print("duplicate read request ignored: ", group_id)
+	//
+	//			case write := <- writes:
+	//			if !success.contains(write.group_id):
+	//				//write to db
+	//				db[write.key] = write.val
+	//				//send update to back up
+	//				call(v.b, "Server.RecieveUpdate",PutArgs, PutReply)
+	//				<-WaitForBackUpAck
+	//				//write complete
+	//				write.resp <- true
+	//				success[write.group_id] = write.group_id
+	//				call(client, "Client.ReicveBroadcastedAck", AckArgs, AckReply)
+	//			else:
+	//
+	//				print("duplicate write request ignored: ", group_id)
+	//
+	//	 //backup recieves updates from primary and no other
+	//   else if pb.me 	== v.b:
+	//		select:
+	//			case entry <- vs.update:
+	//				db[entry.key] = entry.val
+	//				call(v.p, "Server.Ack", AckArg, AckReply)
+	//			case db_data <- vs.copy:
+	//				for k,v in db_data:
+	//					db[k] = v
+	//				//ack copy done for backup
+	//				call(v.p, "Server.Ack", AckArg, AckReply)
+	//	else:
+	//		print("idle server")
+
 }
 
 // tell the server to shut itself down.
@@ -80,9 +162,10 @@ func StartServer(vshost string, me string) *PBServer {
 	pb.me = me
 	pb.vs = viewservice.MakeClerk(me, vshost)
 	pb.finish = make(chan interface{})
-	pb.putter = make(chan *PutArgs)
-	pb.db = make(map[string]string)
 	// Your pb.* initializations here.\
+	pb.writer = make(chan *ClientMsg)
+	pb.reader = make(chan *ClientMsg)
+	pb.db = make(map[string]string)
 
 	rpcs := rpc.NewServer()
 	rpcs.Register(pb)

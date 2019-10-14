@@ -17,6 +17,7 @@ import (
 //check if k/v service grabs the correct value
 func check(ck *Clerk, key string, value string) {
 	v := ck.Get(key)
+	myLogger("TT", v, "TT", "TT")
 	if v != value {
 		log.Fatalf("Get(%v) -> %v, expected %v", key, v, value)
 	}
@@ -240,9 +241,9 @@ func TestAtMostOnce(t *testing.T) {
 // Put right after a backup dies.
 func TestFailPut(t *testing.T) {
 	runtime.GOMAXPROCS(4)
-  //put executed rigtj after a primary or backup dies should still succed once new primary
-  //or back up is slectled. back should still contain identical copy of primary 
-  
+	//put executed rigtj after a primary or backup dies should still succed once new primary
+	//or back up is slectled. back should still contain identical copy of primary
+
 	tag := "failput"
 	vshost := port(tag+"v", 1)
 	vs := viewservice.StartServer(vshost)
@@ -293,8 +294,8 @@ func TestFailPut(t *testing.T) {
 			break
 		}
 		time.Sleep(viewservice.PingInterval)
-  }
-  
+	}
+
 	time.Sleep(time.Second) // wait for backup initialization
 	v2, _ := vck.Get()
 	if v2.Primary != s1.me || v2.Backup != s3.me {
@@ -310,7 +311,7 @@ func TestFailPut(t *testing.T) {
 	ck.Put("b", "bbb")
 	check(ck, "b", "bbb")
 
-  //make sure the new view that has elected primary or else fialed swevrer 
+	//make sure the new view that has elected primary or else fialed swevrer
 	for i := 0; i < viewservice.DeadPings*3; i++ {
 		v, _ := vck.Get()
 		if v.Viewnum > v2.Viewnum && v.Primary != "" {
@@ -352,7 +353,7 @@ func TestConcurrentSame(t *testing.T) {
 	for i := 0; i < nservers; i++ {
 		sa[i] = StartServer(vshost, port(tag, i+1))
 	}
-  //elect primary and backup or failure 
+	//elect primary and backup or failure
 	for iters := 0; iters < viewservice.DeadPings*2; iters++ {
 		view, _ := vck.Get()
 		if view.Primary != "" && view.Backup != "" {
@@ -380,7 +381,7 @@ func TestConcurrentSame(t *testing.T) {
 			}
 		}(xi)
 	}
-  //two clients make requests concurrently to the same key for 5 seconds 
+	//two clients make requests concurrently to the same key for 5 seconds
 	time.Sleep(5 * time.Second)
 	done = true
 	time.Sleep(time.Second)
@@ -389,7 +390,7 @@ func TestConcurrentSame(t *testing.T) {
 	ck := MakeClerk(vshost, "")
 	var vals [nkeys]string
 	for i := 0; i < nkeys; i++ {
-    //values should be in pirmary 
+		//values should be in pirmary
 		vals[i] = ck.Get(strconv.Itoa(i))
 		if vals[i] == "" {
 			t.Fatalf("Get(%v) failed from primary", i)
@@ -402,18 +403,18 @@ func TestConcurrentSame(t *testing.T) {
 			sa[i].kill()
 			break
 		}
-  }
-  
+	}
+
 	for iters := 0; iters < viewservice.DeadPings*2; iters++ {
-    //
+		//
 		view, _ := vck.Get()
 		if view.Primary == view1.Backup {
 			break
 		}
 		time.Sleep(viewservice.PingInterval)
-  }
+	}
 
-  //ensure corret pimary 
+	//ensure corret pimary
 	view2, _ := vck.Get()
 	if view2.Primary != view1.Backup {
 		t.Fatal("wrong Primary")
@@ -421,7 +422,7 @@ func TestConcurrentSame(t *testing.T) {
 
 	// read from old backup
 	for i := 0; i < nkeys; i++ {
-    //should have same values after primary failure 
+		//should have same values after primary failure
 		z := ck.Get(strconv.Itoa(i))
 		if z != vals[i] {
 			t.Fatalf("Get(%v) from backup; wanted %v, got %v", i, vals[i], z)
@@ -432,8 +433,8 @@ func TestConcurrentSame(t *testing.T) {
 
 	for i := 0; i < nservers; i++ {
 		sa[i].kill()
-  }
-  
+	}
+
 	time.Sleep(time.Second)
 	vs.Kill()
 	time.Sleep(time.Second)
@@ -442,9 +443,9 @@ func TestConcurrentSame(t *testing.T) {
 //TEST 5
 func TestConcurrentSameUnreliable(t *testing.T) {
 	runtime.GOMAXPROCS(4)
-  
+
 	tag := "csu"
-  vshost := port(tag+"v", 1)
+	vshost := port(tag+"v", 1)
 	vs := viewservice.StartServer(vshost)
 	time.Sleep(time.Second)
 	vck := viewservice.MakeClerk("", vshost)
@@ -454,13 +455,13 @@ func TestConcurrentSameUnreliable(t *testing.T) {
 	const nservers = 2
 	var sa [nservers]*PBServer
 	for i := 0; i < nservers; i++ {
-    sa[i] = StartServer(vshost, port(tag, i+1))
-    //notice unreliable flag is set, forces RPC to act unreliably neevr sending back anACK.
-    //how does this chamge the behavior? 
+		sa[i] = StartServer(vshost, port(tag, i+1))
+		//notice unreliable flag is set, forces RPC to act unreliably neevr sending back anACK.
+		//how does this chamge the behavior?
 		sa[i].unreliable = true
 	}
 
-  //elect rpimary or back or vs error 
+	//elect rpimary or back or vs error
 	for iters := 0; iters < viewservice.DeadPings*2; iters++ {
 		view, _ := vck.Get()
 		if view.Primary != "" && view.Backup != "" {
@@ -552,13 +553,13 @@ func TestRepeatedCrash(t *testing.T) {
 	vck := viewservice.MakeClerk("", vshost)
 
 	fmt.Printf("Test: Repeated failures/restarts ...\n")
-  //start 3 servers for k/v service p,b and idle 
+	//start 3 servers for k/v service p,b and idle
 	const nservers = 3
 	var sa [nservers]*PBServer
 	for i := 0; i < nservers; i++ {
 		sa[i] = StartServer(vshost, port(tag, i+1))
 	}
-  //wait for election of P and B
+	//wait for election of P and B
 	for i := 0; i < viewservice.DeadPings; i++ {
 		v, _ := vck.Get()
 		if v.Primary != "" && v.Backup != "" {
@@ -569,9 +570,9 @@ func TestRepeatedCrash(t *testing.T) {
 
 	// wait a bit for primary to initialize backup
 	time.Sleep(viewservice.DeadPings * viewservice.PingInterval)
-  done := false
-  
-  //randomly kill and restart servers 
+	done := false
+
+	//randomly kill and restart servers
 	go func() {
 		// kill and restart servers
 		rr := rand.New(rand.NewSource(int64(os.Getpid())))
@@ -590,8 +591,8 @@ func TestRepeatedCrash(t *testing.T) {
 		}
 	}()
 
-  //start 2 clients that mke put and get requests, and verify the data they 
-  //wrote tot the databse is in the database 
+	//start 2 clients that mke put and get requests, and verify the data they
+	//wrote tot the databse is in the database
 	const nth = 2
 	var cha [nth]chan bool
 	for xi := 0; xi < nth; xi++ {
@@ -606,7 +607,7 @@ func TestRepeatedCrash(t *testing.T) {
 				k := strconv.Itoa((i * 1000000) + (rr.Int() % 10))
 				wanted, ok := data[k]
 				if ok {
-          //check if put succedded
+					//check if put succedded
 					v := ck.Get(k)
 					if v != wanted {
 						t.Fatalf("key=%v wanted=%v got=%v", k, wanted, v)
@@ -627,14 +628,14 @@ func TestRepeatedCrash(t *testing.T) {
 	done = true
 
 	fmt.Printf("  ... Put/Gets done ... \n")
-  //no client failed 
+	//no client failed
 	for i := 0; i < nth; i++ {
 		ok := <-cha[i]
 		if ok == false {
 			t.Fatal("child failed")
 		}
 	}
-  //final put/get succueeded 
+	//final put/get succueeded
 	ck := MakeClerk(vshost, "")
 	ck.Put("aaa", "bbb")
 	if v := ck.Get("aaa"); v != "bbb" {
@@ -666,8 +667,8 @@ func TestRepeatedCrashUnreliable(t *testing.T) {
 	const nservers = 3
 	var sa [nservers]*PBServer
 	for i := 0; i < nservers; i++ {
-    sa[i] = StartServer(vshost, port(tag, i+1))
-    //unreiable flag set, rpc's wont send replys 
+		sa[i] = StartServer(vshost, port(tag, i+1))
+		//unreiable flag set, rpc's wont send replys
 		sa[i].unreliable = true
 	}
 
@@ -701,10 +702,10 @@ func TestRepeatedCrashUnreliable(t *testing.T) {
 			time.Sleep(2 * viewservice.PingInterval * viewservice.DeadPings)
 		}
 	}()
-  //since RPC will be unreiable here, to ensure the vlaue gets there and it is theta value
-  //the value of the key must be hashed we can garuntee it is that value 
-  //we borrow the same methodolgy to that TestRepeatedCrashes uses to test and veriy that data is the ame
-  //i.e keepy a local map of the data sent to the databse 
+	//since RPC will be unreiable here, to ensure the vlaue gets there and it is theta value
+	//the value of the key must be hashed we can garuntee it is that value
+	//we borrow the same methodolgy to that TestRepeatedCrashes uses to test and veriy that data is the ame
+	//i.e keepy a local map of the data sent to the databse
 
 	const nth = 2
 	var cha [nth]chan bool
@@ -841,14 +842,14 @@ func TestPartition1(t *testing.T) {
 	ck1 := MakeClerk(vshost, "")
 
 	fmt.Printf("Test: Old primary does not serve Gets ...\n")
-  //make proxy 
-  vshosta := vshost + "a"
-  //creates link between two k/v servers, kind ok like a gaetway. 
+	//make proxy
+	vshosta := vshost + "a"
+	//creates link between two k/v servers, kind ok like a gaetway.
 	os.Link(vshost, vshosta)
 
 	s1 := StartServer(vshosta, port(tag, 1))
-  delay := 0
-  //proxy is used to dely
+	delay := 0
+	//proxy is used to dely
 	proxy(t, port(tag, 1), &delay)
 
 	deadtime := viewservice.PingInterval * viewservice.DeadPings
@@ -871,10 +872,10 @@ func TestPartition1(t *testing.T) {
 
 	// start a client Get(), but use proxy to delay it long
 	// enough that it won't reach s1 until after s1 is no
-  // longer the primary.
-  //this delay ,imics the idea that the servers are on two different networks and must pass througha 
-  //a proxy or gateway
-	delay = 4 //changing the value of delay 
+	// longer the primary.
+	//this delay ,imics the idea that the servers are on two different networks and must pass througha
+	//a proxy or gateway
+	delay = 4 //changing the value of delay
 	stale_get := false
 	go func() {
 		x := ck1.Get("a")
