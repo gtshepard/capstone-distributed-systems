@@ -33,6 +33,7 @@ type PBServer struct {
 	done       sync.WaitGroup
 	finish     chan interface{}
 	// Your declarations here.
+	view View
 }
 
 func (pb *PBServer) Put(args *PutArgs, reply *PutReply) error {
@@ -47,7 +48,16 @@ func (pb *PBServer) Get(args *GetArgs, reply *GetReply) error {
 
 // ping the viewserver periodically.
 func (pb *PBServer) tick() {
-	// Your code here.
+
+	//server learns its role from view service, p/b/i
+	if pb.view == "" {
+		pb.vs.Ping(0)
+	} else {
+		pb.vs.Ping(view)
+	}
+
+	//handle requests
+
 }
 
 // tell the server to shut itself down.
@@ -62,7 +72,10 @@ func StartServer(vshost string, me string) *PBServer {
 	pb.me = me
 	pb.vs = viewservice.MakeClerk(me, vshost)
 	pb.finish = make(chan interface{})
-	// Your pb.* initializations here.
+	// Your pb.* initializations here.\
+
+	//all servers start with out a view
+	pb.view = ""
 
 	rpcs := rpc.NewServer()
 	rpcs.Register(pb)
@@ -132,9 +145,14 @@ func StartServer(vshost string, me string) *PBServer {
 }
 
 // PROTOCOL DESIGN
+// how does a server learn  its role
+// if isIntialElection:
+//		vs.clerk.ping(0)
+//	else:
+//		vs.clerk.ping(n)
 //
 //client.go
-//PutExt(k, v, h):
+// PutExt(k, v, h):
 //
 // need a client to repeatedly send requests until it recieves an ACK from the primary that
 // signals a single request has completed.
@@ -144,6 +162,7 @@ func StartServer(vshost string, me string) *PBServer {
 // a request is an RPC call to either Server.Get or Server.Put
 //
 // a client that sends requests until the client learns one is successful from the server
+//
 // Get(k):
 //   group_id = GetUniqueNumber()
 //	 v = vs.clerk.get()
@@ -306,4 +325,43 @@ func StartServer(vshost string, me string) *PBServer {
 //
 // Ack(AckArg, AckReply):
 //	 vs.waitForBackUp <- AckArg
+//
+//
+// the approach most be more robust. RPC can be reilable meaning ok gives us a value. everytime or it can be
+// unreable meaning  calls value cannot be relid on.this will change how part 6 is done and some other parts
+// approach reliable first becuase that is what is familair.
+//
+// call is made to primary. it fails, then view service should be checked by client for most recent view, then that
+// same job should be called again until a certian interval expires (must foind correct interval).
+// this check should only be done once per ping intwerval to avoid burning p to much CPU time.
+// so if the RPC call fails, contact view service. read most current views primary and
+// make the same request again based on the information. now wait one ping interval. if found
+// the RPC again failed repeat this process. client may loop forever or just fail aftyer an yet to be determined
+// interval of time.
+//
+// this must run until successful
+// ok = call(v.p, "Server.Put", PutArgs, PutReply)
+//
+// while !ok:
+//	 v = vs.clerk.get()
+//	 ok = call(v.p, "Server.Put", PutArgs, PutReply)
+// 	 sleep(pingInterval)
+//
+//
+// literally can just put in the the current client loop.
+//
+// what about unreliable? how does one know the RPC failed?
+// how does one even know the primary is failing? it would be based on the information of the view service
+// if the view service has a primary, the clients sends the request. if the server that reiceves
+// the request replys back an error, then the client should get a new view, if no error is sent from the
+// server (meaning the server the reqeust to is not actaully the primary and error should be sent), other
+// wise the client assumes the primary recieved the message even though there is no garuntee.
+//
+// This means server.go needs a mechanism to send errors when a request is sent to server that is not primary
+// check the lastest view
+// this stops two active primaries
+// v = vs.clerk.get()
+//if !v.p:
+//	call(client, "Client.Error")
+//
 //
