@@ -24,7 +24,7 @@ func DPrintf(format string, a ...interface{}) (n int, err error) {
 	return
 }
 
-type PutClientMsgs struct {
+type PutClientMsg struct {
 	Key   string
 	Value string
 }
@@ -64,6 +64,7 @@ func (pb *PBServer) Get(args *GetArgs, reply *GetReply) error {
 
 	//get reply
 	rep := <-pb.reader
+	myLogger("GET", "AFTER VAL", "Tick", "Server.go")
 	reply.Value = rep.Value
 	myLogger("GET", "AFTER VAL", "Tick", "Server.go")
 	return nil
@@ -91,11 +92,18 @@ func (pb *PBServer) tick() {
 	//handle put/get request for primary
 	select {
 	case read := <-pb.reader:
-
 		msg := &ClientMsg{}
-		msg.Key = read.Key
-		msg.Value = pb.db[read.Key]
-		pb.reader <- msg
+		if val, ok := pb.db[read.Key]; ok {
+			//read given key from db
+			msg.Key = read.Key
+			msg.Value = val
+			pb.reader <- msg
+		} else {
+			//attempted to read key that does not exist
+			msg.Key = read.Key
+			msg.Value = ""
+			pb.reader <- msg
+		}
 
 	case write := <-pb.writer:
 		pb.db[write.Key] = write.Value

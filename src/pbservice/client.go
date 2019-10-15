@@ -3,6 +3,7 @@ package pbservice
 import (
 	"fmt"
 	"net/rpc"
+	"strconv"
 	"viewservice"
 )
 
@@ -14,6 +15,7 @@ import (
 type Clerk struct {
 	vs *viewservice.Clerk
 	// Your declarations here
+	KeyExists chan bool
 }
 
 func MakeClerk(vshost string, me string) *Clerk {
@@ -87,20 +89,44 @@ func (ck *Clerk) Get(key string) string {
 // must keep trying until it succeeds.
 //
 func (ck *Clerk) PutExt(key string, value string, dohash bool) string {
-
+	//remember to test this function explicitly (the hashing part )
 	// Your code here.
 	view, _ := ck.vs.Get()
-	args := &PutArgs{}
-	args.Key = key
-	args.Value = value
-	var reply *PutReply
+	putArgs := &PutArgs{}
+	var putReply *PutReply
 
-	ok := call(view.Primary, "PBServer.Put", args, &reply)
+	if dohash {
 
-	if ok {
-		return key
+		getArgs := &GetArgs{}
+		var getReply GetReply
+		getArgs.Key = key
+		//get previous value for a key
+		if ok := call(view.Primary, "PBServer.Get", getArgs, &getReply); !ok {
+			return "ERROR"
+		}
+
+		//hash new value
+		prev := getReply.Value
+		hashedValue := strconv.Itoa(int(hash(prev + value)))
+		putArgs.Key = key
+		putArgs.Value = hashedValue
+		//send key and hashed value pair to database
+		if ok := call(view.Primary, "PBServer.Put", putArgs, putReply); !ok {
+			return "Error"
+		} else {
+			return key
+		}
+
 	} else {
-		return "???"
+		// put value not hashed
+		putArgs.Key = key
+		putArgs.Value = value
+
+		if ok := call(view.Primary, "PBServer.Put", putArgs, &putReply); !ok {
+			return "ERROR"
+		} else {
+			return key
+		}
 	}
 }
 

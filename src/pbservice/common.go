@@ -24,8 +24,9 @@ type PutArgs struct {
 	// otherwise RPC will break.
 }
 type ClientMsg struct {
-	Key   string
-	Value string
+	Key     string
+	Value   string
+	Success bool
 }
 
 type PutReply struct {
