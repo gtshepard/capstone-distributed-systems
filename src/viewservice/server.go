@@ -110,6 +110,9 @@ func (vs *ViewServer) tick() {
 			vs.servers[srvMsg.name] = srvMsg
 			vs.servers[srvMsg.name].ttl = DeadPings
 			myLogger("", "ELECTED BACKUP: "+srvMsg.name, "Tick()", "ViewService.go")
+		} else {
+			//account for primary pinging before first backup elected
+			vs.servers[srvMsg.name].ttl = DeadPings
 		}
 		//what other case activates this
 		//restart with idle server
