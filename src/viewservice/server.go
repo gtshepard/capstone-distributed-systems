@@ -115,7 +115,7 @@ func (vs *ViewServer) tick() {
 		//restart with idle server
 
 	} else if srvMsg.name == vs.currentView.Primary && srvMsg.oldViewNum < uint(1) {
-		myLogger("", "PRIMARY RESTART "+srvMsg.name, "Tick()", "ViewService.go")
+		myLogger("", "TREAT PRIMARY RESTART AS DEAD "+srvMsg.name, "Tick()", "ViewService.go")
 		//treat primary restart as dead
 		vs.servers[srvMsg.name].ttl = 0
 	} else {

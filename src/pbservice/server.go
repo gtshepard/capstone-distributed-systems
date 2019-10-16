@@ -7,6 +7,7 @@ import (
 	"net"
 	"net/rpc"
 	"os"
+	"strconv"
 	"sync"
 	"syscall"
 	"time"
@@ -24,9 +25,10 @@ func DPrintf(format string, a ...interface{}) (n int, err error) {
 	return
 }
 
-type PutClientMsg struct {
-	Key   string
-	Value string
+type SrvView struct {
+	Viewnum uint
+	Primary string
+	Backup  string
 }
 
 type PBServer struct {
@@ -37,10 +39,15 @@ type PBServer struct {
 	vs         *viewservice.Clerk
 	done       sync.WaitGroup
 	finish     chan interface{}
-	writer     chan *ClientMsg
-	reader     chan *ClientMsg
 	// Your declarations here.
-	db map[string]string
+	writer    chan *ClientMsg
+	reader    chan *ClientMsg
+	db        map[string]string
+	update    chan *Update
+	repilcate chan *DBCopy
+	ack       chan *SrvAckArgs
+	view      SrvView
+	intervals int
 }
 
 func (pb *PBServer) Put(args *PutArgs, reply *PutReply) error {
@@ -57,6 +64,7 @@ func (pb *PBServer) Put(args *PutArgs, reply *PutReply) error {
 func (pb *PBServer) Get(args *GetArgs, reply *GetReply) error {
 	// Your code here.
 	myLogger("GET", "BEFORE SEND", "GET", "Server.go")
+
 	//make request to db
 	msg := &ClientMsg{}
 	msg.Key = args.Key
@@ -70,18 +78,49 @@ func (pb *PBServer) Get(args *GetArgs, reply *GetReply) error {
 	return nil
 }
 
+func (pb *PBServer) RecieveUpdate(args *PutArgs, reply *PutReply) error {
+	update := &Update{}
+	update.Key = args.Key
+	update.Value = args.Value
+	pb.update <- update
+	return nil
+}
+
+func (pb *PBServer) RecieveReplica(args *ReplicateArgs, reply *ReplicateReply) error {
+	replica := &DBCopy{}
+	replica.db = args.db
+	pb.repilcate <- replica
+	return nil
+}
+
+func (pb *PBServer) Ack(args *SrvAckArgs, reply *SrvAckReply) error {
+	pb.ack <- args
+	return nil
+}
+
 // ping the viewserver periodically.
 func (pb *PBServer) tick() {
-
+	pb.intervals += 1
+	myLogger("INTERVAL COUNT: ", strconv.Itoa(pb.intervals)+" SRV: "+pb.me, "Tick", "Server.go")
+	if pb.dead {
+		myLogger("DEAD FLAG", "SRV FAILED: "+pb.me, "Tick", "Server.go")
+		time.Sleep(viewservice.PingInterval * 5)
+	}
 	//server learns its role from view service, p/b/i
-	//handle requests
+	//handle request
 	view, _ := pb.vs.Get()
 
-	if view.Viewnum < 3 {
-		pb.vs.Ping(0)
+	if view.Viewnum < 2 {
+		view, _ = pb.vs.Ping(0)
 	} else {
-		pb.vs.Ping(view.Viewnum)
+		view, _ = pb.vs.Ping(view.Viewnum)
 	}
+
+	//if view.Primary != "" || view.Backup {
+
+	//} else {
+	//	view, _ = pb.vs.Ping(0)
+	//}
 
 	//3 servers are made
 	// server 1 is elected primary
@@ -90,26 +129,65 @@ func (pb *PBServer) tick() {
 	// server 3 is made but view is < 3, it wil just learn the newest view
 
 	//handle put/get request for primary
-	select {
-	case read := <-pb.reader:
-		msg := &ClientMsg{}
-		if val, ok := pb.db[read.Key]; ok {
-			//read given key from db
-			msg.Key = read.Key
-			msg.Value = val
-			pb.reader <- msg
-		} else {
-			//attempted to read key that does not exist
-			msg.Key = read.Key
-			msg.Value = ""
-			pb.reader <- msg
+	if pb.me == view.Primary {
+
+		select {
+		case read := <-pb.reader:
+
+			msg := &ClientMsg{}
+			if val, ok := pb.db[read.Key]; ok {
+				//read given key from db
+				msg.Key = read.Key
+				msg.Value = val
+				pb.reader <- msg
+			} else {
+				//attempted to read key that does not exist
+				msg.Key = read.Key
+				msg.Value = ""
+				pb.reader <- msg
+			}
+
+		case write := <-pb.writer:
+			pb.db[write.Key] = write.Value
+			args := &PutArgs{}
+			var reply *PutReply
+			args.Key = write.Key
+			args.Value = write.Value
+			myLogger("After Recieve", pb.db[write.Key], "Tick", "Server.go")
+			if ok := call(view.Backup, "PBServer.RecieveUpdate", args, &reply); !ok {
+				myLogger("ReciveUpdate", "RPC FAIL", "Tick", "Server.go")
+				return
+			}
+			// wait for update to be written to backup
+			//<-pb.ack
 		}
 
-	case write := <-pb.writer:
-		pb.db[write.Key] = write.Value
-		myLogger("After Recieve", pb.db[write.Key], "Tick", "Server.go")
-	}
+	} else if pb.me == view.Backup {
+		//	select:
+		//			case entry <- vs.update:
+		//				db[entry.key] = entry.val
+		//				call(v.p, "Server.Ack", AckArg, AckReply)
+		//			case db_data <- vs.copy:
+		//				for k,v in db_data:
+		//					db[k] = v
+		//				//ack copy done for backup
+		//				call(v.p, "Server.Ack", AckArg, AckReply)
 
+		//args := &SrvAckArgs{}
+		//var reply *SrvAckReply
+
+		select {
+		case replica := <-pb.repilcate:
+			pb.db = replica.db
+			//call(view.Primary, "PBServer.Ack", args, &reply)
+		case update := <-pb.update:
+			pb.db[update.Key] = update.Value
+			//call(view.Primary, "PBServer.Ack", args, &reply)
+		}
+
+	} else {
+
+	}
 	// Tick():
 	//	 //determine server role
 	//	 //set just promoted flag in event server was just promoted
@@ -147,7 +225,6 @@ func (pb *PBServer) tick() {
 	//				success[write.group_id] = write.group_id
 	//				call(client, "Client.ReicveBroadcastedAck", AckArgs, AckReply)
 	//			else:
-	//
 	//				print("duplicate write request ignored: ", group_id)
 	//
 	//	 //backup recieves updates from primary and no other
@@ -181,7 +258,16 @@ func StartServer(vshost string, me string) *PBServer {
 	// Your pb.* initializations here.\
 	pb.writer = make(chan *ClientMsg)
 	pb.reader = make(chan *ClientMsg)
+	pb.update = make(chan *Update)
+	pb.repilcate = make(chan *DBCopy)
 	pb.db = make(map[string]string)
+	pb.intervals = 0
+	//get a view for the srv
+	// v, _ := pb.vs.Ping(0)
+	// pb.view = SrvView{}
+	// pb.view.Viewnum = v.Viewnum
+	// pb.view.Primary = v.Primary
+	// pb.view.Backup = v.Backup
 
 	rpcs := rpc.NewServer()
 	rpcs.Register(pb)

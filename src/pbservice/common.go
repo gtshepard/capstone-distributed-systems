@@ -24,10 +24,30 @@ type PutArgs struct {
 	// otherwise RPC will break.
 }
 type ClientMsg struct {
-	Key     string
-	Value   string
-	Success bool
+	Key   string
+	Value string
 }
+
+type Update struct {
+	Key   string
+	Value string
+}
+
+type DBCopy struct {
+	db map[string]string
+}
+
+type ReplicateArgs struct {
+	db map[string]string
+}
+
+type ReplicateReply struct {
+	Err Err
+	db  map[string]string
+}
+
+type SrvAckArgs struct{}
+type SrvAckReply struct{}
 
 type PutReply struct {
 	Err           Err

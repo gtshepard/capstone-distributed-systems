@@ -3,6 +3,7 @@ package viewservice
 import (
 	"fmt"
 	"net/rpc"
+	"strconv"
 )
 
 //
@@ -78,7 +79,7 @@ func call(srv string, rpcname string,
 //2. inform the view service of the most recent view that the k/v server knows about
 //3. k/v server learns the new view from the view service
 func (ck *Clerk) Ping(viewnum uint) (View, error) {
-
+	myLogger("VS-CLERK-PING", "VIEW NUMBER: "+strconv.Itoa(int(viewnum)), "Ping", "vs-client.go")
 	// prepare the arguments.
 	args := &PingArgs{}
 	args.Me = ck.me // k/v server name

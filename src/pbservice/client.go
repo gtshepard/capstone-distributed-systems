@@ -15,7 +15,6 @@ import (
 type Clerk struct {
 	vs *viewservice.Clerk
 	// Your declarations here
-	KeyExists chan bool
 }
 
 func MakeClerk(vshost string, me string) *Clerk {
@@ -118,7 +117,7 @@ func (ck *Clerk) PutExt(key string, value string, dohash bool) string {
 		}
 
 	} else {
-		// put value not hashed
+		// put value not hash
 		putArgs.Key = key
 		putArgs.Value = value
 

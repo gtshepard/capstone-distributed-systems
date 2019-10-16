@@ -66,7 +66,7 @@ func TestBasicFail(t *testing.T) {
 	ck.Put("111", "v1")
 	//check to see if the database the correct value
 	check(ck, "111", "v1")
-	myLogger("Passed First Put", "PASS", "TT", "TT")
+
 	ck.Put("2", "v2")
 	check(ck, "2", "v2")
 
@@ -74,6 +74,7 @@ func TestBasicFail(t *testing.T) {
 	check(ck, "1", "v1a")
 
 	fmt.Printf("  ... Passed\n")
+	myLogger("~~~~~~~~~~~~~~~", "PASSED FIRST PRIMARY", "", "~~~~~~~~~~~~~~~~~~~~~~~~~")
 	// add a backup
 	fmt.Printf("Test: Add a backup ...\n")
 	//create backup k/v server
@@ -107,6 +108,7 @@ func TestBasicFail(t *testing.T) {
 	check(ck, "4", "44")
 
 	fmt.Printf("  ... Passed\n")
+	myLogger("~~~~~~~~~~~~~~~", "PASSED FIRST BACKUP", "", "~~~~~~~~~~~~~~~~~~~~~~~~~")
 	// kill the primary
 	fmt.Printf("Test: Primary failure ...\n")
 	//primary fails
@@ -115,7 +117,6 @@ func TestBasicFail(t *testing.T) {
 	for i := 0; i < viewservice.DeadPings*2; i++ {
 
 		v, _ := vck.Get()
-		//backup elected
 		if v.Primary == s2.me {
 			break
 		}
@@ -123,8 +124,10 @@ func TestBasicFail(t *testing.T) {
 	}
 
 	v, _ = vck.Get()
-	//no backup elected
+	myLogger("T1", "current primary"+v.Primary, "T1", "test_test.go")
+	myLogger("T1", "old backup: "+s2.me, "T1", "test_test.go")
 	if v.Primary != s2.me {
+		myLogger("~~~~~~~~~~~~~~~", "FAILED PRIMARY FAIL", "", "~~~~~~~~~~~~~~~~~~~~~~~~~")
 		t.Fatal("backup never switched to primary")
 	}
 
@@ -135,6 +138,7 @@ func TestBasicFail(t *testing.T) {
 	check(ck, "4", "44")
 
 	fmt.Printf("  ... Passed\n")
+	myLogger("~~~~~~~~~~~~~~~", "PASSED PRIMARY FAIL", "", "~~~~~~~~~~~~~~~~~~~~~~~~~")
 
 	// kill solo server, start new server, check that
 	// it does not start serving as primary
