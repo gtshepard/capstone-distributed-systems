@@ -171,6 +171,16 @@ func StartServer(vshost string, me string) *PBServer {
 	pb.db = make(map[string]string)
 	pb.intervals = 0
 
+	pb.done.Add(1)
+	go func() {
+		for pb.dead == false {
+			//srv is alive
+		}
+		myLogger("@@@@@@@@@@@@@@", "CALL TO FIAILURE MADE", "", "@@@@@@@@@@@@@@@@@@")
+		pb.vs.Failure(pb.me)
+		pb.done.Done()
+	}()
+
 	rpcs := rpc.NewServer()
 	rpcs.Register(pb)
 

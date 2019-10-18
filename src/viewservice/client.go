@@ -27,6 +27,11 @@ func MakeClerk(me string, server string) *Clerk {
 	return ck
 }
 
+func (ck *Clerk) Failure(srv string) {
+	//make RPC call
+	myLogger("@@@@@@@@@@@@@@", "THIS VS CLERK SPEAKING", "", "@@@@@@@@@@@@@@@@@@")
+}
+
 // call() sends an RPC to the rpcname handler on server srv
 // with arguments args, waits for the reply, and leaves the
 // reply in reply. the reply argument should be a pointer

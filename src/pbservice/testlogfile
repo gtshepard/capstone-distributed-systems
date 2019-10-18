@@ -1,161 +1,59 @@
-2019/10/15 20:10:42 INTERVAL COUNT:  :  1 SRV: /var/tmp/824-501/pb-58147-basic-1 - Tick - Server.go
-2019/10/15 20:10:42 VS-CLERK-PING :  VIEW NUMBER: 0 - Ping - vs-client.go
-2019/10/15 20:10:42  :  ELECTED FIRST PRIMARY - Tick() - ViewService.go
-2019/10/15 20:10:42 INTERVAL COUNT:  :  2 SRV: /var/tmp/824-501/pb-58147-basic-1 - Tick - Server.go
-2019/10/15 20:10:42 VS-CLERK-PING :  VIEW NUMBER: 0 - Ping - vs-client.go
-2019/10/15 20:10:42 3 :  TTL FOR SRV : /var/tmp/824-501/pb-58147-basic-1:4 - Tick() - ViewService.go
-2019/10/15 20:10:43 After Recieve :  v1 - Tick - Server.go
-2019/10/15 20:10:43 ReciveUpdate :  RPC FAIL - Tick - Server.go
-2019/10/15 20:10:43 GET :  BEFORE SEND - GET - Server.go
-2019/10/15 20:10:43 INTERVAL COUNT:  :  3 SRV: /var/tmp/824-501/pb-58147-basic-1 - Tick - Server.go
-2019/10/15 20:10:43 VS-CLERK-PING :  VIEW NUMBER: 0 - Ping - vs-client.go
-2019/10/15 20:10:43 3 :  TTL FOR SRV : /var/tmp/824-501/pb-58147-basic-1:4 - Tick() - ViewService.go
-2019/10/15 20:10:43 GET :  AFTER VAL - Tick - Server.go
-2019/10/15 20:10:43 GET :  AFTER VAL - Tick - Server.go
-2019/10/15 20:10:43 FINISH :  v1 - TT - TT
-2019/10/15 20:10:43 INTERVAL COUNT:  :  4 SRV: /var/tmp/824-501/pb-58147-basic-1 - Tick - Server.go
-2019/10/15 20:10:43 VS-CLERK-PING :  VIEW NUMBER: 0 - Ping - vs-client.go
-2019/10/15 20:10:43 3 :  TTL FOR SRV : /var/tmp/824-501/pb-58147-basic-1:4 - Tick() - ViewService.go
-2019/10/15 20:10:43 GET :  BEFORE SEND - GET - Server.go
-2019/10/15 20:10:43 ReciveUpdate :  RPC FAIL - Tick - Server.go
-2019/10/15 20:10:43 INTERVAL COUNT:  :  5 SRV: /var/tmp/824-501/pb-58147-basic-1 - Tick - Server.go
-2019/10/15 20:10:43 VS-CLERK-PING :  VIEW NUMBER: 0 - Ping - vs-client.go
-2019/10/15 20:10:43 3 :  TTL FOR SRV : /var/tmp/824-501/pb-58147-basic-1:4 - Tick() - ViewService.go
-2019/10/15 20:10:43 GET :  AFTER VAL - Tick - Server.go
-2019/10/15 20:10:43 GET :  AFTER VAL - Tick - Server.go
-2019/10/15 20:10:43 FINISH :  v2 - TT - TT
-2019/10/15 20:10:43 INTERVAL COUNT:  :  6 SRV: /var/tmp/824-501/pb-58147-basic-1 - Tick - Server.go
-2019/10/15 20:10:43 VS-CLERK-PING :  VIEW NUMBER: 0 - Ping - vs-client.go
-2019/10/15 20:10:43 3 :  TTL FOR SRV : /var/tmp/824-501/pb-58147-basic-1:4 - Tick() - ViewService.go
-2019/10/15 20:10:43 After Recieve :  v1a - Tick - Server.go
-2019/10/15 20:10:43 ReciveUpdate :  RPC FAIL - Tick - Server.go
-2019/10/15 20:10:43 GET :  BEFORE SEND - GET - Server.go
-2019/10/15 20:10:43 INTERVAL COUNT:  :  7 SRV: /var/tmp/824-501/pb-58147-basic-1 - Tick - Server.go
-2019/10/15 20:10:43 VS-CLERK-PING :  VIEW NUMBER: 0 - Ping - vs-client.go
-2019/10/15 20:10:43 3 :  TTL FOR SRV : /var/tmp/824-501/pb-58147-basic-1:4 - Tick() - ViewService.go
-2019/10/15 20:10:43 GET :  AFTER VAL - Tick - Server.go
-2019/10/15 20:10:43 GET :  AFTER VAL - Tick - Server.go
-2019/10/15 20:10:43 FINISH :  v1a - TT - TT
-2019/10/15 20:10:43 ~~~~~~~~~~~~~~~ :  PASSED FIRST PRIMARY -  - ~~~~~~~~~~~~~~~~~~~~~~~~~
-2019/10/15 20:10:43 INTERVAL COUNT:  :  1 SRV: /var/tmp/824-501/pb-58147-basic-2 - Tick - Server.go
-2019/10/15 20:10:43 VS-CLERK-PING :  VIEW NUMBER: 0 - Ping - vs-client.go
-2019/10/15 20:10:43 3 :  TTL FOR SRV : /var/tmp/824-501/pb-58147-basic-1:4 - Tick() - ViewService.go
-2019/10/15 20:10:43 INTERVAL COUNT:  :  8 SRV: /var/tmp/824-501/pb-58147-basic-1 - Tick - Server.go
-2019/10/15 20:10:43 VS-CLERK-PING :  VIEW NUMBER: 2 - Ping - vs-client.go
-2019/10/15 20:10:43 3 :  TTL FOR SRV : /var/tmp/824-501/pb-58147-basic-1:3 - Tick() - ViewService.go
-2019/10/15 20:10:43 3 :  TTL FOR SRV : /var/tmp/824-501/pb-58147-basic-2:4 - Tick() - ViewService.go
-2019/10/15 20:10:43 GET :  BEFORE SEND - GET - Server.go
-2019/10/15 20:10:43 INTERVAL COUNT:  :  2 SRV: /var/tmp/824-501/pb-58147-basic-2 - Tick - Server.go
-2019/10/15 20:10:43 VS :  RESTORE TTL  : /var/tmp/824-501/pb-58147-basic-1:5 - Tick() - ViewService.go
-2019/10/15 20:10:43 VS-CLERK-PING :  VIEW NUMBER: 2 - Ping - vs-client.go
-2019/10/15 20:10:43 VS-PB :  RESTORE TTL  : /var/tmp/824-501/pb-58147-basic-1:5 - Tick() - ViewService.go
-2019/10/15 20:10:44 3 :  TTL FOR SRV : /var/tmp/824-501/pb-58147-basic-1:4 - Tick() - ViewService.go
-2019/10/15 20:10:44 3 :  TTL FOR SRV : /var/tmp/824-501/pb-58147-basic-2:3 - Tick() - ViewService.go
-2019/10/15 20:10:44 VS :  RESTORE TTL  : /var/tmp/824-501/pb-58147-basic-2:5 - Tick() - ViewService.go
-2019/10/15 20:10:44 VS-PB :  RESTORE TTL  : /var/tmp/824-501/pb-58147-basic-2:5 - Tick() - ViewService.go
-2019/10/15 20:10:44 INTERVAL COUNT:  :  3 SRV: /var/tmp/824-501/pb-58147-basic-2 - Tick - Server.go
-2019/10/15 20:10:44 VS-CLERK-PING :  VIEW NUMBER: 2 - Ping - vs-client.go
-2019/10/15 20:10:44 VS-CLERK-PING :  VIEW NUMBER: 2 - Ping - vs-client.go
-2019/10/15 20:10:44 3 :  TTL FOR SRV : /var/tmp/824-501/pb-58147-basic-1:3 - Tick() - ViewService.go
-2019/10/15 20:10:44 3 :  TTL FOR SRV : /var/tmp/824-501/pb-58147-basic-2:4 - Tick() - ViewService.go
-2019/10/15 20:10:44 VS :  RESTORE TTL  : /var/tmp/824-501/pb-58147-basic-2:5 - Tick() - ViewService.go
-2019/10/15 20:10:44 VS-PB :  RESTORE TTL  : /var/tmp/824-501/pb-58147-basic-2:5 - Tick() - ViewService.go
-2019/10/15 20:10:44 3 :  TTL FOR SRV : /var/tmp/824-501/pb-58147-basic-1:2 - Tick() - ViewService.go
-2019/10/15 20:10:44 3 :  TTL FOR SRV : /var/tmp/824-501/pb-58147-basic-2:4 - Tick() - ViewService.go
-2019/10/15 20:10:44 GET :  AFTER VAL - Tick - Server.go
-2019/10/15 20:10:44 VS :  RESTORE TTL  : /var/tmp/824-501/pb-58147-basic-1:5 - Tick() - ViewService.go
-2019/10/15 20:10:44 GET :  AFTER VAL - Tick - Server.go
-2019/10/15 20:10:44 VS-PB :  RESTORE TTL  : /var/tmp/824-501/pb-58147-basic-1:5 - Tick() - ViewService.go
-2019/10/15 20:10:44 FINISH :  33 - TT - TT
-2019/10/15 20:10:44 INTERVAL COUNT:  :  10 SRV: /var/tmp/824-501/pb-58147-basic-1 - Tick - Server.go
-2019/10/15 20:10:44 VS-CLERK-PING :  VIEW NUMBER: 2 - Ping - vs-client.go
-2019/10/15 20:10:44 3 :  TTL FOR SRV : /var/tmp/824-501/pb-58147-basic-1:4 - Tick() - ViewService.go
-2019/10/15 20:10:44 3 :  TTL FOR SRV : /var/tmp/824-501/pb-58147-basic-2:3 - Tick() - ViewService.go
-2019/10/15 20:10:44 VS :  RESTORE TTL  : /var/tmp/824-501/pb-58147-basic-1:5 - Tick() - ViewService.go
-2019/10/15 20:10:44 VS-PB :  RESTORE TTL  : /var/tmp/824-501/pb-58147-basic-1:5 - Tick() - ViewService.go
-2019/10/15 20:10:44 After Recieve :  44 - Tick - Server.go
-2019/10/15 20:10:44 GET :  BEFORE SEND - GET - Server.go
-2019/10/15 20:10:44 INTERVAL COUNT:  :  4 SRV: /var/tmp/824-501/pb-58147-basic-2 - Tick - Server.go
-2019/10/15 20:10:44 INTERVAL COUNT:  :  11 SRV: /var/tmp/824-501/pb-58147-basic-1 - Tick - Server.go
-2019/10/15 20:10:44 VS-CLERK-PING :  VIEW NUMBER: 2 - Ping - vs-client.go
-2019/10/15 20:10:44 VS-CLERK-PING :  VIEW NUMBER: 2 - Ping - vs-client.go
-2019/10/15 20:10:44 3 :  TTL FOR SRV : /var/tmp/824-501/pb-58147-basic-1:4 - Tick() - ViewService.go
-2019/10/15 20:10:44 3 :  TTL FOR SRV : /var/tmp/824-501/pb-58147-basic-2:2 - Tick() - ViewService.go
-2019/10/15 20:10:44 VS :  RESTORE TTL  : /var/tmp/824-501/pb-58147-basic-2:5 - Tick() - ViewService.go
-2019/10/15 20:10:44 VS-PB :  RESTORE TTL  : /var/tmp/824-501/pb-58147-basic-2:5 - Tick() - ViewService.go
-2019/10/15 20:10:44 3 :  TTL FOR SRV : /var/tmp/824-501/pb-58147-basic-1:3 - Tick() - ViewService.go
-2019/10/15 20:10:44 3 :  TTL FOR SRV : /var/tmp/824-501/pb-58147-basic-2:4 - Tick() - ViewService.go
-2019/10/15 20:10:44 GET :  AFTER VAL - Tick - Server.go
-2019/10/15 20:10:44 FINISH :  44 - TT - TT
-2019/10/15 20:10:44 VS :  RESTORE TTL  : /var/tmp/824-501/pb-58147-basic-1:5 - Tick() - ViewService.go
-2019/10/15 20:10:44 ~~~~~~~~~~~~~~~ :  PASSED FIRST BACKUP -  - ~~~~~~~~~~~~~~~~~~~~~~~~~
-2019/10/15 20:10:44 VS-PB :  RESTORE TTL  : /var/tmp/824-501/pb-58147-basic-1:5 - Tick() - ViewService.go
-2019/10/15 20:10:45 T1 :  current primary/var/tmp/824-501/pb-58147-basic-1 - T1 - test_test.go
-2019/10/15 20:10:45 T1 :  old backup: /var/tmp/824-501/pb-58147-basic-2 - T1 - test_test.go
-2019/10/15 20:10:45 ~~~~~~~~~~~~~~~ :  FAILED PRIMARY FAIL -  - ~~~~~~~~~~~~~~~~~~~~~~~~~
-2019/10/15 20:10:46 1 :  THIS IS ITER: 0 - TestAtMostOnce - test_test
-2019/10/15 20:10:46 INTERVAL COUNT:  :  1 SRV: /var/tmp/824-501/pb-58147-csu-1 - Tick - Server.go
-2019/10/15 20:10:46 VS-CLERK-PING :  VIEW NUMBER: 0 - Ping - vs-client.go
-2019/10/15 20:10:46  :  ELECTED FIRST PRIMARY - Tick() - ViewService.go
-2019/10/15 20:10:46 INTERVAL COUNT:  :  2 SRV: /var/tmp/824-501/pb-58147-csu-1 - Tick - Server.go
-2019/10/15 20:10:46 VS-CLERK-PING :  VIEW NUMBER: 0 - Ping - vs-client.go
-2019/10/15 20:10:46 3 :  TTL FOR SRV : /var/tmp/824-501/pb-58147-csu-1:4 - Tick() - ViewService.go
-2019/10/15 21:06:54 INTERVAL COUNT:  :  1 SRV: /var/tmp/824-501/pb-64390-basic-1 - Tick - Server.go
-2019/10/15 21:06:54  :  ELECTED FIRST PRIMARY - Tick() - ViewService.go
-2019/10/15 21:06:54 INTERVAL COUNT:  :  2 SRV: /var/tmp/824-501/pb-64390-basic-1 - Tick - Server.go
-2019/10/15 21:06:54 3 :  TTL FOR SRV : /var/tmp/824-501/pb-64390-basic-1:4 - Tick() - ViewService.go
-2019/10/15 21:06:55 After Recieve :  v1 - Tick - Server.go
-2019/10/15 21:06:55 ReciveUpdate :  RPC FAIL - Tick - Server.go
-2019/10/15 21:06:55 INTERVAL COUNT:  :  3 SRV: /var/tmp/824-501/pb-64390-basic-1 - Tick - Server.go
-2019/10/15 21:06:55 3 :  TTL FOR SRV : /var/tmp/824-501/pb-64390-basic-1:4 - Tick() - ViewService.go
-2019/10/15 21:06:55 INTERVAL COUNT:  :  4 SRV: /var/tmp/824-501/pb-64390-basic-1 - Tick - Server.go
-2019/10/15 21:06:55 After Recieve :  v2 - Tick - Server.go
-2019/10/15 21:06:55 3 :  TTL FOR SRV : /var/tmp/824-501/pb-64390-basic-1:4 - Tick() - ViewService.go
-2019/10/15 21:06:55 ReciveUpdate :  RPC FAIL - Tick - Server.go
-2019/10/15 21:06:55 INTERVAL COUNT:  :  5 SRV: /var/tmp/824-501/pb-64390-basic-1 - Tick - Server.go
-2019/10/15 21:06:55 3 :  TTL FOR SRV : /var/tmp/824-501/pb-64390-basic-1:4 - Tick() - ViewService.go
-2019/10/15 21:06:55 INTERVAL COUNT:  :  6 SRV: /var/tmp/824-501/pb-64390-basic-1 - Tick - Server.go
-2019/10/15 21:06:55 3 :  TTL FOR SRV : /var/tmp/824-501/pb-64390-basic-1:4 - Tick() - ViewService.go
-2019/10/15 21:06:55 ReciveUpdate :  RPC FAIL - Tick - Server.go
-2019/10/15 21:06:55 INTERVAL COUNT:  :  7 SRV: /var/tmp/824-501/pb-64390-basic-1 - Tick - Server.go
-2019/10/15 21:06:55 3 :  TTL FOR SRV : /var/tmp/824-501/pb-64390-basic-1:4 - Tick() - ViewService.go
-2019/10/15 21:06:55 INTERVAL COUNT:  :  1 SRV: /var/tmp/824-501/pb-64390-basic-2 - Tick - Server.go
-2019/10/15 21:06:55 INTERVAL COUNT:  :  8 SRV: /var/tmp/824-501/pb-64390-basic-1 - Tick - Server.go
-2019/10/15 21:06:55 3 :  TTL FOR SRV : /var/tmp/824-501/pb-64390-basic-1:4 - Tick() - ViewService.go
-2019/10/15 21:06:55  :  ELECTED BACKUP: /var/tmp/824-501/pb-64390-basic-2 - Tick() - ViewService.go
-2019/10/15 21:06:55 INTERVAL COUNT:  :  2 SRV: /var/tmp/824-501/pb-64390-basic-2 - Tick - Server.go
-2019/10/15 21:06:55 3 :  TTL FOR SRV : /var/tmp/824-501/pb-64390-basic-1:3 - Tick() - ViewService.go
-2019/10/15 21:06:55 After Recieve :  33 - Tick - Server.go
-2019/10/15 21:06:55 3 :  TTL FOR SRV : /var/tmp/824-501/pb-64390-basic-2:4 - Tick() - ViewService.go
-2019/10/15 21:06:55  :  PRIMARY RESTART /var/tmp/824-501/pb-64390-basic-1 - Tick() - ViewService.go
-2019/10/15 21:06:55  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/pb-64390-basic-1 - Tick() - ViewService.go
-2019/10/15 21:06:56 3 :  TTL FOR SRV : /var/tmp/824-501/pb-64390-basic-1:-1 - Tick() - ViewService.go
-2019/10/15 21:06:56 3 :  TTL FOR SRV : /var/tmp/824-501/pb-64390-basic-2:3 - Tick() - ViewService.go
-2019/10/15 21:06:56 3 :  RESTORE TTL  : /var/tmp/824-501/pb-64390-basic-2:5 - Tick() - ViewService.go
-2019/10/15 21:06:56  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/pb-64390-basic-1 - Tick() - ViewService.go
-2019/10/15 21:06:56 INTERVAL COUNT:  :  3 SRV: /var/tmp/824-501/pb-64390-basic-2 - Tick - Server.go
-2019/10/15 21:06:56 INTERVAL COUNT:  :  9 SRV: /var/tmp/824-501/pb-64390-basic-1 - Tick - Server.go
-2019/10/15 21:06:56 3 :  TTL FOR SRV : /var/tmp/824-501/pb-64390-basic-1:-2 - Tick() - ViewService.go
-2019/10/15 21:06:56 3 :  TTL FOR SRV : /var/tmp/824-501/pb-64390-basic-2:4 - Tick() - ViewService.go
-2019/10/15 21:06:56 3 :  RESTORE TTL  : /var/tmp/824-501/pb-64390-basic-2:5 - Tick() - ViewService.go
-2019/10/15 21:06:56  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/pb-64390-basic-1 - Tick() - ViewService.go
-2019/10/15 21:06:56 3 :  TTL FOR SRV : /var/tmp/824-501/pb-64390-basic-1:-3 - Tick() - ViewService.go
-2019/10/15 21:06:56 3 :  TTL FOR SRV : /var/tmp/824-501/pb-64390-basic-2:4 - Tick() - ViewService.go
-2019/10/15 21:06:56 3 :  RESTORE TTL  : /var/tmp/824-501/pb-64390-basic-1:5 - Tick() - ViewService.go
-2019/10/15 21:06:56 INTERVAL COUNT:  :  10 SRV: /var/tmp/824-501/pb-64390-basic-1 - Tick - Server.go
-2019/10/15 21:06:56 3 :  TTL FOR SRV : /var/tmp/824-501/pb-64390-basic-1:4 - Tick() - ViewService.go
-2019/10/15 21:06:56 3 :  TTL FOR SRV : /var/tmp/824-501/pb-64390-basic-2:3 - Tick() - ViewService.go
-2019/10/15 21:06:56 3 :  RESTORE TTL  : /var/tmp/824-501/pb-64390-basic-1:5 - Tick() - ViewService.go
-2019/10/15 21:06:56 After Recieve :  44 - Tick - Server.go
-2019/10/15 21:06:56 INTERVAL COUNT:  :  11 SRV: /var/tmp/824-501/pb-64390-basic-1 - Tick - Server.go
-2019/10/15 21:06:56 INTERVAL COUNT:  :  4 SRV: /var/tmp/824-501/pb-64390-basic-2 - Tick - Server.go
-2019/10/15 21:06:56 3 :  TTL FOR SRV : /var/tmp/824-501/pb-64390-basic-1:4 - Tick() - ViewService.go
-2019/10/15 21:06:56 3 :  TTL FOR SRV : /var/tmp/824-501/pb-64390-basic-2:2 - Tick() - ViewService.go
-2019/10/15 21:06:56 3 :  RESTORE TTL  : /var/tmp/824-501/pb-64390-basic-1:5 - Tick() - ViewService.go
-2019/10/15 21:06:56 3 :  TTL FOR SRV : /var/tmp/824-501/pb-64390-basic-1:4 - Tick() - ViewService.go
-2019/10/15 21:06:56 3 :  TTL FOR SRV : /var/tmp/824-501/pb-64390-basic-2:1 - Tick() - ViewService.go
-2019/10/15 21:06:56 3 :  RESTORE TTL  : /var/tmp/824-501/pb-64390-basic-2:5 - Tick() - ViewService.go
-2019/10/15 21:06:58 INTERVAL COUNT:  :  1 SRV: /var/tmp/824-501/pb-64390-csu-1 - Tick - Server.go
-2019/10/15 21:06:58  :  ELECTED FIRST PRIMARY - Tick() - ViewService.go
-2019/10/15 21:06:58 INTERVAL COUNT:  :  2 SRV: /var/tmp/824-501/pb-64390-csu-1 - Tick - Server.go
-2019/10/15 21:06:58 3 :  TTL FOR SRV : /var/tmp/824-501/pb-64390-csu-1:4 - Tick() - ViewService.go
+2019/10/17 22:34:12 INTERVAL COUNT:  :  1 SRV: /var/tmp/824-501/pb-97807-basic-1 - Tick - Server.go
+2019/10/17 22:34:12  :  ELECTED FIRST PRIMARY - Tick() - ViewService.go
+2019/10/17 22:34:12 INTERVAL COUNT:  :  2 SRV: /var/tmp/824-501/pb-97807-basic-1 - Tick - Server.go
+2019/10/17 22:34:12 3 :  TTL FOR SRV : /var/tmp/824-501/pb-97807-basic-1:4 - Tick() - ViewService.go
+2019/10/17 22:34:13 After Recieve :  v1 - Tick - Server.go
+2019/10/17 22:34:13 ReciveUpdate :  RPC FAIL - Tick - Server.go
+2019/10/17 22:34:13 INTERVAL COUNT:  :  3 SRV: /var/tmp/824-501/pb-97807-basic-1 - Tick - Server.go
+2019/10/17 22:34:13 3 :  TTL FOR SRV : /var/tmp/824-501/pb-97807-basic-1:4 - Tick() - ViewService.go
+2019/10/17 22:34:14 INTERVAL COUNT:  :  4 SRV: /var/tmp/824-501/pb-97807-basic-1 - Tick - Server.go
+2019/10/17 22:34:14 After Recieve :  v2 - Tick - Server.go
+2019/10/17 22:34:14 3 :  TTL FOR SRV : /var/tmp/824-501/pb-97807-basic-1:4 - Tick() - ViewService.go
+2019/10/17 22:34:14 ReciveUpdate :  RPC FAIL - Tick - Server.go
+2019/10/17 22:34:14 INTERVAL COUNT:  :  5 SRV: /var/tmp/824-501/pb-97807-basic-1 - Tick - Server.go
+2019/10/17 22:34:14 3 :  TTL FOR SRV : /var/tmp/824-501/pb-97807-basic-1:4 - Tick() - ViewService.go
+2019/10/17 22:34:14 INTERVAL COUNT:  :  6 SRV: /var/tmp/824-501/pb-97807-basic-1 - Tick - Server.go
+2019/10/17 22:34:14 After Recieve :  v1a - Tick - Server.go
+2019/10/17 22:34:14 3 :  TTL FOR SRV : /var/tmp/824-501/pb-97807-basic-1:4 - Tick() - ViewService.go
+2019/10/17 22:34:14 ReciveUpdate :  RPC FAIL - Tick - Server.go
+2019/10/17 22:34:14 INTERVAL COUNT:  :  7 SRV: /var/tmp/824-501/pb-97807-basic-1 - Tick - Server.go
+2019/10/17 22:34:14 3 :  TTL FOR SRV : /var/tmp/824-501/pb-97807-basic-1:4 - Tick() - ViewService.go
+2019/10/17 22:34:14 INTERVAL COUNT:  :  1 SRV: /var/tmp/824-501/pb-97807-basic-2 - Tick - Server.go
+2019/10/17 22:34:14 INTERVAL COUNT:  :  8 SRV: /var/tmp/824-501/pb-97807-basic-1 - Tick - Server.go
+2019/10/17 22:34:14 3 :  TTL FOR SRV : /var/tmp/824-501/pb-97807-basic-1:4 - Tick() - ViewService.go
+2019/10/17 22:34:14  :  ELECTED BACKUP: /var/tmp/824-501/pb-97807-basic-2 - Tick() - ViewService.go
+2019/10/17 22:34:14 3 :  TTL FOR SRV : /var/tmp/824-501/pb-97807-basic-1:3 - Tick() - ViewService.go
+2019/10/17 22:34:14 INTERVAL COUNT:  :  2 SRV: /var/tmp/824-501/pb-97807-basic-2 - Tick - Server.go
+2019/10/17 22:34:14 3 :  TTL FOR SRV : /var/tmp/824-501/pb-97807-basic-2:4 - Tick() - ViewService.go
+2019/10/17 22:34:14  :  PRIMARY RESTART /var/tmp/824-501/pb-97807-basic-1 - Tick() - ViewService.go
+2019/10/17 22:34:14  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/pb-97807-basic-1 - Tick() - ViewService.go
+2019/10/17 22:34:14 After Recieve :  33 - Tick - Server.go
+2019/10/17 22:34:14 ReciveUpdate :  RPC FAIL - Tick - Server.go
+2019/10/17 22:34:14 3 :  TTL FOR SRV : /var/tmp/824-501/pb-97807-basic-1:-1 - Tick() - ViewService.go
+2019/10/17 22:34:14 INTERVAL COUNT:  :  9 SRV: /var/tmp/824-501/pb-97807-basic-1 - Tick - Server.go
+2019/10/17 22:34:14 3 :  TTL FOR SRV : /var/tmp/824-501/pb-97807-basic-2:3 - Tick() - ViewService.go
+2019/10/17 22:34:14 3 :  RESTORE TTL  : /var/tmp/824-501/pb-97807-basic-2:5 - Tick() - ViewService.go
+2019/10/17 22:34:14  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/pb-97807-basic-1 - Tick() - ViewService.go
+2019/10/17 22:34:14 3 :  TTL FOR SRV : /var/tmp/824-501/pb-97807-basic-1:-2 - Tick() - ViewService.go
+2019/10/17 22:34:14 3 :  TTL FOR SRV : /var/tmp/824-501/pb-97807-basic-2:4 - Tick() - ViewService.go
+2019/10/17 22:34:14 3 :  RESTORE TTL  : /var/tmp/824-501/pb-97807-basic-1:5 - Tick() - ViewService.go
+2019/10/17 22:34:14 INTERVAL COUNT:  :  10 SRV: /var/tmp/824-501/pb-97807-basic-1 - Tick - Server.go
+2019/10/17 22:34:14 3 :  TTL FOR SRV : /var/tmp/824-501/pb-97807-basic-1:4 - Tick() - ViewService.go
+2019/10/17 22:34:14 3 :  TTL FOR SRV : /var/tmp/824-501/pb-97807-basic-2:3 - Tick() - ViewService.go
+2019/10/17 22:34:14 3 :  RESTORE TTL  : /var/tmp/824-501/pb-97807-basic-1:5 - Tick() - ViewService.go
+2019/10/17 22:34:15 After Recieve :  44 - Tick - Server.go
+2019/10/17 22:34:15 INTERVAL COUNT:  :  3 SRV: /var/tmp/824-501/pb-97807-basic-2 - Tick - Server.go
+2019/10/17 22:34:15 3 :  TTL FOR SRV : /var/tmp/824-501/pb-97807-basic-1:4 - Tick() - ViewService.go
+2019/10/17 22:34:15 3 :  TTL FOR SRV : /var/tmp/824-501/pb-97807-basic-2:2 - Tick() - ViewService.go
+2019/10/17 22:34:15 3 :  RESTORE TTL  : /var/tmp/824-501/pb-97807-basic-2:5 - Tick() - ViewService.go
+2019/10/17 22:34:15 INTERVAL COUNT:  :  11 SRV: /var/tmp/824-501/pb-97807-basic-1 - Tick - Server.go
+2019/10/17 22:34:15 3 :  TTL FOR SRV : /var/tmp/824-501/pb-97807-basic-1:3 - Tick() - ViewService.go
+2019/10/17 22:34:15 3 :  TTL FOR SRV : /var/tmp/824-501/pb-97807-basic-2:4 - Tick() - ViewService.go
+2019/10/17 22:34:15 @@@@@@@@@@@@@@ :  KILL JUST CALLED -  - @@@@@@@@@@@@@@@@@@
+2019/10/17 22:34:15 3 :  RESTORE TTL  : /var/tmp/824-501/pb-97807-basic-1:5 - Tick() - ViewService.go
+2019/10/17 22:34:15 @@@@@@@@@@@@@@ :  CALL TO FIAILURE MADE -  - @@@@@@@@@@@@@@@@@@
+2019/10/17 22:34:15 @@@@@@@@@@@@@@ :  THIS VS CLERK SPEAKING -  - @@@@@@@@@@@@@@@@@@
+2019/10/17 22:34:17 INTERVAL COUNT:  :  1 SRV: /var/tmp/824-501/pb-97807-csu-1 - Tick - Server.go
+2019/10/17 22:34:17  :  ELECTED FIRST PRIMARY - Tick() - ViewService.go
+2019/10/17 22:34:17 INTERVAL COUNT:  :  2 SRV: /var/tmp/824-501/pb-97807-csu-1 - Tick - Server.go
+2019/10/17 22:34:17 3 :  TTL FOR SRV : /var/tmp/824-501/pb-97807-csu-1:4 - Tick() - ViewService.go
