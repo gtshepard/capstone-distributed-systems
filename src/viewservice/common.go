@@ -70,6 +70,12 @@ type PingReply struct {
 	View View
 }
 
+type ServerFailureArgs struct {
+	Srv string
+}
+type ServerFailureReply struct {
+}
+
 // Get(): fetch the current view, without volunteering
 // to be a server. mostly for clients of the p/b service,
 // and for testing.

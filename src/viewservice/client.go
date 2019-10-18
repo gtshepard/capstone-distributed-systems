@@ -29,7 +29,16 @@ func MakeClerk(me string, server string) *Clerk {
 
 func (ck *Clerk) Failure(srv string) {
 	//make RPC call
-	myLogger("@@@@@@@@@@@@@@", "THIS VS CLERK SPEAKING", "", "@@@@@@@@@@@@@@@@@@")
+	args := &ServerFailureArgs{}
+	args.Srv = srv
+	var reply *ServerFailureReply
+	ok := call(ck.server, "ViewServer.HandleServerFailure", args, &reply)
+
+	if ok {
+		myLogger("@@@@@@@@@@@@@@", "THIS VS CLERK SPEAKING: "+srv, "", "@@@@@@@@@@@@@@@@@@")
+	} else {
+		myLogger("@@@@@@@@@@@@@@", "FAILED TO MAKE CALL TO VS: "+srv, "", "@@@@@@@@@@@@@@@@@@")
+	}
 }
 
 // call() sends an RPC to the rpcname handler on server srv

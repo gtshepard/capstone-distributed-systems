@@ -96,7 +96,7 @@ func TestBasicFail(t *testing.T) {
 
 	fmt.Printf("Test: Primary failure ...\n")
 	s1.kill()
-
+	time.Sleep(time.Second * 10)
 	for i := 0; i < viewservice.DeadPings*2; i++ {
 		v, _ := vck.Get()
 		if v.Primary == s2.me {

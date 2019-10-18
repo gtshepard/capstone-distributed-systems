@@ -38,7 +38,8 @@ type ViewServer struct {
 	//reviece ping message data incoming reqeust. elimnates need to write to shared variable
 	ping chan *SrvMsg
 	//send replys from view service in form of mesage passing to elimante shared variables
-	clientMsg chan View
+	clientMsg  chan View
+	srvFailure chan string
 }
 
 //acquires lock when writing?
@@ -74,7 +75,15 @@ func (vs *ViewServer) Get(args *GetArgs, reply *GetReply) error {
 	return nil
 }
 
-//
+func (vs *ViewServer) HandleServerFailure(args *ServerFailureArgs, reply *ServerFailureReply) error {
+
+	// Your code here.
+	myLogger("##############", "HANDLE SERVER FAILURE", "", "###############")
+	failedServer := args.Srv
+	vs.srvFailure <- failedServer
+	return nil
+}
+
 // tick() is called once per PingInterval; it should notice
 // if servers have died or recovered, and change the view
 // accordingly.
@@ -84,6 +93,13 @@ func (vs *ViewServer) tick() {
 	// THIS FUCNTION IS GOOD FOR PERIODIC DECISISONS
 	// I.E to promote the backup, backup if the the view service has missed N pings (N = deadpings) from the primary
 	// this fucntion Tick is called once per pinginterval
+
+	select {
+	case failed := <-vs.srvFailure:
+		myLogger("##############", "FAIL"+failed, "", "###############")
+	default:
+		myLogger("##############", "PROCEED AS NORMAL", "", "###############")
+	}
 
 	srvMsg := <-vs.ping
 	for key := range vs.servers {
@@ -173,6 +189,7 @@ func StartServer(me string) *ViewServer {
 	// Your vs.* initializations here.
 	vs.ping = make(chan *SrvMsg)
 	vs.clientMsg = make(chan View)
+	vs.srvFailure = make(chan string)
 	vs.servers = make(map[string]*SrvMsg)
 
 	vs.testCount = 0

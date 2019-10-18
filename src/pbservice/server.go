@@ -176,7 +176,7 @@ func StartServer(vshost string, me string) *PBServer {
 		for pb.dead == false {
 			//srv is alive
 		}
-		myLogger("@@@@@@@@@@@@@@", "CALL TO FIAILURE MADE", "", "@@@@@@@@@@@@@@@@@@")
+		myLogger("~~~~~~~~~~~~~~~~~~~~", "CALL TO FAILURE MADE", "KV_SRV", "~~~~~~~~~~~~~~~~~~~")
 		pb.vs.Failure(pb.me)
 		pb.done.Done()
 	}()

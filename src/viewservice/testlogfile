@@ -6304,3 +6304,780 @@
 2019/10/17 22:35:28 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-98074-2:5 - Tick() - ViewService.go
 2019/10/17 22:35:28 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-98074-2:4 - Tick() - ViewService.go
 2019/10/17 22:35:28 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-98074-2:5 - Tick() - ViewService.go
+2019/10/18 19:09:36  :  ELECTED FIRST PRIMARY - Tick() - ViewService.go
+2019/10/18 19:09:37 FROM_TEST :  ...Passed First Primary  - test1 - test_test.go
+2019/10/18 19:09:37 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:37 FROM_TEST :  Test: First Backup - test1 - test_test.go
+2019/10/18 19:09:37 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:37 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-1:5 - Tick() - ViewService.go
+2019/10/18 19:09:37 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:37  :  ELECTED BACKUP: /var/tmp/824-501/viewserver-9162-2 - Tick() - ViewService.go
+2019/10/18 19:09:37 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:3 - Tick() - ViewService.go
+2019/10/18 19:09:37 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:4 - Tick() - ViewService.go
+2019/10/18 19:09:37 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-1:5 - Tick() - ViewService.go
+2019/10/18 19:09:37 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:3 - Tick() - ViewService.go
+2019/10/18 19:09:37 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:37 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-2:5 - Tick() - ViewService.go
+2019/10/18 19:09:37 FROM_TEST :  ...Passed First Backup  - test1 - test_test.go
+2019/10/18 19:09:37 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:3 - Tick() - ViewService.go
+2019/10/18 19:09:37 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:4 - Tick() - ViewService.go
+2019/10/18 19:09:37 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-1:5 - Tick() - ViewService.go
+2019/10/18 19:09:37 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:37 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:3 - Tick() - ViewService.go
+2019/10/18 19:09:37 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-2:5 - Tick() - ViewService.go
+2019/10/18 19:09:37 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:3 - Tick() - ViewService.go
+2019/10/18 19:09:37 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:4 - Tick() - ViewService.go
+2019/10/18 19:09:37 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-2:5 - Tick() - ViewService.go
+2019/10/18 19:09:37 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:2 - Tick() - ViewService.go
+2019/10/18 19:09:37 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:4 - Tick() - ViewService.go
+2019/10/18 19:09:37 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-2:5 - Tick() - ViewService.go
+2019/10/18 19:09:38 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:1 - Tick() - ViewService.go
+2019/10/18 19:09:38 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:4 - Tick() - ViewService.go
+2019/10/18 19:09:38 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-2:5 - Tick() - ViewService.go
+2019/10/18 19:09:38 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:0 - Tick() - ViewService.go
+2019/10/18 19:09:38 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:4 - Tick() - ViewService.go
+2019/10/18 19:09:38 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-2:5 - Tick() - ViewService.go
+2019/10/18 19:09:38  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/viewserver-9162-1 - Tick() - ViewService.go
+2019/10/18 19:09:38 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:4 - Tick() - ViewService.go
+2019/10/18 19:09:38 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-2:5 - Tick() - ViewService.go
+2019/10/18 19:09:38 FROM_TEST :  ...Passed Backup Takes Over If Primary Fails  - test1 - test_test.go
+2019/10/18 19:09:38 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:4 - Tick() - ViewService.go
+2019/10/18 19:09:38 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-2:5 - Tick() - ViewService.go
+2019/10/18 19:09:38 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:4 - Tick() - ViewService.go
+2019/10/18 19:09:38  :  ELECTED BACKUP: /var/tmp/824-501/viewserver-9162-1 - Tick() - ViewService.go
+2019/10/18 19:09:38 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:38 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:3 - Tick() - ViewService.go
+2019/10/18 19:09:38 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-2:5 - Tick() - ViewService.go
+2019/10/18 19:09:38 FROM_TEST :  ...Passed Restarted Server Becomes Backup  - test1 - test_test.go
+2019/10/18 19:09:38 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:3 - Tick() - ViewService.go
+2019/10/18 19:09:38 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:4 - Tick() - ViewService.go
+2019/10/18 19:09:38 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-2:5 - Tick() - ViewService.go
+2019/10/18 19:09:38 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:2 - Tick() - ViewService.go
+2019/10/18 19:09:38 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:4 - Tick() - ViewService.go
+2019/10/18 19:09:38 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-3:5 - Tick() - ViewService.go
+2019/10/18 19:09:38 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:1 - Tick() - ViewService.go
+2019/10/18 19:09:38 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:3 - Tick() - ViewService.go
+2019/10/18 19:09:38 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:4 - Tick() - ViewService.go
+2019/10/18 19:09:38 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-1:5 - Tick() - ViewService.go
+2019/10/18 19:09:38 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:38 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:2 - Tick() - ViewService.go
+2019/10/18 19:09:38 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:3 - Tick() - ViewService.go
+2019/10/18 19:09:38 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-3:5 - Tick() - ViewService.go
+2019/10/18 19:09:39 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:3 - Tick() - ViewService.go
+2019/10/18 19:09:39 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:1 - Tick() - ViewService.go
+2019/10/18 19:09:39 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:4 - Tick() - ViewService.go
+2019/10/18 19:09:39 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-1:5 - Tick() - ViewService.go
+2019/10/18 19:09:39 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:39 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:0 - Tick() - ViewService.go
+2019/10/18 19:09:39 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:3 - Tick() - ViewService.go
+2019/10/18 19:09:39 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-3:5 - Tick() - ViewService.go
+2019/10/18 19:09:39  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/viewserver-9162-2 - Tick() - ViewService.go
+2019/10/18 19:09:39 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:4 - Tick() - ViewService.go
+2019/10/18 19:09:39 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:3 - Tick() - ViewService.go
+2019/10/18 19:09:39 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-1:5 - Tick() - ViewService.go
+2019/10/18 19:09:39 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:39 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:3 - Tick() - ViewService.go
+2019/10/18 19:09:39  :  ELECTED BACKUP: /var/tmp/824-501/viewserver-9162-3 - Tick() - ViewService.go
+2019/10/18 19:09:39 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:3 - Tick() - ViewService.go
+2019/10/18 19:09:39 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:4 - Tick() - ViewService.go
+2019/10/18 19:09:39 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-1:5 - Tick() - ViewService.go
+2019/10/18 19:09:39 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:3 - Tick() - ViewService.go
+2019/10/18 19:09:39 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:39 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-3:5 - Tick() - ViewService.go
+2019/10/18 19:09:39 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:3 - Tick() - ViewService.go
+2019/10/18 19:09:39 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:4 - Tick() - ViewService.go
+2019/10/18 19:09:39 FROM_TEST :  ...Passed Idle Server Takes over if Primary Fails  - test1 - test_test.go
+2019/10/18 19:09:39 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-1:5 - Tick() - ViewService.go
+2019/10/18 19:09:39 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:39 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:3 - Tick() - ViewService.go
+2019/10/18 19:09:39 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-1:5 - Tick() - ViewService.go
+2019/10/18 19:09:39 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:39 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:2 - Tick() - ViewService.go
+2019/10/18 19:09:39  :  PRIMARY RESTART /var/tmp/824-501/viewserver-9162-1 - Tick() - ViewService.go
+2019/10/18 19:09:39  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/viewserver-9162-1 - Tick() - ViewService.go
+2019/10/18 19:09:40 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:1 - Tick() - ViewService.go
+2019/10/18 19:09:40 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-3:5 - Tick() - ViewService.go
+2019/10/18 19:09:40 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:4 - Tick() - ViewService.go
+2019/10/18 19:09:40 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-3:5 - Tick() - ViewService.go
+2019/10/18 19:09:40 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:4 - Tick() - ViewService.go
+2019/10/18 19:09:40 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-3:5 - Tick() - ViewService.go
+2019/10/18 19:09:40 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:4 - Tick() - ViewService.go
+2019/10/18 19:09:40 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-3:5 - Tick() - ViewService.go
+2019/10/18 19:09:40 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:4 - Tick() - ViewService.go
+2019/10/18 19:09:40 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-3:5 - Tick() - ViewService.go
+2019/10/18 19:09:40 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:4 - Tick() - ViewService.go
+2019/10/18 19:09:40 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-3:5 - Tick() - ViewService.go
+2019/10/18 19:09:40 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:4 - Tick() - ViewService.go
+2019/10/18 19:09:40 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-3:5 - Tick() - ViewService.go
+2019/10/18 19:09:40 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:4 - Tick() - ViewService.go
+2019/10/18 19:09:40 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-3:5 - Tick() - ViewService.go
+2019/10/18 19:09:40 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:4 - Tick() - ViewService.go
+2019/10/18 19:09:40 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-3:5 - Tick() - ViewService.go
+2019/10/18 19:09:41 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:4 - Tick() - ViewService.go
+2019/10/18 19:09:41 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-3:5 - Tick() - ViewService.go
+2019/10/18 19:09:41 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:4 - Tick() - ViewService.go
+2019/10/18 19:09:41 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-3:5 - Tick() - ViewService.go
+2019/10/18 19:09:41 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:4 - Tick() - ViewService.go
+2019/10/18 19:09:41 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-3:5 - Tick() - ViewService.go
+2019/10/18 19:09:41 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:4 - Tick() - ViewService.go
+2019/10/18 19:09:41 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-3:5 - Tick() - ViewService.go
+2019/10/18 19:09:41 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:4 - Tick() - ViewService.go
+2019/10/18 19:09:41 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-3:5 - Tick() - ViewService.go
+2019/10/18 19:09:41 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:4 - Tick() - ViewService.go
+2019/10/18 19:09:41 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-3:5 - Tick() - ViewService.go
+2019/10/18 19:09:41 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:4 - Tick() - ViewService.go
+2019/10/18 19:09:41 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-3:5 - Tick() - ViewService.go
+2019/10/18 19:09:41 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:4 - Tick() - ViewService.go
+2019/10/18 19:09:41  :  ELECTED BACKUP: /var/tmp/824-501/viewserver-9162-1 - Tick() - ViewService.go
+2019/10/18 19:09:41 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:41 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:3 - Tick() - ViewService.go
+2019/10/18 19:09:41 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-3:5 - Tick() - ViewService.go
+2019/10/18 19:09:41 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:3 - Tick() - ViewService.go
+2019/10/18 19:09:41 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:4 - Tick() - ViewService.go
+2019/10/18 19:09:41 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-1:5 - Tick() - ViewService.go
+2019/10/18 19:09:42 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:3 - Tick() - ViewService.go
+2019/10/18 19:09:42 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:42 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-1:5 - Tick() - ViewService.go
+2019/10/18 19:09:42 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:2 - Tick() - ViewService.go
+2019/10/18 19:09:42 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:42 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-1:5 - Tick() - ViewService.go
+2019/10/18 19:09:42 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:1 - Tick() - ViewService.go
+2019/10/18 19:09:42 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:42 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-1:5 - Tick() - ViewService.go
+2019/10/18 19:09:42 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:42 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:0 - Tick() - ViewService.go
+2019/10/18 19:09:42 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-1:5 - Tick() - ViewService.go
+2019/10/18 19:09:42  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/viewserver-9162-3 - Tick() - ViewService.go
+2019/10/18 19:09:42 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:42 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:-1 - Tick() - ViewService.go
+2019/10/18 19:09:42 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-1:5 - Tick() - ViewService.go
+2019/10/18 19:09:42  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/viewserver-9162-3 - Tick() - ViewService.go
+2019/10/18 19:09:42 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:42 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:-2 - Tick() - ViewService.go
+2019/10/18 19:09:42 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-1:5 - Tick() - ViewService.go
+2019/10/18 19:09:42  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/viewserver-9162-3 - Tick() - ViewService.go
+2019/10/18 19:09:42 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:42 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:-3 - Tick() - ViewService.go
+2019/10/18 19:09:42 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-1:5 - Tick() - ViewService.go
+2019/10/18 19:09:42  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/viewserver-9162-3 - Tick() - ViewService.go
+2019/10/18 19:09:42 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:-4 - Tick() - ViewService.go
+2019/10/18 19:09:42 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:42 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-1:5 - Tick() - ViewService.go
+2019/10/18 19:09:42  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/viewserver-9162-3 - Tick() - ViewService.go
+2019/10/18 19:09:42 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:42 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:-5 - Tick() - ViewService.go
+2019/10/18 19:09:42 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-1:5 - Tick() - ViewService.go
+2019/10/18 19:09:42  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/viewserver-9162-3 - Tick() - ViewService.go
+2019/10/18 19:09:43 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:43 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:-6 - Tick() - ViewService.go
+2019/10/18 19:09:43 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-1:5 - Tick() - ViewService.go
+2019/10/18 19:09:43  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/viewserver-9162-3 - Tick() - ViewService.go
+2019/10/18 19:09:43 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:43 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:-7 - Tick() - ViewService.go
+2019/10/18 19:09:43 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-1:5 - Tick() - ViewService.go
+2019/10/18 19:09:43  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/viewserver-9162-3 - Tick() - ViewService.go
+2019/10/18 19:09:43 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:43 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:-8 - Tick() - ViewService.go
+2019/10/18 19:09:43 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-1:5 - Tick() - ViewService.go
+2019/10/18 19:09:43  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/viewserver-9162-3 - Tick() - ViewService.go
+2019/10/18 19:09:43 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:-9 - Tick() - ViewService.go
+2019/10/18 19:09:43 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:43 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-1:5 - Tick() - ViewService.go
+2019/10/18 19:09:43  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/viewserver-9162-3 - Tick() - ViewService.go
+2019/10/18 19:09:43 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:-10 - Tick() - ViewService.go
+2019/10/18 19:09:43 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:43 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-1:5 - Tick() - ViewService.go
+2019/10/18 19:09:43  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/viewserver-9162-3 - Tick() - ViewService.go
+2019/10/18 19:09:43 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:43 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:-11 - Tick() - ViewService.go
+2019/10/18 19:09:43 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-1:5 - Tick() - ViewService.go
+2019/10/18 19:09:43  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/viewserver-9162-3 - Tick() - ViewService.go
+2019/10/18 19:09:43 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:43 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:-12 - Tick() - ViewService.go
+2019/10/18 19:09:43 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-2:5 - Tick() - ViewService.go
+2019/10/18 19:09:43  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/viewserver-9162-3 - Tick() - ViewService.go
+2019/10/18 19:09:43 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:3 - Tick() - ViewService.go
+2019/10/18 19:09:43 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:4 - Tick() - ViewService.go
+2019/10/18 19:09:43 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:-13 - Tick() - ViewService.go
+2019/10/18 19:09:43 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-3:5 - Tick() - ViewService.go
+2019/10/18 19:09:43 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:4 - Tick() - ViewService.go
+2019/10/18 19:09:43 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:2 - Tick() - ViewService.go
+2019/10/18 19:09:43 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:3 - Tick() - ViewService.go
+2019/10/18 19:09:43 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-1:5 - Tick() - ViewService.go
+2019/10/18 19:09:43 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:43 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:2 - Tick() - ViewService.go
+2019/10/18 19:09:43 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:3 - Tick() - ViewService.go
+2019/10/18 19:09:43 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-2:5 - Tick() - ViewService.go
+2019/10/18 19:09:44 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:3 - Tick() - ViewService.go
+2019/10/18 19:09:44 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:4 - Tick() - ViewService.go
+2019/10/18 19:09:44 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:2 - Tick() - ViewService.go
+2019/10/18 19:09:44 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-3:5 - Tick() - ViewService.go
+2019/10/18 19:09:44 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:4 - Tick() - ViewService.go
+2019/10/18 19:09:44 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:2 - Tick() - ViewService.go
+2019/10/18 19:09:44 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:3 - Tick() - ViewService.go
+2019/10/18 19:09:44 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-1:5 - Tick() - ViewService.go
+2019/10/18 19:09:44 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:44 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:2 - Tick() - ViewService.go
+2019/10/18 19:09:44 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:3 - Tick() - ViewService.go
+2019/10/18 19:09:44 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-2:5 - Tick() - ViewService.go
+2019/10/18 19:09:44 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:3 - Tick() - ViewService.go
+2019/10/18 19:09:44 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:4 - Tick() - ViewService.go
+2019/10/18 19:09:44 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:2 - Tick() - ViewService.go
+2019/10/18 19:09:44 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-3:5 - Tick() - ViewService.go
+2019/10/18 19:09:44 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:3 - Tick() - ViewService.go
+2019/10/18 19:09:44 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:4 - Tick() - ViewService.go
+2019/10/18 19:09:44 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:2 - Tick() - ViewService.go
+2019/10/18 19:09:44 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-1:5 - Tick() - ViewService.go
+2019/10/18 19:09:44 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:2 - Tick() - ViewService.go
+2019/10/18 19:09:44 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:3 - Tick() - ViewService.go
+2019/10/18 19:09:44 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:44 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-2:5 - Tick() - ViewService.go
+2019/10/18 19:09:44 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:3 - Tick() - ViewService.go
+2019/10/18 19:09:44 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:4 - Tick() - ViewService.go
+2019/10/18 19:09:44 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:2 - Tick() - ViewService.go
+2019/10/18 19:09:44 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-3:5 - Tick() - ViewService.go
+2019/10/18 19:09:44 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:3 - Tick() - ViewService.go
+2019/10/18 19:09:44 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:4 - Tick() - ViewService.go
+2019/10/18 19:09:44 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:2 - Tick() - ViewService.go
+2019/10/18 19:09:44 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-1:5 - Tick() - ViewService.go
+2019/10/18 19:09:44 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:2 - Tick() - ViewService.go
+2019/10/18 19:09:44 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:3 - Tick() - ViewService.go
+2019/10/18 19:09:44 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:44 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-2:5 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:3 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:4 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:2 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-3:5 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:2 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:3 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:4 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-1:5 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:2 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:3 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-2:5 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:3 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:4 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:2 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-3:5 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:2 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:3 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:4 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-1:5 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:2 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:3 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-2:5 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:3 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:4 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:2 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-3:5 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:2 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:3 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:4 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-1:5 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:2 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:3 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-2:5 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:2 - Tick() - ViewService.go
+2019/10/18 19:09:45 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:3 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:4 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-3:5 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:2 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:3 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:4 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-1:5 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:2 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:3 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-2:5 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:3 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:4 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:2 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-3:5 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:2 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:3 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:4 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-1:5 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:4 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:2 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:3 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-2:5 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:3 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:4 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:2 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-3:5 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:3 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:4 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:2 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-2:5 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:1 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:4 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:3 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-2:5 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-1:0 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:4 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:2 - Tick() - ViewService.go
+2019/10/18 19:09:46 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-2:5 - Tick() - ViewService.go
+2019/10/18 19:09:47 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:1 - Tick() - ViewService.go
+2019/10/18 19:09:47 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:4 - Tick() - ViewService.go
+2019/10/18 19:09:47 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-2:5 - Tick() - ViewService.go
+2019/10/18 19:09:47 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:4 - Tick() - ViewService.go
+2019/10/18 19:09:47 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-3:0 - Tick() - ViewService.go
+2019/10/18 19:09:47 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-2:5 - Tick() - ViewService.go
+2019/10/18 19:09:47  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/viewserver-9162-3 - Tick() - ViewService.go
+2019/10/18 19:09:47 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:4 - Tick() - ViewService.go
+2019/10/18 19:09:47  :  ELECTED BACKUP: /var/tmp/824-501/viewserver-9162-2 - Tick() - ViewService.go
+2019/10/18 19:09:47 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:4 - Tick() - ViewService.go
+2019/10/18 19:09:47 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-2:5 - Tick() - ViewService.go
+2019/10/18 19:09:47 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:4 - Tick() - ViewService.go
+2019/10/18 19:09:47 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-2:5 - Tick() - ViewService.go
+2019/10/18 19:09:47 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:4 - Tick() - ViewService.go
+2019/10/18 19:09:47 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-2:5 - Tick() - ViewService.go
+2019/10/18 19:09:47 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-9162-2:4 - Tick() - ViewService.go
+2019/10/18 19:09:47 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-9162-2:5 - Tick() - ViewService.go
+2019/10/18 19:42:04 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:04  :  ELECTED FIRST PRIMARY - Tick() - ViewService.go
+2019/10/18 19:42:04 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:04 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:04 FROM_TEST :  ...Passed First Primary  - test1 - test_test.go
+2019/10/18 19:42:04 FROM_TEST :  Test: First Backup - test1 - test_test.go
+2019/10/18 19:42:04 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:04 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:04 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-1:5 - Tick() - ViewService.go
+2019/10/18 19:42:04 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:04 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:04  :  ELECTED BACKUP: /var/tmp/824-501/viewserver-15083-2 - Tick() - ViewService.go
+2019/10/18 19:42:04 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:04 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:3 - Tick() - ViewService.go
+2019/10/18 19:42:04 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:4 - Tick() - ViewService.go
+2019/10/18 19:42:04 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-1:5 - Tick() - ViewService.go
+2019/10/18 19:42:04 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:04 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:04 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:3 - Tick() - ViewService.go
+2019/10/18 19:42:04 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-2:5 - Tick() - ViewService.go
+2019/10/18 19:42:04 FROM_TEST :  ...Passed First Backup  - test1 - test_test.go
+2019/10/18 19:42:04 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:04 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:3 - Tick() - ViewService.go
+2019/10/18 19:42:04 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:4 - Tick() - ViewService.go
+2019/10/18 19:42:04 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-1:5 - Tick() - ViewService.go
+2019/10/18 19:42:05 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:05 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:05 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:3 - Tick() - ViewService.go
+2019/10/18 19:42:05 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-2:5 - Tick() - ViewService.go
+2019/10/18 19:42:05 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:05 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:3 - Tick() - ViewService.go
+2019/10/18 19:42:05 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:4 - Tick() - ViewService.go
+2019/10/18 19:42:05 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-2:5 - Tick() - ViewService.go
+2019/10/18 19:42:05 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:05 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:2 - Tick() - ViewService.go
+2019/10/18 19:42:05 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:4 - Tick() - ViewService.go
+2019/10/18 19:42:05 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-2:5 - Tick() - ViewService.go
+2019/10/18 19:42:05 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:05 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:1 - Tick() - ViewService.go
+2019/10/18 19:42:05 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:4 - Tick() - ViewService.go
+2019/10/18 19:42:05 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-2:5 - Tick() - ViewService.go
+2019/10/18 19:42:05 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:05 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:0 - Tick() - ViewService.go
+2019/10/18 19:42:05 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:4 - Tick() - ViewService.go
+2019/10/18 19:42:05 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-2:5 - Tick() - ViewService.go
+2019/10/18 19:42:05  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/viewserver-15083-1 - Tick() - ViewService.go
+2019/10/18 19:42:05 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:05 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:4 - Tick() - ViewService.go
+2019/10/18 19:42:05 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-2:5 - Tick() - ViewService.go
+2019/10/18 19:42:05 FROM_TEST :  ...Passed Backup Takes Over If Primary Fails  - test1 - test_test.go
+2019/10/18 19:42:05 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:05 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:4 - Tick() - ViewService.go
+2019/10/18 19:42:05 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-2:5 - Tick() - ViewService.go
+2019/10/18 19:42:05 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:05 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:4 - Tick() - ViewService.go
+2019/10/18 19:42:05  :  ELECTED BACKUP: /var/tmp/824-501/viewserver-15083-1 - Tick() - ViewService.go
+2019/10/18 19:42:05 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:05 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:3 - Tick() - ViewService.go
+2019/10/18 19:42:05 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:05 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-2:5 - Tick() - ViewService.go
+2019/10/18 19:42:05 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:05 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:3 - Tick() - ViewService.go
+2019/10/18 19:42:05 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:4 - Tick() - ViewService.go
+2019/10/18 19:42:05 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-1:5 - Tick() - ViewService.go
+2019/10/18 19:42:06 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:06 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:06 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:3 - Tick() - ViewService.go
+2019/10/18 19:42:06 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-2:5 - Tick() - ViewService.go
+2019/10/18 19:42:06 FROM_TEST :  ...Passed Restarted Server Becomes Backup  - test1 - test_test.go
+2019/10/18 19:42:06 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:06 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:4 - Tick() - ViewService.go
+2019/10/18 19:42:06 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:3 - Tick() - ViewService.go
+2019/10/18 19:42:06 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-2:5 - Tick() - ViewService.go
+2019/10/18 19:42:06 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:06 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:2 - Tick() - ViewService.go
+2019/10/18 19:42:06 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:4 - Tick() - ViewService.go
+2019/10/18 19:42:06 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-3:5 - Tick() - ViewService.go
+2019/10/18 19:42:06 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:06 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:1 - Tick() - ViewService.go
+2019/10/18 19:42:06 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:3 - Tick() - ViewService.go
+2019/10/18 19:42:06 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:4 - Tick() - ViewService.go
+2019/10/18 19:42:06 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-1:5 - Tick() - ViewService.go
+2019/10/18 19:42:06 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:06 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:06 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:2 - Tick() - ViewService.go
+2019/10/18 19:42:06 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:3 - Tick() - ViewService.go
+2019/10/18 19:42:06 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-3:5 - Tick() - ViewService.go
+2019/10/18 19:42:06 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:06 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:3 - Tick() - ViewService.go
+2019/10/18 19:42:06 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:1 - Tick() - ViewService.go
+2019/10/18 19:42:06 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:4 - Tick() - ViewService.go
+2019/10/18 19:42:06 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-1:5 - Tick() - ViewService.go
+2019/10/18 19:42:06 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:06 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:06 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:0 - Tick() - ViewService.go
+2019/10/18 19:42:06 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:3 - Tick() - ViewService.go
+2019/10/18 19:42:06 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-3:5 - Tick() - ViewService.go
+2019/10/18 19:42:06  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/viewserver-15083-2 - Tick() - ViewService.go
+2019/10/18 19:42:06 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:06 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:3 - Tick() - ViewService.go
+2019/10/18 19:42:06 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:4 - Tick() - ViewService.go
+2019/10/18 19:42:06 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-1:5 - Tick() - ViewService.go
+2019/10/18 19:42:06 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:06 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:3 - Tick() - ViewService.go
+2019/10/18 19:42:06 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:06  :  ELECTED BACKUP: /var/tmp/824-501/viewserver-15083-3 - Tick() - ViewService.go
+2019/10/18 19:42:07 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:07 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:4 - Tick() - ViewService.go
+2019/10/18 19:42:07 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:3 - Tick() - ViewService.go
+2019/10/18 19:42:07 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-1:5 - Tick() - ViewService.go
+2019/10/18 19:42:07 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:07 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:07 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:3 - Tick() - ViewService.go
+2019/10/18 19:42:07 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-3:5 - Tick() - ViewService.go
+2019/10/18 19:42:07 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:07 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:3 - Tick() - ViewService.go
+2019/10/18 19:42:07 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:4 - Tick() - ViewService.go
+2019/10/18 19:42:07 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-1:5 - Tick() - ViewService.go
+2019/10/18 19:42:07 FROM_TEST :  ...Passed Idle Server Takes over if Primary Fails  - test1 - test_test.go
+2019/10/18 19:42:07 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:07 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:3 - Tick() - ViewService.go
+2019/10/18 19:42:07 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:07 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-1:5 - Tick() - ViewService.go
+2019/10/18 19:42:07 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:07 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:2 - Tick() - ViewService.go
+2019/10/18 19:42:07 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:07  :  PRIMARY RESTART /var/tmp/824-501/viewserver-15083-1 - Tick() - ViewService.go
+2019/10/18 19:42:07  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/viewserver-15083-1 - Tick() - ViewService.go
+2019/10/18 19:42:07 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:07 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:1 - Tick() - ViewService.go
+2019/10/18 19:42:07 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-3:5 - Tick() - ViewService.go
+2019/10/18 19:42:07 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:07 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:4 - Tick() - ViewService.go
+2019/10/18 19:42:07 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-3:5 - Tick() - ViewService.go
+2019/10/18 19:42:07 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:07 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:4 - Tick() - ViewService.go
+2019/10/18 19:42:07 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-3:5 - Tick() - ViewService.go
+2019/10/18 19:42:07 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:07 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:4 - Tick() - ViewService.go
+2019/10/18 19:42:07 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-3:5 - Tick() - ViewService.go
+2019/10/18 19:42:08 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:08 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:4 - Tick() - ViewService.go
+2019/10/18 19:42:08 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-3:5 - Tick() - ViewService.go
+2019/10/18 19:42:08 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:08 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:4 - Tick() - ViewService.go
+2019/10/18 19:42:08 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-3:5 - Tick() - ViewService.go
+2019/10/18 19:42:08 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:08 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:4 - Tick() - ViewService.go
+2019/10/18 19:42:08 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-3:5 - Tick() - ViewService.go
+2019/10/18 19:42:08 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:08 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:4 - Tick() - ViewService.go
+2019/10/18 19:42:08 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-3:5 - Tick() - ViewService.go
+2019/10/18 19:42:08 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:08 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:4 - Tick() - ViewService.go
+2019/10/18 19:42:08 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-3:5 - Tick() - ViewService.go
+2019/10/18 19:42:08 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:08 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:4 - Tick() - ViewService.go
+2019/10/18 19:42:08 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-3:5 - Tick() - ViewService.go
+2019/10/18 19:42:08 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:08 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:4 - Tick() - ViewService.go
+2019/10/18 19:42:08 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-3:5 - Tick() - ViewService.go
+2019/10/18 19:42:08 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:08 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:4 - Tick() - ViewService.go
+2019/10/18 19:42:08 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-3:5 - Tick() - ViewService.go
+2019/10/18 19:42:08 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:08 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:4 - Tick() - ViewService.go
+2019/10/18 19:42:08 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-3:5 - Tick() - ViewService.go
+2019/10/18 19:42:08 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:08 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:4 - Tick() - ViewService.go
+2019/10/18 19:42:08 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-3:5 - Tick() - ViewService.go
+2019/10/18 19:42:09 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:09 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:4 - Tick() - ViewService.go
+2019/10/18 19:42:09 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-3:5 - Tick() - ViewService.go
+2019/10/18 19:42:09 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:09 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:4 - Tick() - ViewService.go
+2019/10/18 19:42:09 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-3:5 - Tick() - ViewService.go
+2019/10/18 19:42:09 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:09 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:4 - Tick() - ViewService.go
+2019/10/18 19:42:09  :  ELECTED BACKUP: /var/tmp/824-501/viewserver-15083-1 - Tick() - ViewService.go
+2019/10/18 19:42:09 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:09 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:09 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:3 - Tick() - ViewService.go
+2019/10/18 19:42:09 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-3:5 - Tick() - ViewService.go
+2019/10/18 19:42:09 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:09 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:3 - Tick() - ViewService.go
+2019/10/18 19:42:09 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:4 - Tick() - ViewService.go
+2019/10/18 19:42:09 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-1:5 - Tick() - ViewService.go
+2019/10/18 19:42:09 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:09 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:09 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:3 - Tick() - ViewService.go
+2019/10/18 19:42:09 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-1:5 - Tick() - ViewService.go
+2019/10/18 19:42:09 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:09 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:09 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:2 - Tick() - ViewService.go
+2019/10/18 19:42:09 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-1:5 - Tick() - ViewService.go
+2019/10/18 19:42:09 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:09 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:09 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:1 - Tick() - ViewService.go
+2019/10/18 19:42:09 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-1:5 - Tick() - ViewService.go
+2019/10/18 19:42:09 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:09 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:0 - Tick() - ViewService.go
+2019/10/18 19:42:09 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:09 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-1:5 - Tick() - ViewService.go
+2019/10/18 19:42:09  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/viewserver-15083-3 - Tick() - ViewService.go
+2019/10/18 19:42:10 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:10 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:10 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:-1 - Tick() - ViewService.go
+2019/10/18 19:42:10 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-1:5 - Tick() - ViewService.go
+2019/10/18 19:42:10  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/viewserver-15083-3 - Tick() - ViewService.go
+2019/10/18 19:42:10 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:10 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:10 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:-2 - Tick() - ViewService.go
+2019/10/18 19:42:10 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-1:5 - Tick() - ViewService.go
+2019/10/18 19:42:10  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/viewserver-15083-3 - Tick() - ViewService.go
+2019/10/18 19:42:10 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:10 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:10 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:-3 - Tick() - ViewService.go
+2019/10/18 19:42:10 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-1:5 - Tick() - ViewService.go
+2019/10/18 19:42:10  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/viewserver-15083-3 - Tick() - ViewService.go
+2019/10/18 19:42:10 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:10 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:10 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:-4 - Tick() - ViewService.go
+2019/10/18 19:42:10 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-1:5 - Tick() - ViewService.go
+2019/10/18 19:42:10  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/viewserver-15083-3 - Tick() - ViewService.go
+2019/10/18 19:42:10 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:10 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:10 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:-5 - Tick() - ViewService.go
+2019/10/18 19:42:10 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-1:5 - Tick() - ViewService.go
+2019/10/18 19:42:10  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/viewserver-15083-3 - Tick() - ViewService.go
+2019/10/18 19:42:10 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:10 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:-6 - Tick() - ViewService.go
+2019/10/18 19:42:10 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:10 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-1:5 - Tick() - ViewService.go
+2019/10/18 19:42:10  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/viewserver-15083-3 - Tick() - ViewService.go
+2019/10/18 19:42:10 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:10 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:-7 - Tick() - ViewService.go
+2019/10/18 19:42:10 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:10 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-1:5 - Tick() - ViewService.go
+2019/10/18 19:42:10  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/viewserver-15083-3 - Tick() - ViewService.go
+2019/10/18 19:42:10 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:10 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:10 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:-8 - Tick() - ViewService.go
+2019/10/18 19:42:10 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-1:5 - Tick() - ViewService.go
+2019/10/18 19:42:10  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/viewserver-15083-3 - Tick() - ViewService.go
+2019/10/18 19:42:10 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:10 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:10 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:-9 - Tick() - ViewService.go
+2019/10/18 19:42:10 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-1:5 - Tick() - ViewService.go
+2019/10/18 19:42:10  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/viewserver-15083-3 - Tick() - ViewService.go
+2019/10/18 19:42:10 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:10 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:-10 - Tick() - ViewService.go
+2019/10/18 19:42:10 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:10 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-1:5 - Tick() - ViewService.go
+2019/10/18 19:42:10  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/viewserver-15083-3 - Tick() - ViewService.go
+2019/10/18 19:42:11 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:11 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:11 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:-11 - Tick() - ViewService.go
+2019/10/18 19:42:11 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-1:5 - Tick() - ViewService.go
+2019/10/18 19:42:11  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/viewserver-15083-3 - Tick() - ViewService.go
+2019/10/18 19:42:11 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:11 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:11 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:-12 - Tick() - ViewService.go
+2019/10/18 19:42:11 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-2:5 - Tick() - ViewService.go
+2019/10/18 19:42:11  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/viewserver-15083-3 - Tick() - ViewService.go
+2019/10/18 19:42:11 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:11 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:3 - Tick() - ViewService.go
+2019/10/18 19:42:11 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:4 - Tick() - ViewService.go
+2019/10/18 19:42:11 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:-13 - Tick() - ViewService.go
+2019/10/18 19:42:11 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-3:5 - Tick() - ViewService.go
+2019/10/18 19:42:11 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:11 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:2 - Tick() - ViewService.go
+2019/10/18 19:42:11 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:3 - Tick() - ViewService.go
+2019/10/18 19:42:11 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:4 - Tick() - ViewService.go
+2019/10/18 19:42:11 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-1:5 - Tick() - ViewService.go
+2019/10/18 19:42:11 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:11 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:3 - Tick() - ViewService.go
+2019/10/18 19:42:11 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:11 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:2 - Tick() - ViewService.go
+2019/10/18 19:42:11 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-2:5 - Tick() - ViewService.go
+2019/10/18 19:42:11 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:11 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:3 - Tick() - ViewService.go
+2019/10/18 19:42:11 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:4 - Tick() - ViewService.go
+2019/10/18 19:42:11 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:2 - Tick() - ViewService.go
+2019/10/18 19:42:11 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-3:5 - Tick() - ViewService.go
+2019/10/18 19:42:11 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:11 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:2 - Tick() - ViewService.go
+2019/10/18 19:42:11 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:3 - Tick() - ViewService.go
+2019/10/18 19:42:11 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:4 - Tick() - ViewService.go
+2019/10/18 19:42:11 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-1:5 - Tick() - ViewService.go
+2019/10/18 19:42:11 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:11 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:11 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:2 - Tick() - ViewService.go
+2019/10/18 19:42:11 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:3 - Tick() - ViewService.go
+2019/10/18 19:42:11 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-2:5 - Tick() - ViewService.go
+2019/10/18 19:42:11 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:11 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:3 - Tick() - ViewService.go
+2019/10/18 19:42:11 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:4 - Tick() - ViewService.go
+2019/10/18 19:42:11 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:2 - Tick() - ViewService.go
+2019/10/18 19:42:11 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-3:5 - Tick() - ViewService.go
+2019/10/18 19:42:12 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:12 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:2 - Tick() - ViewService.go
+2019/10/18 19:42:12 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:3 - Tick() - ViewService.go
+2019/10/18 19:42:12 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:4 - Tick() - ViewService.go
+2019/10/18 19:42:12 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-1:5 - Tick() - ViewService.go
+2019/10/18 19:42:12 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:12 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:12 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:2 - Tick() - ViewService.go
+2019/10/18 19:42:12 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:3 - Tick() - ViewService.go
+2019/10/18 19:42:12 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-2:5 - Tick() - ViewService.go
+2019/10/18 19:42:12 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:12 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:3 - Tick() - ViewService.go
+2019/10/18 19:42:12 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:4 - Tick() - ViewService.go
+2019/10/18 19:42:12 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:2 - Tick() - ViewService.go
+2019/10/18 19:42:12 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-3:5 - Tick() - ViewService.go
+2019/10/18 19:42:12 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:12 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:3 - Tick() - ViewService.go
+2019/10/18 19:42:12 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:4 - Tick() - ViewService.go
+2019/10/18 19:42:12 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:2 - Tick() - ViewService.go
+2019/10/18 19:42:12 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-1:5 - Tick() - ViewService.go
+2019/10/18 19:42:12 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:12 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:12 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:2 - Tick() - ViewService.go
+2019/10/18 19:42:12 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:3 - Tick() - ViewService.go
+2019/10/18 19:42:12 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-2:5 - Tick() - ViewService.go
+2019/10/18 19:42:12 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:12 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:3 - Tick() - ViewService.go
+2019/10/18 19:42:12 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:4 - Tick() - ViewService.go
+2019/10/18 19:42:12 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:2 - Tick() - ViewService.go
+2019/10/18 19:42:12 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-3:5 - Tick() - ViewService.go
+2019/10/18 19:42:12 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:12 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:4 - Tick() - ViewService.go
+2019/10/18 19:42:12 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:2 - Tick() - ViewService.go
+2019/10/18 19:42:12 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:3 - Tick() - ViewService.go
+2019/10/18 19:42:12 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-1:5 - Tick() - ViewService.go
+2019/10/18 19:42:12 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:12 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:2 - Tick() - ViewService.go
+2019/10/18 19:42:12 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:3 - Tick() - ViewService.go
+2019/10/18 19:42:12 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:12 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-2:5 - Tick() - ViewService.go
+2019/10/18 19:42:12 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:12 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:3 - Tick() - ViewService.go
+2019/10/18 19:42:12 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:4 - Tick() - ViewService.go
+2019/10/18 19:42:12 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:2 - Tick() - ViewService.go
+2019/10/18 19:42:12 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-3:5 - Tick() - ViewService.go
+2019/10/18 19:42:13 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:13 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:2 - Tick() - ViewService.go
+2019/10/18 19:42:13 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:3 - Tick() - ViewService.go
+2019/10/18 19:42:13 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:4 - Tick() - ViewService.go
+2019/10/18 19:42:13 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-1:5 - Tick() - ViewService.go
+2019/10/18 19:42:13 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:13 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:13 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:2 - Tick() - ViewService.go
+2019/10/18 19:42:13 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:3 - Tick() - ViewService.go
+2019/10/18 19:42:13 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-2:5 - Tick() - ViewService.go
+2019/10/18 19:42:13 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:13 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:2 - Tick() - ViewService.go
+2019/10/18 19:42:13 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:3 - Tick() - ViewService.go
+2019/10/18 19:42:13 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:4 - Tick() - ViewService.go
+2019/10/18 19:42:13 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-3:5 - Tick() - ViewService.go
+2019/10/18 19:42:13 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:13 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:3 - Tick() - ViewService.go
+2019/10/18 19:42:13 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:4 - Tick() - ViewService.go
+2019/10/18 19:42:13 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:2 - Tick() - ViewService.go
+2019/10/18 19:42:13 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-1:5 - Tick() - ViewService.go
+2019/10/18 19:42:13 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:13 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:3 - Tick() - ViewService.go
+2019/10/18 19:42:13 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:13 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:2 - Tick() - ViewService.go
+2019/10/18 19:42:13 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-2:5 - Tick() - ViewService.go
+2019/10/18 19:42:13 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:13 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:3 - Tick() - ViewService.go
+2019/10/18 19:42:13 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:4 - Tick() - ViewService.go
+2019/10/18 19:42:13 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:2 - Tick() - ViewService.go
+2019/10/18 19:42:13 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-3:5 - Tick() - ViewService.go
+2019/10/18 19:42:13 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:13 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:2 - Tick() - ViewService.go
+2019/10/18 19:42:13 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:3 - Tick() - ViewService.go
+2019/10/18 19:42:13 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:4 - Tick() - ViewService.go
+2019/10/18 19:42:13 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-1:5 - Tick() - ViewService.go
+2019/10/18 19:42:13 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:13 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:13 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:2 - Tick() - ViewService.go
+2019/10/18 19:42:13 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:3 - Tick() - ViewService.go
+2019/10/18 19:42:13 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-2:5 - Tick() - ViewService.go
+2019/10/18 19:42:13 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:13 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:3 - Tick() - ViewService.go
+2019/10/18 19:42:13 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:4 - Tick() - ViewService.go
+2019/10/18 19:42:13 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:2 - Tick() - ViewService.go
+2019/10/18 19:42:13 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-3:5 - Tick() - ViewService.go
+2019/10/18 19:42:13 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:13 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:2 - Tick() - ViewService.go
+2019/10/18 19:42:13 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:3 - Tick() - ViewService.go
+2019/10/18 19:42:13 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:4 - Tick() - ViewService.go
+2019/10/18 19:42:13 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-1:5 - Tick() - ViewService.go
+2019/10/18 19:42:14 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:14 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:4 - Tick() - ViewService.go
+2019/10/18 19:42:14 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:2 - Tick() - ViewService.go
+2019/10/18 19:42:14 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:3 - Tick() - ViewService.go
+2019/10/18 19:42:14 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-2:5 - Tick() - ViewService.go
+2019/10/18 19:42:14 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:14 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:3 - Tick() - ViewService.go
+2019/10/18 19:42:14 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:4 - Tick() - ViewService.go
+2019/10/18 19:42:14 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:2 - Tick() - ViewService.go
+2019/10/18 19:42:14 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-3:5 - Tick() - ViewService.go
+2019/10/18 19:42:14 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:14 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:2 - Tick() - ViewService.go
+2019/10/18 19:42:14 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:3 - Tick() - ViewService.go
+2019/10/18 19:42:14 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:4 - Tick() - ViewService.go
+2019/10/18 19:42:14 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-2:5 - Tick() - ViewService.go
+2019/10/18 19:42:14 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:14 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:1 - Tick() - ViewService.go
+2019/10/18 19:42:14 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:4 - Tick() - ViewService.go
+2019/10/18 19:42:14 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:3 - Tick() - ViewService.go
+2019/10/18 19:42:14 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-2:5 - Tick() - ViewService.go
+2019/10/18 19:42:14 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:14 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-1:0 - Tick() - ViewService.go
+2019/10/18 19:42:14 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:4 - Tick() - ViewService.go
+2019/10/18 19:42:14 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:2 - Tick() - ViewService.go
+2019/10/18 19:42:14 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-2:5 - Tick() - ViewService.go
+2019/10/18 19:42:14 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:14 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:4 - Tick() - ViewService.go
+2019/10/18 19:42:14 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:1 - Tick() - ViewService.go
+2019/10/18 19:42:14 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-2:5 - Tick() - ViewService.go
+2019/10/18 19:42:14 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:14 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:4 - Tick() - ViewService.go
+2019/10/18 19:42:14 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-3:0 - Tick() - ViewService.go
+2019/10/18 19:42:14 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-2:5 - Tick() - ViewService.go
+2019/10/18 19:42:14  :  PRIMARY NOT ALIVE PROMOTE BACK UP: /var/tmp/824-501/viewserver-15083-3 - Tick() - ViewService.go
+2019/10/18 19:42:14 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:14 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:4 - Tick() - ViewService.go
+2019/10/18 19:42:14  :  ELECTED BACKUP: /var/tmp/824-501/viewserver-15083-2 - Tick() - ViewService.go
+2019/10/18 19:42:14 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:14 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:4 - Tick() - ViewService.go
+2019/10/18 19:42:14 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-2:5 - Tick() - ViewService.go
+2019/10/18 19:42:15 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:15 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:4 - Tick() - ViewService.go
+2019/10/18 19:42:15 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-2:5 - Tick() - ViewService.go
+2019/10/18 19:42:15 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:15 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:4 - Tick() - ViewService.go
+2019/10/18 19:42:15 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-2:5 - Tick() - ViewService.go
+2019/10/18 19:42:15 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/18 19:42:15 3 :  TTL FOR SRV : /var/tmp/824-501/viewserver-15083-2:4 - Tick() - ViewService.go
+2019/10/18 19:42:15 3 :  RESTORE TTL  : /var/tmp/824-501/viewserver-15083-2:5 - Tick() - ViewService.go
+2019/10/18 19:42:15 ############## :  PROCEED AS NORMAL -  - ###############
