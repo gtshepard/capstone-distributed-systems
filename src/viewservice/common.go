@@ -38,9 +38,10 @@ import (
 //
 
 type View struct {
-	Viewnum uint   //view number
-	Primary string //identity of primary (port name)
-	Backup  string //identity of backup (port name )
+	Viewnum           uint   //view number
+	Primary           string //identity of primary (port name)
+	Backup            string //identity of backup (port name )
+	JustElectedBackup bool
 }
 
 // clients should send a Ping RPC this often,

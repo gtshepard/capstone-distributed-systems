@@ -102,6 +102,7 @@ func (vs *ViewServer) tick() {
 			if vs.servers[failed].oldViewNum == vs.currentView.Viewnum {
 				vs.currentView.Primary = vs.currentView.Backup
 				vs.currentView.Backup = ""
+				vs.currentView.JustElectedBackup = false
 				vs.currentView.Viewnum += 1
 				myLogger("##############", "PROMOTE BACKUP: "+vs.currentView.Primary, "", "###############")
 				delete(vs.servers, failed)
@@ -117,6 +118,7 @@ func (vs *ViewServer) tick() {
 		if vs.currentView.Primary == "" && vs.isFirstElection {
 
 			vs.currentView.Primary = srvMsg.name
+			vs.currentView.JustElectedBackup = false
 			vs.servers[srvMsg.name] = srvMsg
 			vs.servers[srvMsg.name].ttl = DeadPings
 			vs.isFirstElection = false
@@ -129,11 +131,13 @@ func (vs *ViewServer) tick() {
 			if srvMsg.name != vs.currentView.Primary {
 				vs.currentView.Viewnum += 1
 				vs.currentView.Backup = srvMsg.name
+				vs.currentView.JustElectedBackup = true
 				vs.servers[srvMsg.name] = srvMsg
 				vs.servers[srvMsg.name].ttl = DeadPings
 				myLogger("", "ELECTED BACKUP: "+srvMsg.name, "Tick()", "ViewService.go")
 			} else {
 				//account for primary pinging before first backup elected
+				vs.currentView.JustElectedBackup = false
 				vs.servers[srvMsg.name].ttl = DeadPings
 			}
 			//what other case activates this
@@ -141,10 +145,15 @@ func (vs *ViewServer) tick() {
 
 		} else if srvMsg.name == vs.currentView.Primary && srvMsg.oldViewNum < uint(1) {
 			myLogger("", "PRIMARY RESTART "+srvMsg.name, "Tick()", "ViewService.go")
+			vs.currentView.JustElectedBackup = false
 			//treat primary restart as dead
 			vs.servers[srvMsg.name].ttl = 0
+		} else if srvMsg.name != vs.currentView.Primary && vs.currentView.Backup == "" {
+			myLogger("!!!!!!!!!!!!!!!!", "BACKUP ELECTED "+srvMsg.name, "Tick()", "!!!!!!!!!!!!!!!!")
+			vs.currentView.Backup = srvMsg.name
+			vs.currentView.JustElectedBackup = true
 		} else {
-
+			vs.currentView.JustElectedBackup = false
 			vs.servers[srvMsg.name] = srvMsg
 			vs.servers[srvMsg.name].ttl = DeadPings
 			dp := strconv.Itoa(DeadPings)
@@ -164,6 +173,7 @@ func (vs *ViewServer) tick() {
 						vs.currentView.Viewnum += 1
 						vs.currentView.Primary = vs.currentView.Backup
 						vs.currentView.Backup = ""
+						vs.currentView.JustElectedBackup = false
 						delete(vs.servers, key)
 					}
 				}

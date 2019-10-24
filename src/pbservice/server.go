@@ -89,6 +89,9 @@ func (pb *PBServer) Ack(args *SrvAckArgs, reply *SrvAckReply) error {
 	pb.ack <- args
 	return nil
 }
+func JustElectedBackUp() {
+
+}
 
 // ping the viewserver periodically.
 func (pb *PBServer) tick() {
@@ -102,16 +105,32 @@ func (pb *PBServer) tick() {
 	}
 
 	view, _ := pb.vs.Get()
+	//
 
 	if view.Viewnum < 2 {
 		view, _ = pb.vs.Ping(0)
+
 	} else {
 		view, _ = pb.vs.Ping(view.Viewnum)
+
 	}
 
 	if pb.me == view.Primary {
 
+		//if pb.prevBackUp == "" && view.Backup != "" {
+		if view.JustElectedBackup {
+			myLogger("&&&&&&&&&&&&&&&&&&&", "COPY TO BACKUP", "", "&&&&&&&&&&&&&&&&")
+			args := &ReplicateArgs{}
+			var reply *ReplicateReply
+			args.Db = pb.db
+			if ok := call(view.Backup, "PBServer.RecieveReplica", args, &reply); !ok {
+				myLogger("ReciveReplica", "RPC FAIL", "Tick", "Server.go")
+				return
+			}
+		}
+
 		select {
+
 		case read := <-pb.reader:
 			myLogger("$$$$$$$$$$$$$$$", "PBSERVICE TICK READ", "", "$$$$$$$$$$$$$$")
 			msg := &ClientMsg{}

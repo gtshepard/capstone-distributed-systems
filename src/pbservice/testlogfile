@@ -1,159 +1,189 @@
-2019/10/23 21:34:17 ############## :  PROCEED AS NORMAL -  - ###############
-2019/10/23 21:34:17 ############## :  PROCEED AS NORMAL -  - ###############
-2019/10/23 21:34:17 ############## :  PROCEED AS NORMAL -  - ###############
-2019/10/23 21:34:17 ############## :  PROCEED AS NORMAL -  - ###############
-2019/10/23 21:34:18 ############## :  PROCEED AS NORMAL -  - ###############
-2019/10/23 21:34:18 ############## :  PROCEED AS NORMAL -  - ###############
-2019/10/23 21:34:18 ############## :  PROCEED AS NORMAL -  - ###############
-2019/10/23 21:34:18 ############## :  PROCEED AS NORMAL -  - ###############
-2019/10/23 21:34:18 ############## :  PROCEED AS NORMAL -  - ###############
-2019/10/23 21:34:18 ############## :  PROCEED AS NORMAL -  - ###############
-2019/10/23 21:34:18 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:18 INTERVAL COUNT:  :  1 SRV: /var/tmp/824-501/pb-91984-basic-1 - Tick - Server.go
-2019/10/23 21:34:18  :  ELECTED FIRST PRIMARY - Tick() - ViewService.go
-2019/10/23 21:34:18 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:18 ############## :  PROCEED AS NORMAL -  - ###############
-2019/10/23 21:34:18 INTERVAL COUNT:  :  2 SRV: /var/tmp/824-501/pb-91984-basic-1 - Tick - Server.go
-2019/10/23 21:34:18 3 :  TTL FOR SRV : /var/tmp/824-501/pb-91984-basic-1:4 - Tick() - ViewService.go
-2019/10/23 21:34:18 ############## :  PROCEED AS NORMAL -  - ###############
-2019/10/23 21:34:19 ############## :  PROCEED AS NORMAL -  - ###############
-2019/10/23 21:34:19 ############## :  PROCEED AS NORMAL -  - ###############
-2019/10/23 21:34:19 ############## :  PROCEED AS NORMAL -  - ###############
-2019/10/23 21:34:19 ############## :  PROCEED AS NORMAL -  - ###############
-2019/10/23 21:34:19 ############## :  PROCEED AS NORMAL -  - ###############
-2019/10/23 21:34:19 ############## :  PROCEED AS NORMAL -  - ###############
-2019/10/23 21:34:19 $$$$$$$$$$$$$$$ :  CHECK CALLED -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:19 ReciveUpdate :  RPC FAIL - Tick - Server.go
-2019/10/23 21:34:19 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:19 ############## :  PROCEED AS NORMAL -  - ###############
-2019/10/23 21:34:19 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:19 INTERVAL COUNT:  :  3 SRV: /var/tmp/824-501/pb-91984-basic-1 - Tick - Server.go
-2019/10/23 21:34:19 3 :  TTL FOR SRV : /var/tmp/824-501/pb-91984-basic-1:4 - Tick() - ViewService.go
-2019/10/23 21:34:19 $$$$$$$$$$$$$$$ :  PBSERVICE TICK READ -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:19 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET RPC -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:19 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET RPC RETURN -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:19 $$$$$$$$$$$$$$$ :  GRABBED KEY -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:19 ############## :  PROCEED AS NORMAL -  - ###############
-2019/10/23 21:34:19 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:19 INTERVAL COUNT:  :  4 SRV: /var/tmp/824-501/pb-91984-basic-1 - Tick - Server.go
-2019/10/23 21:34:19 3 :  TTL FOR SRV : /var/tmp/824-501/pb-91984-basic-1:4 - Tick() - ViewService.go
-2019/10/23 21:34:19 After Recieve :  v2 - Tick - Server.go
-2019/10/23 21:34:19 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:19 ReciveUpdate :  RPC FAIL - Tick - Server.go
-2019/10/23 21:34:20 ############## :  PROCEED AS NORMAL -  - ###############
-2019/10/23 21:34:20 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:20 INTERVAL COUNT:  :  5 SRV: /var/tmp/824-501/pb-91984-basic-1 - Tick - Server.go
-2019/10/23 21:34:20 3 :  TTL FOR SRV : /var/tmp/824-501/pb-91984-basic-1:4 - Tick() - ViewService.go
-2019/10/23 21:34:20 $$$$$$$$$$$$$$$ :  PBSERVICE TICK READ -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:20 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET RPC -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:20 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET RPC RETURN -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:20 $$$$$$$$$$$$$$$ :  GRABBED KEY -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:20 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:20 ############## :  PROCEED AS NORMAL -  - ###############
-2019/10/23 21:34:20 INTERVAL COUNT:  :  6 SRV: /var/tmp/824-501/pb-91984-basic-1 - Tick - Server.go
-2019/10/23 21:34:20 3 :  TTL FOR SRV : /var/tmp/824-501/pb-91984-basic-1:4 - Tick() - ViewService.go
-2019/10/23 21:34:20 $$$$$$$$$$$$$$$ :  CHECK CALLED -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:20 After Recieve :  v1a - Tick - Server.go
-2019/10/23 21:34:20 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:20 ReciveUpdate :  RPC FAIL - Tick - Server.go
-2019/10/23 21:34:20 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:20 INTERVAL COUNT:  :  7 SRV: /var/tmp/824-501/pb-91984-basic-1 - Tick - Server.go
-2019/10/23 21:34:20 3 :  TTL FOR SRV : /var/tmp/824-501/pb-91984-basic-1:4 - Tick() - ViewService.go
-2019/10/23 21:34:20 $$$$$$$$$$$$$$$ :  PBSERVICE TICK READ -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:20 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET RPC -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:20 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET RPC RETURN -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:20 $$$$$$$$$$$$$$$ :  GRABBED KEY -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:20 ********************* :  PASSED FIRST PRIMARY -  - *********************
-2019/10/23 21:34:20 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:20 INTERVAL COUNT:  :  1 SRV: /var/tmp/824-501/pb-91984-basic-2 - Tick - Server.go
-2019/10/23 21:34:20 3 :  TTL FOR SRV : /var/tmp/824-501/pb-91984-basic-1:4 - Tick() - ViewService.go
-2019/10/23 21:34:20  :  ELECTED BACKUP: /var/tmp/824-501/pb-91984-basic-2 - Tick() - ViewService.go
-2019/10/23 21:34:20 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:20 INTERVAL COUNT:  :  8 SRV: /var/tmp/824-501/pb-91984-basic-1 - Tick - Server.go
-2019/10/23 21:34:20 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:20 After Recieve :  33 - Tick - Server.go
-2019/10/23 21:34:20 INTERVAL COUNT:  :  2 SRV: /var/tmp/824-501/pb-91984-basic-2 - Tick - Server.go
-2019/10/23 21:34:20 $$$$$$$$$$$$$$$ :  CHECK CALLED -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:20 3 :  TTL FOR SRV : /var/tmp/824-501/pb-91984-basic-1:3 - Tick() - ViewService.go
-2019/10/23 21:34:20 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:20 3 :  TTL FOR SRV : /var/tmp/824-501/pb-91984-basic-2:4 - Tick() - ViewService.go
-2019/10/23 21:34:20 3 :  RESTORE TTL  : /var/tmp/824-501/pb-91984-basic-1:5 - Tick() - ViewService.go
-2019/10/23 21:34:20 3 :  TTL FOR SRV : /var/tmp/824-501/pb-91984-basic-1:4 - Tick() - ViewService.go
-2019/10/23 21:34:20 3 :  TTL FOR SRV : /var/tmp/824-501/pb-91984-basic-2:3 - Tick() - ViewService.go
-2019/10/23 21:34:20 $$$$$$$$$$$$$$$ :  PBSERVICE TICK - BACKUP UPDATE  -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:20 3 :  RESTORE TTL  : /var/tmp/824-501/pb-91984-basic-2:5 - Tick() - ViewService.go
-2019/10/23 21:34:21 ############## :  PROCEED AS NORMAL -  - ###############
-2019/10/23 21:34:21 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:21 INTERVAL COUNT:  :  3 SRV: /var/tmp/824-501/pb-91984-basic-2 - Tick - Server.go
-2019/10/23 21:34:21 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:21 INTERVAL COUNT:  :  9 SRV: /var/tmp/824-501/pb-91984-basic-1 - Tick - Server.go
-2019/10/23 21:34:21 3 :  TTL FOR SRV : /var/tmp/824-501/pb-91984-basic-1:3 - Tick() - ViewService.go
-2019/10/23 21:34:21 3 :  TTL FOR SRV : /var/tmp/824-501/pb-91984-basic-2:4 - Tick() - ViewService.go
-2019/10/23 21:34:21 $$$$$$$$$$$$$$$ :  PBSERVICE TICK - BACKUP DEFAULT  -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:21 3 :  RESTORE TTL  : /var/tmp/824-501/pb-91984-basic-2:5 - Tick() - ViewService.go
-2019/10/23 21:34:21 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:21 $$$$$$$$$$$$$$$ :  PBSERVICE TICK READ -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:21 3 :  TTL FOR SRV : /var/tmp/824-501/pb-91984-basic-1:2 - Tick() - ViewService.go
-2019/10/23 21:34:21 INTERVAL COUNT:  :  4 SRV: /var/tmp/824-501/pb-91984-basic-2 - Tick - Server.go
-2019/10/23 21:34:21 3 :  TTL FOR SRV : /var/tmp/824-501/pb-91984-basic-2:4 - Tick() - ViewService.go
-2019/10/23 21:34:21 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET RPC -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:21 3 :  RESTORE TTL  : /var/tmp/824-501/pb-91984-basic-1:5 - Tick() - ViewService.go
-2019/10/23 21:34:21 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET RPC RETURN -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:21 $$$$$$$$$$$$$$$ :  GRABBED KEY -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:21 3 :  TTL FOR SRV : /var/tmp/824-501/pb-91984-basic-1:4 - Tick() - ViewService.go
-2019/10/23 21:34:21 $$$$$$$$$$$$$$$ :  PBSERVICE TICK - BACKUP DEFAULT  -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:21 3 :  TTL FOR SRV : /var/tmp/824-501/pb-91984-basic-2:3 - Tick() - ViewService.go
-2019/10/23 21:34:21 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:21 3 :  RESTORE TTL  : /var/tmp/824-501/pb-91984-basic-2:5 - Tick() - ViewService.go
-2019/10/23 21:34:21 INTERVAL COUNT:  :  10 SRV: /var/tmp/824-501/pb-91984-basic-1 - Tick - Server.go
-2019/10/23 21:34:21 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:21 3 :  TTL FOR SRV : /var/tmp/824-501/pb-91984-basic-1:3 - Tick() - ViewService.go
-2019/10/23 21:34:21 3 :  TTL FOR SRV : /var/tmp/824-501/pb-91984-basic-2:4 - Tick() - ViewService.go
-2019/10/23 21:34:21 INTERVAL COUNT:  :  5 SRV: /var/tmp/824-501/pb-91984-basic-2 - Tick - Server.go
-2019/10/23 21:34:21 3 :  RESTORE TTL  : /var/tmp/824-501/pb-91984-basic-1:5 - Tick() - ViewService.go
-2019/10/23 21:34:21 After Recieve :  44 - Tick - Server.go
-2019/10/23 21:34:21 $$$$$$$$$$$$$$$ :  CHECK CALLED -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:21 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:21 3 :  TTL FOR SRV : /var/tmp/824-501/pb-91984-basic-1:4 - Tick() - ViewService.go
-2019/10/23 21:34:21 $$$$$$$$$$$$$$$ :  PBSERVICE TICK - BACKUP UPDATE  -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:21 3 :  TTL FOR SRV : /var/tmp/824-501/pb-91984-basic-2:3 - Tick() - ViewService.go
-2019/10/23 21:34:21 3 :  RESTORE TTL  : /var/tmp/824-501/pb-91984-basic-2:5 - Tick() - ViewService.go
-2019/10/23 21:34:21 ############## :  PROCEED AS NORMAL -  - ###############
-2019/10/23 21:34:21 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:21 INTERVAL COUNT:  :  6 SRV: /var/tmp/824-501/pb-91984-basic-2 - Tick - Server.go
-2019/10/23 21:34:21 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:21 INTERVAL COUNT:  :  11 SRV: /var/tmp/824-501/pb-91984-basic-1 - Tick - Server.go
-2019/10/23 21:34:21 3 :  TTL FOR SRV : /var/tmp/824-501/pb-91984-basic-1:3 - Tick() - ViewService.go
-2019/10/23 21:34:21 3 :  TTL FOR SRV : /var/tmp/824-501/pb-91984-basic-2:4 - Tick() - ViewService.go
-2019/10/23 21:34:21 $$$$$$$$$$$$$$$ :  PBSERVICE TICK - BACKUP DEFAULT  -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:21 3 :  RESTORE TTL  : /var/tmp/824-501/pb-91984-basic-2:5 - Tick() - ViewService.go
-2019/10/23 21:34:21 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:21 3 :  TTL FOR SRV : /var/tmp/824-501/pb-91984-basic-1:2 - Tick() - ViewService.go
-2019/10/23 21:34:21 INTERVAL COUNT:  :  7 SRV: /var/tmp/824-501/pb-91984-basic-2 - Tick - Server.go
-2019/10/23 21:34:21 $$$$$$$$$$$$$$$ :  PBSERVICE TICK READ -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:21 3 :  TTL FOR SRV : /var/tmp/824-501/pb-91984-basic-2:4 - Tick() - ViewService.go
-2019/10/23 21:34:21 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET RPC -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:21 3 :  RESTORE TTL  : /var/tmp/824-501/pb-91984-basic-1:5 - Tick() - ViewService.go
-2019/10/23 21:34:21 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET RPC RETURN -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:21 $$$$$$$$$$$$$$$ :  GRABBED KEY -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:21 ********************* :  PASSED FIRST BACKUP -  - *********************
-2019/10/23 21:34:21 $$$$$$$$$$$$$$$ :  TIME TO LOOP -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:21 ~~~~~~~~~~~~~~~~~~~~ :  CALL TO FAILURE MADE - KV_SRV - ~~~~~~~~~~~~~~~~~~~
-2019/10/23 21:34:21 ############## :  HANDLE SERVER FAILURE -  - ###############
-2019/10/23 21:34:21 3 :  TTL FOR SRV : /var/tmp/824-501/pb-91984-basic-1:4 - Tick() - ViewService.go
-2019/10/23 21:34:21 3 :  TTL FOR SRV : /var/tmp/824-501/pb-91984-basic-2:3 - Tick() - ViewService.go
-2019/10/23 21:34:21 3 :  RESTORE TTL  : /var/tmp/824-501/pb-91984-basic-2:5 - Tick() - ViewService.go
-2019/10/23 21:34:22 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:22 ############## :  FAIL/var/tmp/824-501/pb-91984-basic-1 -  - ###############
-2019/10/23 21:34:22 $$$$$$$$$$$$$$$ :  BEFORE GET -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:22 INTERVAL COUNT:  :  8 SRV: /var/tmp/824-501/pb-91984-basic-2 - Tick - Server.go
-2019/10/23 21:34:22 $$$$$$$$$$$$$$$ :  GET MADE BY VCK -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:22 $$$$$$$$$$$$$$$ :  BEFORE CHECK -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:22 $$$$$$$$$$$$$$$ :  CHECK CALLED -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:22 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:22 3 :  TTL FOR SRV : /var/tmp/824-501/pb-91984-basic-2:4 - Tick() - ViewService.go
-2019/10/23 21:34:22 $$$$$$$$$$$$$$$ :  PBSERVICE TICK READ -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:22 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET RPC -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:22 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET RPC RETURN -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:22 $$$$$$$$$$$$$$$ :  GRABBED KEY -  - $$$$$$$$$$$$$$
-2019/10/23 21:34:22 $$$$$$$$$$$$$$$ :  FAIL VALUE CHECK -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:45 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/23 22:59:45 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/23 22:59:45 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/23 22:59:45 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/23 22:59:45 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/23 22:59:45 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/23 22:59:45 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/23 22:59:45 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/23 22:59:45 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/23 22:59:46 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/23 22:59:46 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:46 INTERVAL COUNT:  :  1 SRV: /var/tmp/824-501/pb-821-basic-1 - Tick - Server.go
+2019/10/23 22:59:46  :  ELECTED FIRST PRIMARY - Tick() - ViewService.go
+2019/10/23 22:59:46 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/23 22:59:46 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:46 INTERVAL COUNT:  :  2 SRV: /var/tmp/824-501/pb-821-basic-1 - Tick - Server.go
+2019/10/23 22:59:46 3 :  TTL FOR SRV : /var/tmp/824-501/pb-821-basic-1:4 - Tick() - ViewService.go
+2019/10/23 22:59:46 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/23 22:59:46 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/23 22:59:46 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/23 22:59:46 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/23 22:59:46 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/23 22:59:46 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/23 22:59:47 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/23 22:59:47 After Recieve :  v1 - Tick - Server.go
+2019/10/23 22:59:47 $$$$$$$$$$$$$$$ :  CHECK CALLED -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:47 ReciveUpdate :  RPC FAIL - Tick - Server.go
+2019/10/23 22:59:47 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:47 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/23 22:59:47 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:47 INTERVAL COUNT:  :  3 SRV: /var/tmp/824-501/pb-821-basic-1 - Tick - Server.go
+2019/10/23 22:59:47 3 :  TTL FOR SRV : /var/tmp/824-501/pb-821-basic-1:4 - Tick() - ViewService.go
+2019/10/23 22:59:47 $$$$$$$$$$$$$$$ :  PBSERVICE TICK READ -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:47 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET RPC -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:47 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET RPC RETURN -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:47 $$$$$$$$$$$$$$$ :  GRABBED KEY -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:47 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/23 22:59:47 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:47 INTERVAL COUNT:  :  4 SRV: /var/tmp/824-501/pb-821-basic-1 - Tick - Server.go
+2019/10/23 22:59:47 3 :  TTL FOR SRV : /var/tmp/824-501/pb-821-basic-1:4 - Tick() - ViewService.go
+2019/10/23 22:59:47 After Recieve :  v2 - Tick - Server.go
+2019/10/23 22:59:47 $$$$$$$$$$$$$$$ :  CHECK CALLED -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:47 ReciveUpdate :  RPC FAIL - Tick - Server.go
+2019/10/23 22:59:47 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:47 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/23 22:59:47 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:47 INTERVAL COUNT:  :  5 SRV: /var/tmp/824-501/pb-821-basic-1 - Tick - Server.go
+2019/10/23 22:59:47 3 :  TTL FOR SRV : /var/tmp/824-501/pb-821-basic-1:4 - Tick() - ViewService.go
+2019/10/23 22:59:47 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET RPC -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:47 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET RPC RETURN -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:47 $$$$$$$$$$$$$$$ :  GRABBED KEY -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:47 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:47 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/23 22:59:47 INTERVAL COUNT:  :  6 SRV: /var/tmp/824-501/pb-821-basic-1 - Tick - Server.go
+2019/10/23 22:59:47 3 :  TTL FOR SRV : /var/tmp/824-501/pb-821-basic-1:4 - Tick() - ViewService.go
+2019/10/23 22:59:47 $$$$$$$$$$$$$$$ :  CHECK CALLED -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:47 After Recieve :  v1a - Tick - Server.go
+2019/10/23 22:59:47 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:47 ReciveUpdate :  RPC FAIL - Tick - Server.go
+2019/10/23 22:59:47 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/23 22:59:47 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:47 INTERVAL COUNT:  :  7 SRV: /var/tmp/824-501/pb-821-basic-1 - Tick - Server.go
+2019/10/23 22:59:48 3 :  TTL FOR SRV : /var/tmp/824-501/pb-821-basic-1:4 - Tick() - ViewService.go
+2019/10/23 22:59:48 $$$$$$$$$$$$$$$ :  PBSERVICE TICK READ -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:48 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET RPC -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:48 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET RPC RETURN -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:48 $$$$$$$$$$$$$$$ :  GRABBED KEY -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:48 ********************* :  PASSED FIRST PRIMARY -  - *********************
+2019/10/23 22:59:48 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:48 INTERVAL COUNT:  :  1 SRV: /var/tmp/824-501/pb-821-basic-2 - Tick - Server.go
+2019/10/23 22:59:48 3 :  TTL FOR SRV : /var/tmp/824-501/pb-821-basic-1:4 - Tick() - ViewService.go
+2019/10/23 22:59:48  :  ELECTED BACKUP: /var/tmp/824-501/pb-821-basic-2 - Tick() - ViewService.go
+2019/10/23 22:59:48 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:48 INTERVAL COUNT:  :  8 SRV: /var/tmp/824-501/pb-821-basic-1 - Tick - Server.go
+2019/10/23 22:59:48 3 :  TTL FOR SRV : /var/tmp/824-501/pb-821-basic-2:4 - Tick() - ViewService.go
+2019/10/23 22:59:48 &&&&&&&&&&&&&&&&&&& :  COPY TO BACKUP -  - &&&&&&&&&&&&&&&&
+2019/10/23 22:59:48 3 :  TTL FOR SRV : /var/tmp/824-501/pb-821-basic-1:3 - Tick() - ViewService.go
+2019/10/23 22:59:48 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:48 3 :  RESTORE TTL  : /var/tmp/824-501/pb-821-basic-1:5 - Tick() - ViewService.go
+2019/10/23 22:59:48 INTERVAL COUNT:  :  2 SRV: /var/tmp/824-501/pb-821-basic-2 - Tick - Server.go
+2019/10/23 22:59:48 3 :  TTL FOR SRV : /var/tmp/824-501/pb-821-basic-1:4 - Tick() - ViewService.go
+2019/10/23 22:59:48 After Recieve :  33 - Tick - Server.go
+2019/10/23 22:59:48 $$$$$$$$$$$$$$$ :  PBSERVICE TICK - BACKUP REPLICATE  -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:48 $$$$$$$$$$$$$$$ :  CHECK CALLED -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:48 3 :  RESTORE TTL  : /var/tmp/824-501/pb-821-basic-2:5 - Tick() - ViewService.go
+2019/10/23 22:59:48 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:48 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:48 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/23 22:59:48 INTERVAL COUNT:  :  3 SRV: /var/tmp/824-501/pb-821-basic-2 - Tick - Server.go
+2019/10/23 22:59:48 3 :  TTL FOR SRV : /var/tmp/824-501/pb-821-basic-1:3 - Tick() - ViewService.go
+2019/10/23 22:59:48 3 :  TTL FOR SRV : /var/tmp/824-501/pb-821-basic-2:4 - Tick() - ViewService.go
+2019/10/23 22:59:48 $$$$$$$$$$$$$$$ :  PBSERVICE TICK - BACKUP UPDATE  -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:48 3 :  RESTORE TTL  : /var/tmp/824-501/pb-821-basic-2:5 - Tick() - ViewService.go
+2019/10/23 22:59:48 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/23 22:59:48 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:48 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:48 INTERVAL COUNT:  :  4 SRV: /var/tmp/824-501/pb-821-basic-2 - Tick - Server.go
+2019/10/23 22:59:48 INTERVAL COUNT:  :  9 SRV: /var/tmp/824-501/pb-821-basic-1 - Tick - Server.go
+2019/10/23 22:59:48 3 :  TTL FOR SRV : /var/tmp/824-501/pb-821-basic-1:2 - Tick() - ViewService.go
+2019/10/23 22:59:48 3 :  TTL FOR SRV : /var/tmp/824-501/pb-821-basic-2:4 - Tick() - ViewService.go
+2019/10/23 22:59:48 $$$$$$$$$$$$$$$ :  PBSERVICE TICK - BACKUP DEFAULT  -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:48 3 :  RESTORE TTL  : /var/tmp/824-501/pb-821-basic-2:5 - Tick() - ViewService.go
+2019/10/23 22:59:48 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:48 INTERVAL COUNT:  :  5 SRV: /var/tmp/824-501/pb-821-basic-2 - Tick - Server.go
+2019/10/23 22:59:48 $$$$$$$$$$$$$$$ :  PBSERVICE TICK READ -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:48 3 :  TTL FOR SRV : /var/tmp/824-501/pb-821-basic-2:4 - Tick() - ViewService.go
+2019/10/23 22:59:48 3 :  TTL FOR SRV : /var/tmp/824-501/pb-821-basic-1:1 - Tick() - ViewService.go
+2019/10/23 22:59:48 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET RPC -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:48 3 :  RESTORE TTL  : /var/tmp/824-501/pb-821-basic-1:5 - Tick() - ViewService.go
+2019/10/23 22:59:48 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET RPC RETURN -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:48 $$$$$$$$$$$$$$$ :  GRABBED KEY -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:49 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:49 INTERVAL COUNT:  :  10 SRV: /var/tmp/824-501/pb-821-basic-1 - Tick - Server.go
+2019/10/23 22:59:49 $$$$$$$$$$$$$$$ :  PBSERVICE TICK - BACKUP DEFAULT  -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:49 3 :  TTL FOR SRV : /var/tmp/824-501/pb-821-basic-1:4 - Tick() - ViewService.go
+2019/10/23 22:59:49 3 :  TTL FOR SRV : /var/tmp/824-501/pb-821-basic-2:3 - Tick() - ViewService.go
+2019/10/23 22:59:49 3 :  RESTORE TTL  : /var/tmp/824-501/pb-821-basic-2:5 - Tick() - ViewService.go
+2019/10/23 22:59:49 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:49 INTERVAL COUNT:  :  6 SRV: /var/tmp/824-501/pb-821-basic-2 - Tick - Server.go
+2019/10/23 22:59:49 3 :  TTL FOR SRV : /var/tmp/824-501/pb-821-basic-1:3 - Tick() - ViewService.go
+2019/10/23 22:59:49 3 :  TTL FOR SRV : /var/tmp/824-501/pb-821-basic-2:4 - Tick() - ViewService.go
+2019/10/23 22:59:49 3 :  RESTORE TTL  : /var/tmp/824-501/pb-821-basic-1:5 - Tick() - ViewService.go
+2019/10/23 22:59:49 After Recieve :  44 - Tick - Server.go
+2019/10/23 22:59:49 $$$$$$$$$$$$$$$ :  CHECK CALLED -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:49 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:49 3 :  TTL FOR SRV : /var/tmp/824-501/pb-821-basic-1:4 - Tick() - ViewService.go
+2019/10/23 22:59:49 $$$$$$$$$$$$$$$ :  PBSERVICE TICK - BACKUP UPDATE  -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:49 3 :  TTL FOR SRV : /var/tmp/824-501/pb-821-basic-2:3 - Tick() - ViewService.go
+2019/10/23 22:59:49 3 :  RESTORE TTL  : /var/tmp/824-501/pb-821-basic-2:5 - Tick() - ViewService.go
+2019/10/23 22:59:49 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:49 INTERVAL COUNT:  :  7 SRV: /var/tmp/824-501/pb-821-basic-2 - Tick - Server.go
+2019/10/23 22:59:49 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:49 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/23 22:59:49 INTERVAL COUNT:  :  11 SRV: /var/tmp/824-501/pb-821-basic-1 - Tick - Server.go
+2019/10/23 22:59:49 3 :  TTL FOR SRV : /var/tmp/824-501/pb-821-basic-1:3 - Tick() - ViewService.go
+2019/10/23 22:59:49 3 :  TTL FOR SRV : /var/tmp/824-501/pb-821-basic-2:4 - Tick() - ViewService.go
+2019/10/23 22:59:49 3 :  RESTORE TTL  : /var/tmp/824-501/pb-821-basic-1:5 - Tick() - ViewService.go
+2019/10/23 22:59:49 $$$$$$$$$$$$$$$ :  PBSERVICE TICK READ -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:49 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET RPC -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:49 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET RPC RETURN -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:49 $$$$$$$$$$$$$$$ :  GRABBED KEY -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:49 ********************* :  PASSED FIRST BACKUP -  - *********************
+2019/10/23 22:59:49 $$$$$$$$$$$$$$$ :  TIME TO LOOP -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:49 ~~~~~~~~~~~~~~~~~~~~ :  CALL TO FAILURE MADE - KV_SRV - ~~~~~~~~~~~~~~~~~~~
+2019/10/23 22:59:49 ############## :  HANDLE SERVER FAILURE -  - ###############
+2019/10/23 22:59:49 ############## :  FAIL/var/tmp/824-501/pb-821-basic-1 -  - ###############
+2019/10/23 22:59:49 $$$$$$$$$$$$$$$ :  BEFORE GET -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:49 @@@@@@@@@@@@@@ :  THIS VS CLERK SPEAKING: /var/tmp/824-501/pb-821-basic-1 -  - @@@@@@@@@@@@@@@@@@
+2019/10/23 22:59:49 $$$$$$$$$$$$$$$ :  GET MADE BY VCK -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:49 $$$$$$$$$$$$$$$ :  BEFORE CHECK -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:49 $$$$$$$$$$$$$$$ :  CHECK CALLED -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:49 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:49 3 :  TTL FOR SRV : /var/tmp/824-501/pb-821-basic-2:3 - Tick() - ViewService.go
+2019/10/23 22:59:49 $$$$$$$$$$$$$$$ :  PBSERVICE TICK - BACKUP DEFAULT  -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:49 3 :  RESTORE TTL  : /var/tmp/824-501/pb-821-basic-2:5 - Tick() - ViewService.go
+2019/10/23 22:59:49 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:49 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/23 22:59:49 3 :  TTL FOR SRV : /var/tmp/824-501/pb-821-basic-2:4 - Tick() - ViewService.go
+2019/10/23 22:59:49 3 :  RESTORE TTL  : /var/tmp/824-501/pb-821-basic-2:5 - Tick() - ViewService.go
+2019/10/23 22:59:49 $$$$$$$$$$$$$$$ :  PBSERVICE TICK READ -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:49 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET RPC -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:49 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET RPC RETURN -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:49 $$$$$$$$$$$$$$$ :  GRABBED KEY -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:49 $$$$$$$$$$$$$$$ :  CHECK CALLED -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:49 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:49 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:49 INTERVAL COUNT:  :  9 SRV: /var/tmp/824-501/pb-821-basic-2 - Tick - Server.go
+2019/10/23 22:59:49 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/23 22:59:50 3 :  TTL FOR SRV : /var/tmp/824-501/pb-821-basic-2:4 - Tick() - ViewService.go
+2019/10/23 22:59:50 3 :  RESTORE TTL  : /var/tmp/824-501/pb-821-basic-2:5 - Tick() - ViewService.go
+2019/10/23 22:59:50 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET RPC -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:50 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET RPC RETURN -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:50 $$$$$$$$$$$$$$$ :  GRABBED KEY -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:50 $$$$$$$$$$$$$$$ :  CHECK CALLED -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:50 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:50 ############## :  PROCEED AS NORMAL -  - ###############
+2019/10/23 22:59:50 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:50 INTERVAL COUNT:  :  10 SRV: /var/tmp/824-501/pb-821-basic-2 - Tick - Server.go
+2019/10/23 22:59:50 3 :  TTL FOR SRV : /var/tmp/824-501/pb-821-basic-2:4 - Tick() - ViewService.go
+2019/10/23 22:59:50 3 :  RESTORE TTL  : /var/tmp/824-501/pb-821-basic-2:5 - Tick() - ViewService.go
+2019/10/23 22:59:50 $$$$$$$$$$$$$$$ :  PBSERVICE TICK READ -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:50 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET RPC -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:50 $$$$$$$$$$$$$$$ :  PBSERVICE CLERK GET RPC RETURN -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:50 $$$$$$$$$$$$$$$ :  GRABBED KEY -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:50 $$$$$$$$$$$$$$$ :  PASSED PRIMARY FAIL -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:50 ~~~~~~~~~~~~~~~~~~~~ :  CALL TO FAILURE MADE - KV_SRV - ~~~~~~~~~~~~~~~~~~~
+2019/10/23 22:59:50 ############## :  HANDLE SERVER FAILURE -  - ###############
+2019/10/23 22:59:50 $$$$$$$$$$$$$$$ :  PBSERVICE TICK  -  - $$$$$$$$$$$$$$
+2019/10/23 22:59:50 INTERVAL COUNT:  :  1 SRV: /var/tmp/824-501/pb-821-basic-3 - Tick - Server.go
