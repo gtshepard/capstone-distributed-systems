@@ -15,8 +15,11 @@ import (
 )
 
 func check(ck *Clerk, key string, value string) {
+	myLogger("$$$$$$$$$$$$$$$", "CHECK CALLED", "", "$$$$$$$$$$$$$$")
 	v := ck.Get(key)
+	myLogger("$$$$$$$$$$$$$$$", "GRABBED KEY", "", "$$$$$$$$$$$$$$")
 	if v != value {
+		myLogger("$$$$$$$$$$$$$$$", "FAIL VALUE CHECK", "", "$$$$$$$$$$$$$$")
 		log.Fatalf("Get(%v) -> %v, expected %v", key, v, value)
 	}
 }
@@ -63,7 +66,7 @@ func TestBasicFail(t *testing.T) {
 	check(ck, "1", "v1a")
 
 	fmt.Printf("  ... Passed\n")
-
+	myLogger("*********************", "PASSED FIRST PRIMARY", "", "*********************")
 	// add a backup
 
 	fmt.Printf("Test: Add a backup ...\n")
@@ -91,12 +94,12 @@ func TestBasicFail(t *testing.T) {
 	check(ck, "4", "44")
 
 	fmt.Printf("  ... Passed\n")
-
+	myLogger("*********************", "PASSED FIRST BACKUP", "", "*********************")
 	// kill the primary
 
 	fmt.Printf("Test: Primary failure ...\n")
 	s1.kill()
-	time.Sleep(time.Second * 10)
+	myLogger("$$$$$$$$$$$$$$$", "TIME TO LOOP", "", "$$$$$$$$$$$$$$")
 	for i := 0; i < viewservice.DeadPings*2; i++ {
 		v, _ := vck.Get()
 		if v.Primary == s2.me {
@@ -104,17 +107,20 @@ func TestBasicFail(t *testing.T) {
 		}
 		time.Sleep(viewservice.PingInterval)
 	}
+	myLogger("$$$$$$$$$$$$$$$", "BEFORE GET", "", "$$$$$$$$$$$$$$")
 	v, _ = vck.Get()
+	myLogger("$$$$$$$$$$$$$$$", "GET MADE BY VCK", "", "$$$$$$$$$$$$$$")
+
 	if v.Primary != s2.me {
 		t.Fatal("backup never switched to primary")
 	}
-
+	myLogger("$$$$$$$$$$$$$$$", "BEFORE CHECK", "", "$$$$$$$$$$$$$$")
 	check(ck, "1", "v1a")
 	check(ck, "3", "33")
 	check(ck, "4", "44")
 
 	fmt.Printf("  ... Passed\n")
-
+	myLogger("$$$$$$$$$$$$$$$", "PASSED PRIMARY FAIL", "", "$$$$$$$$$$$$$$")
 	// kill solo server, start new server, check that
 	// it does not start serving as primary
 
@@ -128,6 +134,7 @@ func TestBasicFail(t *testing.T) {
 		ck.Get("1")
 		get_done = true
 	}()
+
 	time.Sleep(2 * time.Second)
 	if get_done {
 		t.Fatalf("ck.Get() returned even though no initialized primary")

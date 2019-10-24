@@ -68,7 +68,6 @@ func (vs *ViewServer) Ping(args *PingArgs, reply *PingReply) error {
 // server Get() RPC handler.
 //
 func (vs *ViewServer) Get(args *GetArgs, reply *GetReply) error {
-
 	// Your code here.
 	//retrieve the most current view
 	reply.View = vs.currentView
@@ -96,81 +95,164 @@ func (vs *ViewServer) tick() {
 
 	select {
 	case failed := <-vs.srvFailure:
-		myLogger("##############", "FAIL"+failed, "", "###############")
-	default:
-		myLogger("##############", "PROCEED AS NORMAL", "", "###############")
-	}
 
-	srvMsg := <-vs.ping
-	for key := range vs.servers {
-		vs.servers[key].ttl -= 1
-		ttl := strconv.Itoa(vs.servers[key].ttl)
-		myLogger("3", "TTL FOR SRV : "+key+":"+ttl, "Tick()", "ViewService.go")
-	}
+		if failed == vs.currentView.Primary {
+			myLogger("##############", "FAIL"+failed, "", "###############")
+			//wait for ack to change views
+			if vs.servers[failed].oldViewNum == vs.currentView.Viewnum {
+				vs.currentView.Primary = vs.currentView.Backup
+				vs.currentView.Backup = ""
+				vs.currentView.Viewnum += 1
+				myLogger("##############", "PROMOTE BACKUP: "+vs.currentView.Primary, "", "###############")
+				delete(vs.servers, failed)
+			}
+		}
+	case srvMsg := <-vs.ping:
+		for key := range vs.servers {
+			vs.servers[key].ttl -= 1
+			ttl := strconv.Itoa(vs.servers[key].ttl)
+			myLogger("3", "TTL FOR SRV : "+key+":"+ttl, "Tick()", "ViewService.go")
+		}
 
-	if vs.currentView.Primary == "" && vs.isFirstElection {
+		if vs.currentView.Primary == "" && vs.isFirstElection {
 
-		vs.currentView.Primary = srvMsg.name
-		vs.servers[srvMsg.name] = srvMsg
-		vs.servers[srvMsg.name].ttl = DeadPings
-		vs.isFirstElection = false
-		myLogger("", "ELECTED FIRST PRIMARY", "Tick()", "ViewService.go")
-		//myLogger("3", "Primary Elected: "+srvMsg.name, "Tick()", "ViewService.go")
-		//myLogger("3", "MAP SIZE: "+strconv.Itoa(len(vs.servers)), "Tick()", "ViewService.go")
-
-	} else if vs.currentView.Backup == "" && srvMsg.oldViewNum < uint(1) {
-
-		if srvMsg.name != vs.currentView.Primary {
-			vs.currentView.Viewnum += 1
-			vs.currentView.Backup = srvMsg.name
+			vs.currentView.Primary = srvMsg.name
 			vs.servers[srvMsg.name] = srvMsg
 			vs.servers[srvMsg.name].ttl = DeadPings
-			myLogger("", "ELECTED BACKUP: "+srvMsg.name, "Tick()", "ViewService.go")
+			vs.isFirstElection = false
+			myLogger("", "ELECTED FIRST PRIMARY", "Tick()", "ViewService.go")
+			//myLogger("3", "Primary Elected: "+srvMsg.name, "Tick()", "ViewService.go")
+			//myLogger("3", "MAP SIZE: "+strconv.Itoa(len(vs.servers)), "Tick()", "ViewService.go")
+
+		} else if vs.currentView.Backup == "" && srvMsg.oldViewNum < uint(1) {
+
+			if srvMsg.name != vs.currentView.Primary {
+				vs.currentView.Viewnum += 1
+				vs.currentView.Backup = srvMsg.name
+				vs.servers[srvMsg.name] = srvMsg
+				vs.servers[srvMsg.name].ttl = DeadPings
+				myLogger("", "ELECTED BACKUP: "+srvMsg.name, "Tick()", "ViewService.go")
+			} else {
+				//account for primary pinging before first backup elected
+				vs.servers[srvMsg.name].ttl = DeadPings
+			}
+			//what other case activates this
+			//restart with idle server
+
+		} else if srvMsg.name == vs.currentView.Primary && srvMsg.oldViewNum < uint(1) {
+			myLogger("", "PRIMARY RESTART "+srvMsg.name, "Tick()", "ViewService.go")
+			//treat primary restart as dead
+			vs.servers[srvMsg.name].ttl = 0
 		} else {
-			//account for primary pinging before first backup elected
+
+			vs.servers[srvMsg.name] = srvMsg
 			vs.servers[srvMsg.name].ttl = DeadPings
+			dp := strconv.Itoa(DeadPings)
+			myLogger("3", "RESTORE TTL  : "+srvMsg.name+":"+dp, "Tick()", "ViewService.go")
 		}
-		//what other case activates this
-		//restart with idle server
+		//reset TTL for pinging SRV
 
-	} else if srvMsg.name == vs.currentView.Primary && srvMsg.oldViewNum < uint(1) {
-		myLogger("", "PRIMARY RESTART "+srvMsg.name, "Tick()", "ViewService.go")
-		//treat primary restart as dead
-		vs.servers[srvMsg.name].ttl = 0
-	} else {
+		//promote back up and prune dead servers
 
-		vs.servers[srvMsg.name] = srvMsg
-		vs.servers[srvMsg.name].ttl = DeadPings
-		dp := strconv.Itoa(DeadPings)
-		myLogger("3", "RESTORE TTL  : "+srvMsg.name+":"+dp, "Tick()", "ViewService.go")
-	}
-	//reset TTL for pinging SRV
+		for key := range vs.servers {
+			if vs.servers[key].ttl <= 0 {
+				//if primary not alive
+				if key == vs.currentView.Primary {
+					myLogger("", "PRIMARY NOT ALIVE PROMOTE BACK UP: "+key, "Tick()", "ViewService.go")
+					//wait for ack to change views
+					if vs.servers[key].oldViewNum == vs.currentView.Viewnum {
+						vs.currentView.Viewnum += 1
+						vs.currentView.Primary = vs.currentView.Backup
+						vs.currentView.Backup = ""
+						delete(vs.servers, key)
+					}
+				}
+			}
+		}
 
-	//promote back up and prune dead servers
-
-	for key := range vs.servers {
-		if vs.servers[key].ttl <= 0 {
-			//if primary not alive
-			if key == vs.currentView.Primary {
-				myLogger("", "PRIMARY NOT ALIVE PROMOTE BACK UP: "+key, "Tick()", "ViewService.go")
-				//wait for ack to change views
-				if vs.servers[key].oldViewNum == vs.currentView.Viewnum {
-					vs.currentView.Viewnum += 1
-					vs.currentView.Primary = vs.currentView.Backup
-					vs.currentView.Backup = ""
+		for key := range vs.servers {
+			if vs.servers[key].ttl <= 0 {
+				if key != vs.currentView.Primary {
 					delete(vs.servers, key)
 				}
 			}
 		}
+
+	default:
+		myLogger("##############", "PROCEED AS NORMAL", "", "###############")
 	}
 
-	for key := range vs.servers {
-		if vs.servers[key].ttl <= 0 {
-			if key != vs.currentView.Primary {
-				delete(vs.servers, key)
-			}
-		}
-	}
+	//myLogger("##############", "WAITING FOR PING", "", "###############")
+	// srvMsg := <-vs.ping
+	// for key := range vs.servers {
+	// 	vs.servers[key].ttl -= 1
+	// 	ttl := strconv.Itoa(vs.servers[key].ttl)
+	// 	myLogger("3", "TTL FOR SRV : "+key+":"+ttl, "Tick()", "ViewService.go")
+	// }
+
+	// if vs.currentView.Primary == "" && vs.isFirstElection {
+
+	// 	vs.currentView.Primary = srvMsg.name
+	// 	vs.servers[srvMsg.name] = srvMsg
+	// 	vs.servers[srvMsg.name].ttl = DeadPings
+	// 	vs.isFirstElection = false
+	// 	myLogger("", "ELECTED FIRST PRIMARY", "Tick()", "ViewService.go")
+	// 	//myLogger("3", "Primary Elected: "+srvMsg.name, "Tick()", "ViewService.go")
+	// 	//myLogger("3", "MAP SIZE: "+strconv.Itoa(len(vs.servers)), "Tick()", "ViewService.go")
+
+	// } else if vs.currentView.Backup == "" && srvMsg.oldViewNum < uint(1) {
+
+	// 	if srvMsg.name != vs.currentView.Primary {
+	// 		vs.currentView.Viewnum += 1
+	// 		vs.currentView.Backup = srvMsg.name
+	// 		vs.servers[srvMsg.name] = srvMsg
+	// 		vs.servers[srvMsg.name].ttl = DeadPings
+	// 		myLogger("", "ELECTED BACKUP: "+srvMsg.name, "Tick()", "ViewService.go")
+	// 	} else {
+	// 		//account for primary pinging before first backup elected
+	// 		vs.servers[srvMsg.name].ttl = DeadPings
+	// 	}
+	// 	//what other case activates this
+	// 	//restart with idle server
+
+	// } else if srvMsg.name == vs.currentView.Primary && srvMsg.oldViewNum < uint(1) {
+	// 	myLogger("", "PRIMARY RESTART "+srvMsg.name, "Tick()", "ViewService.go")
+	// 	//treat primary restart as dead
+	// 	vs.servers[srvMsg.name].ttl = 0
+	// } else {
+
+	// 	vs.servers[srvMsg.name] = srvMsg
+	// 	vs.servers[srvMsg.name].ttl = DeadPings
+	// 	dp := strconv.Itoa(DeadPings)
+	// 	myLogger("3", "RESTORE TTL  : "+srvMsg.name+":"+dp, "Tick()", "ViewService.go")
+	// }
+	// //reset TTL for pinging SRV
+
+	// //promote back up and prune dead servers
+
+	// for key := range vs.servers {
+	// 	if vs.servers[key].ttl <= 0 {
+	// 		//if primary not alive
+	// 		if key == vs.currentView.Primary {
+	// 			myLogger("", "PRIMARY NOT ALIVE PROMOTE BACK UP: "+key, "Tick()", "ViewService.go")
+	// 			//wait for ack to change views
+	// 			if vs.servers[key].oldViewNum == vs.currentView.Viewnum {
+	// 				vs.currentView.Viewnum += 1
+	// 				vs.currentView.Primary = vs.currentView.Backup
+	// 				vs.currentView.Backup = ""
+	// 				delete(vs.servers, key)
+	// 			}
+	// 		}
+	// 	}
+	// }
+
+	// for key := range vs.servers {
+	// 	if vs.servers[key].ttl <= 0 {
+	// 		if key != vs.currentView.Primary {
+	// 			delete(vs.servers, key)
+	// 		}
+	// 	}
+	// }
 }
 
 //

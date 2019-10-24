@@ -56,11 +56,15 @@ func (pb *PBServer) Put(args *PutArgs, reply *PutReply) error {
 func (pb *PBServer) Get(args *GetArgs, reply *GetReply) error {
 	// Your code here.
 	//make request to db
+
 	msg := &ClientMsg{}
 	msg.Key = args.Key
+
 	pb.reader <- msg
+
 	//get reply
 	rep := <-pb.reader
+
 	reply.Value = rep.Value
 
 	return nil
@@ -89,6 +93,7 @@ func (pb *PBServer) Ack(args *SrvAckArgs, reply *SrvAckReply) error {
 // ping the viewserver periodically.
 func (pb *PBServer) tick() {
 	// Your code here.
+	myLogger("$$$$$$$$$$$$$$$", "PBSERVICE TICK ", "", "$$$$$$$$$$$$$$")
 	pb.intervals += 1
 	myLogger("INTERVAL COUNT: ", strconv.Itoa(pb.intervals)+" SRV: "+pb.me, "Tick", "Server.go")
 	if pb.dead {
@@ -108,7 +113,7 @@ func (pb *PBServer) tick() {
 
 		select {
 		case read := <-pb.reader:
-
+			myLogger("$$$$$$$$$$$$$$$", "PBSERVICE TICK READ", "", "$$$$$$$$$$$$$$")
 			msg := &ClientMsg{}
 			if val, ok := pb.db[read.Key]; ok {
 				//read given key from db
@@ -138,13 +143,18 @@ func (pb *PBServer) tick() {
 		}
 
 	} else if pb.me == view.Backup {
+
 		select {
 		case replica := <-pb.repilcate:
 			pb.db = replica.Db
+			myLogger("$$$$$$$$$$$$$$$", "PBSERVICE TICK - BACKUP REPLICATE ", "", "$$$$$$$$$$$$$$")
 			//call(view.Primary, "PBServer.Ack", args, &reply)
 		case update := <-pb.update:
+			myLogger("$$$$$$$$$$$$$$$", "PBSERVICE TICK - BACKUP UPDATE ", "", "$$$$$$$$$$$$$$")
 			pb.db[update.Key] = update.Value
 			//call(view.Primary, "PBServer.Ack", args, &reply)
+		default:
+			myLogger("$$$$$$$$$$$$$$$", "PBSERVICE TICK - BACKUP DEFAULT ", "", "$$$$$$$$$$$$$$")
 		}
 	} else {
 
