@@ -38,8 +38,7 @@ type ViewServer struct {
 	//reviece ping message data incoming reqeust. elimnates need to write to shared variable
 	ping chan *SrvMsg
 	//send replys from view service in form of mesage passing to elimante shared variables
-	clientMsg  chan View
-	srvFailure chan string
+	clientMsg chan View
 }
 
 //acquires lock when writing?
@@ -74,15 +73,6 @@ func (vs *ViewServer) Get(args *GetArgs, reply *GetReply) error {
 	return nil
 }
 
-func (vs *ViewServer) HandleServerFailure(args *ServerFailureArgs, reply *ServerFailureReply) error {
-
-	// Your code here.
-	myLogger("##############", "HANDLE SERVER FAILURE", "", "###############")
-	failedServer := args.Srv
-	vs.srvFailure <- failedServer
-	return nil
-}
-
 // tick() is called once per PingInterval; it should notice
 // if servers have died or recovered, and change the view
 // accordingly.
@@ -93,103 +83,85 @@ func (vs *ViewServer) tick() {
 	// I.E to promote the backup, backup if the the view service has missed N pings (N = deadpings) from the primary
 	// this fucntion Tick is called once per pinginterval
 
-	select {
-	case failed := <-vs.srvFailure:
+	srvMsg := <-vs.ping
 
-		if failed == vs.currentView.Primary {
-			myLogger("##############", "FAIL"+failed, "", "###############")
-			//wait for ack to change views
-			if vs.servers[failed].oldViewNum == vs.currentView.Viewnum {
-				vs.currentView.Primary = vs.currentView.Backup
-				vs.currentView.Backup = ""
-				vs.currentView.JustElectedBackup = false
-				vs.currentView.Viewnum += 1
-				myLogger("##############", "PROMOTE BACKUP: "+vs.currentView.Primary, "", "###############")
-				delete(vs.servers, failed)
-			}
-		}
-	case srvMsg := <-vs.ping:
-		for key := range vs.servers {
-			vs.servers[key].ttl -= 1
-			ttl := strconv.Itoa(vs.servers[key].ttl)
-			myLogger("3", "TTL FOR SRV : "+key+":"+ttl, "Tick()", "ViewService.go")
-		}
+	for key := range vs.servers {
+		vs.servers[key].ttl -= 1
+		ttl := strconv.Itoa(vs.servers[key].ttl)
+		myLogger("3", "TTL FOR SRV : "+key+":"+ttl, "Tick()", "ViewService.go")
+	}
 
-		if vs.currentView.Primary == "" && vs.isFirstElection {
+	if vs.currentView.Primary == "" && vs.isFirstElection {
 
-			vs.currentView.Primary = srvMsg.name
-			vs.currentView.JustElectedBackup = false
-			vs.servers[srvMsg.name] = srvMsg
-			vs.servers[srvMsg.name].ttl = DeadPings
-			vs.isFirstElection = false
-			myLogger("", "ELECTED FIRST PRIMARY", "Tick()", "ViewService.go")
-			//myLogger("3", "Primary Elected: "+srvMsg.name, "Tick()", "ViewService.go")
-			//myLogger("3", "MAP SIZE: "+strconv.Itoa(len(vs.servers)), "Tick()", "ViewService.go")
+		vs.currentView.Primary = srvMsg.name
+		vs.currentView.JustElectedBackup = false
+		vs.servers[srvMsg.name] = srvMsg
+		vs.servers[srvMsg.name].ttl = DeadPings
+		vs.isFirstElection = false
+		myLogger("", "ELECTED FIRST PRIMARY", "Tick()", "ViewService.go")
+		//myLogger("3", "Primary Elected: "+srvMsg.name, "Tick()", "ViewService.go")
+		//myLogger("3", "MAP SIZE: "+strconv.Itoa(len(vs.servers)), "Tick()", "ViewService.go")
 
-		} else if vs.currentView.Backup == "" && srvMsg.oldViewNum < uint(1) {
+	} else if vs.currentView.Backup == "" && srvMsg.oldViewNum < uint(1) {
 
-			if srvMsg.name != vs.currentView.Primary {
-				vs.currentView.Viewnum += 1
-				vs.currentView.Backup = srvMsg.name
-				vs.currentView.JustElectedBackup = true
-				vs.servers[srvMsg.name] = srvMsg
-				vs.servers[srvMsg.name].ttl = DeadPings
-				myLogger("", "ELECTED BACKUP: "+srvMsg.name, "Tick()", "ViewService.go")
-			} else {
-				//account for primary pinging before first backup elected
-				vs.currentView.JustElectedBackup = false
-				vs.servers[srvMsg.name].ttl = DeadPings
-			}
-			//what other case activates this
-			//restart with idle server
-
-		} else if srvMsg.name == vs.currentView.Primary && srvMsg.oldViewNum < uint(1) {
-			myLogger("", "PRIMARY RESTART "+srvMsg.name, "Tick()", "ViewService.go")
-			vs.currentView.JustElectedBackup = false
-			//treat primary restart as dead
-			vs.servers[srvMsg.name].ttl = 0
-		} else if srvMsg.name != vs.currentView.Primary && vs.currentView.Backup == "" {
-			myLogger("!!!!!!!!!!!!!!!!", "BACKUP ELECTED "+srvMsg.name, "Tick()", "!!!!!!!!!!!!!!!!")
+		if srvMsg.name != vs.currentView.Primary {
+			vs.currentView.Viewnum += 1
 			vs.currentView.Backup = srvMsg.name
 			vs.currentView.JustElectedBackup = true
-		} else {
-			vs.currentView.JustElectedBackup = false
 			vs.servers[srvMsg.name] = srvMsg
 			vs.servers[srvMsg.name].ttl = DeadPings
-			dp := strconv.Itoa(DeadPings)
-			myLogger("3", "RESTORE TTL  : "+srvMsg.name+":"+dp, "Tick()", "ViewService.go")
+			myLogger("", "ELECTED BACKUP: "+srvMsg.name, "Tick()", "ViewService.go")
+		} else {
+			//account for primary pinging before first backup elected
+			vs.currentView.JustElectedBackup = false
+			vs.servers[srvMsg.name].ttl = DeadPings
 		}
-		//reset TTL for pinging SRV
+		//what other case activates this
+		//restart with idle server
 
-		//promote back up and prune dead servers
+	} else if srvMsg.name == vs.currentView.Primary && srvMsg.oldViewNum < uint(1) {
+		myLogger("", "PRIMARY RESTART "+srvMsg.name, "Tick()", "ViewService.go")
+		vs.currentView.JustElectedBackup = false
+		//treat primary restart as dead
+		vs.servers[srvMsg.name].ttl = 0
+	} else if srvMsg.name != vs.currentView.Primary && vs.currentView.Backup == "" {
+		myLogger("!!!!!!!!!!!!!!!!", "BACKUP ELECTED "+srvMsg.name, "Tick()", "!!!!!!!!!!!!!!!!")
+		vs.currentView.Backup = srvMsg.name
+		vs.currentView.JustElectedBackup = true
+	} else {
+		vs.currentView.JustElectedBackup = false
+		vs.servers[srvMsg.name] = srvMsg
+		vs.servers[srvMsg.name].ttl = DeadPings
+		dp := strconv.Itoa(DeadPings)
+		myLogger("3", "RESTORE TTL  : "+srvMsg.name+":"+dp, "Tick()", "ViewService.go")
+	}
+	//reset TTL for pinging SRV
 
-		for key := range vs.servers {
-			if vs.servers[key].ttl <= 0 {
-				//if primary not alive
-				if key == vs.currentView.Primary {
-					myLogger("", "PRIMARY NOT ALIVE PROMOTE BACK UP: "+key, "Tick()", "ViewService.go")
-					//wait for ack to change views
-					if vs.servers[key].oldViewNum == vs.currentView.Viewnum {
-						vs.currentView.Viewnum += 1
-						vs.currentView.Primary = vs.currentView.Backup
-						vs.currentView.Backup = ""
-						vs.currentView.JustElectedBackup = false
-						delete(vs.servers, key)
-					}
-				}
-			}
-		}
+	//promote back up and prune dead servers
 
-		for key := range vs.servers {
-			if vs.servers[key].ttl <= 0 {
-				if key != vs.currentView.Primary {
+	for key := range vs.servers {
+		if vs.servers[key].ttl <= 0 {
+			//if primary not alive
+			if key == vs.currentView.Primary {
+				myLogger("", "PRIMARY NOT ALIVE PROMOTE BACK UP: "+key, "Tick()", "ViewService.go")
+				//wait for ack to change views
+				if vs.servers[key].oldViewNum == vs.currentView.Viewnum {
+					vs.currentView.Viewnum += 1
+					vs.currentView.Primary = vs.currentView.Backup
+					vs.currentView.Backup = ""
+					vs.currentView.JustElectedBackup = false
 					delete(vs.servers, key)
 				}
 			}
 		}
+	}
 
-	default:
-		myLogger("##############", "PROCEED AS NORMAL", "", "###############")
+	for key := range vs.servers {
+		if vs.servers[key].ttl <= 0 {
+			if key != vs.currentView.Primary {
+				delete(vs.servers, key)
+			}
+		}
 	}
 
 	//myLogger("##############", "WAITING FOR PING", "", "###############")
@@ -281,7 +253,6 @@ func StartServer(me string) *ViewServer {
 	// Your vs.* initializations here.
 	vs.ping = make(chan *SrvMsg)
 	vs.clientMsg = make(chan View)
-	vs.srvFailure = make(chan string)
 	vs.servers = make(map[string]*SrvMsg)
 
 	vs.testCount = 0

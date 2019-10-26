@@ -89,9 +89,6 @@ func (pb *PBServer) Ack(args *SrvAckArgs, reply *SrvAckReply) error {
 	pb.ack <- args
 	return nil
 }
-func JustElectedBackUp() {
-
-}
 
 // ping the viewserver periodically.
 func (pb *PBServer) tick() {
@@ -199,16 +196,6 @@ func StartServer(vshost string, me string) *PBServer {
 	pb.repilcate = make(chan *DBCopy)
 	pb.db = make(map[string]string)
 	pb.intervals = 0
-
-	pb.done.Add(1)
-	go func() {
-		for pb.dead == false {
-			//srv is alive
-		}
-		myLogger("~~~~~~~~~~~~~~~~~~~~", "CALL TO FAILURE MADE", "KV_SRV", "~~~~~~~~~~~~~~~~~~~")
-		pb.vs.Failure(pb.me)
-		pb.done.Done()
-	}()
 
 	rpcs := rpc.NewServer()
 	rpcs.Register(pb)
