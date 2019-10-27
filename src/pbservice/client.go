@@ -66,21 +66,25 @@ func call(srv string, rpcname string,
 // says the key doesn't exist (has never been Put().
 //
 func (ck *Clerk) Get(key string) string {
-	myLogger("$$$$$$$$$$$$$$$", "PBSERVICE CLERK GET", "", "$$$$$$$$$$$$$$")
+
 	// Your code here.
 	view, _ := ck.vs.Get()
 	args := &GetArgs{}
 	args.Key = key
 	var reply *GetReply
-
+	myLogger("*********************", "DO GET CK", "", "*********************")
 	ok := call(view.Primary, "PBServer.Get", args, &reply)
 	myLogger("$$$$$$$$$$$$$$$", "PBSERVICE CLERK GET RPC", "", "$$$$$$$$$$$$$$")
+
 	if ok {
 		myLogger("$$$$$$$$$$$$$$$", "PBSERVICE CLERK GET RPC RETURN", "", "$$$$$$$$$$$$$$")
 		return reply.Value
-	} else {
-		return ""
 	}
+
+	for !ok {
+		myLogger("$$$$$$$$$$$$$$$", "FALSE", "", "$$$$$$$$$$$$$$")
+	}
+	return ""
 }
 
 //

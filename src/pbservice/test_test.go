@@ -107,20 +107,19 @@ func TestBasicFail(t *testing.T) {
 		}
 		time.Sleep(viewservice.PingInterval)
 	}
-	myLogger("$$$$$$$$$$$$$$$", "BEFORE GET", "", "$$$$$$$$$$$$$$")
+
 	v, _ = vck.Get()
-	myLogger("$$$$$$$$$$$$$$$", "GET MADE BY VCK", "", "$$$$$$$$$$$$$$")
 
 	if v.Primary != s2.me {
 		t.Fatal("backup never switched to primary")
 	}
-	myLogger("$$$$$$$$$$$$$$$", "BEFORE CHECK", "", "$$$$$$$$$$$$$$")
+
 	check(ck, "1", "v1a")
 	check(ck, "3", "33")
 	check(ck, "4", "44")
 
 	fmt.Printf("  ... Passed\n")
-	myLogger("$$$$$$$$$$$$$$$", "PASSED PRIMARY FAIL", "", "$$$$$$$$$$$$$$")
+	myLogger("*********************", "PASSED PRIMARY FAIL", "", "*********************")
 	// kill solo server, start new server, check that
 	// it does not start serving as primary
 
@@ -131,6 +130,7 @@ func TestBasicFail(t *testing.T) {
 	time.Sleep(1 * time.Second)
 	get_done := false
 	go func() {
+		myLogger("*********************", "DO GET", "", "*********************")
 		ck.Get("1")
 		get_done = true
 	}()
@@ -152,7 +152,7 @@ func TestBasicFail(t *testing.T) {
 
 func TestAtMostOnce(t *testing.T) {
 	runtime.GOMAXPROCS(4)
-
+	myLogger("*********************", "TEST AT MOST ONCE", "", "*********************")
 	tag := "csu"
 	vshost := port(tag+"v", 1)
 	vs := viewservice.StartServer(vshost)

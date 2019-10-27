@@ -59,12 +59,12 @@ func (pb *PBServer) Get(args *GetArgs, reply *GetReply) error {
 
 	msg := &ClientMsg{}
 	msg.Key = args.Key
-
+	myLogger("$$$$$$$$$$$$$$$", "SEND ON READ CHANNEL ", "", "$$$$$$$$$$$$$$")
 	pb.reader <- msg
 
 	//get reply
 	rep := <-pb.reader
-
+	myLogger("$$$$$$$$$$$$$$$", "RECIEVE ON READ ", "", "$$$$$$$$$$$$$$")
 	reply.Value = rep.Value
 
 	return nil
@@ -93,7 +93,7 @@ func (pb *PBServer) Ack(args *SrvAckArgs, reply *SrvAckReply) error {
 // ping the viewserver periodically.
 func (pb *PBServer) tick() {
 	// Your code here.
-	myLogger("$$$$$$$$$$$$$$$", "PBSERVICE TICK ", "", "$$$$$$$$$$$$$$")
+
 	pb.intervals += 1
 	myLogger("INTERVAL COUNT: ", strconv.Itoa(pb.intervals)+" SRV: "+pb.me, "Tick", "Server.go")
 	if pb.dead {
@@ -173,8 +173,9 @@ func (pb *PBServer) tick() {
 			myLogger("$$$$$$$$$$$$$$$", "PBSERVICE TICK - BACKUP DEFAULT ", "", "$$$$$$$$$$$$$$")
 		}
 	} else {
-
+		myLogger("$$$$$$$$$$$$$$$", "IDLE: "+pb.me, "", "$$$$$$$$$$$$$$")
 	}
+
 }
 
 // tell the server to shut itself down.

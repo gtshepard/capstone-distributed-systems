@@ -99,8 +99,6 @@ func (vs *ViewServer) tick() {
 		vs.servers[srvMsg.name].ttl = DeadPings
 		vs.isFirstElection = false
 		myLogger("", "ELECTED FIRST PRIMARY", "Tick()", "ViewService.go")
-		//myLogger("3", "Primary Elected: "+srvMsg.name, "Tick()", "ViewService.go")
-		//myLogger("3", "MAP SIZE: "+strconv.Itoa(len(vs.servers)), "Tick()", "ViewService.go")
 
 	} else if vs.currentView.Backup == "" && srvMsg.oldViewNum < uint(1) {
 
@@ -125,9 +123,12 @@ func (vs *ViewServer) tick() {
 		//treat primary restart as dead
 		vs.servers[srvMsg.name].ttl = 0
 	} else if srvMsg.name != vs.currentView.Primary && vs.currentView.Backup == "" {
-		myLogger("!!!!!!!!!!!!!!!!", "BACKUP ELECTED "+srvMsg.name, "Tick()", "!!!!!!!!!!!!!!!!")
-		vs.currentView.Backup = srvMsg.name
-		vs.currentView.JustElectedBackup = true
+		// myLogger("!!!!!!!!!!!!!!!!", "BACKUP ELECTED "+srvMsg.name, "Tick()", "!!!!!!!!!!!!!!!!")
+		// vs.currentView.Backup = srvMsg.name
+		// vs.currentView.JustElectedBackup = true
+		myLogger("", "CURRENT PRIMARY: "+vs.currentView.Primary, "", "ViewService.go")
+		myLogger("", "CURRENT BACKUP: "+vs.currentView.Backup, "", "ViewService.go")
+
 	} else {
 		vs.currentView.JustElectedBackup = false
 		vs.servers[srvMsg.name] = srvMsg
@@ -143,11 +144,12 @@ func (vs *ViewServer) tick() {
 		if vs.servers[key].ttl <= 0 {
 			//if primary not alive
 			if key == vs.currentView.Primary {
-				myLogger("", "PRIMARY NOT ALIVE PROMOTE BACK UP: "+key, "Tick()", "ViewService.go")
+				myLogger("", "PRIMARY FAILED: "+key, "Tick()", "ViewService.go")
 				//wait for ack to change views
 				if vs.servers[key].oldViewNum == vs.currentView.Viewnum {
 					vs.currentView.Viewnum += 1
 					vs.currentView.Primary = vs.currentView.Backup
+					myLogger("", "PROMOTED TO PRIMARY: "+vs.currentView.Backup, "Tick()", "ViewService.go")
 					vs.currentView.Backup = ""
 					vs.currentView.JustElectedBackup = false
 					delete(vs.servers, key)
