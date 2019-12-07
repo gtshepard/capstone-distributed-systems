@@ -49,6 +49,7 @@ func (pb *PBServer) Put(args *PutArgs, reply *PutReply) error {
 	msg := &ClientMsg{}
 	msg.Key = args.Key
 	msg.Value = args.Value
+	reply.Error = ""
 	pb.writer <- msg
 	return nil
 }
@@ -102,14 +103,12 @@ func (pb *PBServer) tick() {
 	}
 
 	view, _ := pb.vs.Get()
-	//
 
 	if view.Viewnum < 2 {
 		view, _ = pb.vs.Ping(0)
 
 	} else {
 		view, _ = pb.vs.Ping(view.Viewnum)
-
 	}
 
 	if pb.me == view.Primary {
@@ -175,7 +174,7 @@ func (pb *PBServer) tick() {
 	} else {
 		myLogger("$$$$$$$$$$$$$$$", "IDLE: "+pb.me, "", "$$$$$$$$$$$$$$")
 	}
-
+	//here is a comment
 }
 
 // tell the server to shut itself down.

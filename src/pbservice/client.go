@@ -25,7 +25,6 @@ func MakeClerk(vshost string, me string) *Clerk {
 	return ck
 }
 
-//
 // call() sends an RPC to the rpcname handler on server srv
 // with arguments args, waits for the reply, and leaves the
 // reply in reply. the reply argument should be a pointer
@@ -58,7 +57,6 @@ func call(srv string, rpcname string,
 	return false
 }
 
-//
 // fetch a key's value from the current primary;
 // if they key has never been set, return "".
 // Get() must keep trying until it either the
@@ -66,6 +64,8 @@ func call(srv string, rpcname string,
 // says the key doesn't exist (has never been Put().
 //
 func (ck *Clerk) Get(key string) string {
+	requestGroup := groupIdForRequest()
+	myLog(requestGroup)
 
 	// Your code here.
 	view, _ := ck.vs.Get()
@@ -129,7 +129,6 @@ func (ck *Clerk) PutExt(key string, value string, dohash bool) string {
 		// put value not hash
 		putArgs.Key = key
 		putArgs.Value = value
-
 		call(view.Primary, "PBServer.Put", putArgs, &putReply)
 		if putReply.Error != "" {
 			return putReply.Error
@@ -141,6 +140,7 @@ func (ck *Clerk) PutExt(key string, value string, dohash bool) string {
 func (ck *Clerk) Put(key string, value string) {
 	ck.PutExt(key, value, false)
 }
+
 func (ck *Clerk) PutHash(key string, value string) string {
 	v := ck.PutExt(key, value, true)
 	return v

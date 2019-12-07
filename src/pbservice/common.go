@@ -1,8 +1,10 @@
 package pbservice
 
 import (
+	"crypto/rand"
 	"hash/fnv"
 	"log"
+	"math/big"
 	"os"
 )
 
@@ -27,6 +29,7 @@ type PutArgs struct {
 type PutReply struct {
 	Err           Err
 	PreviousValue string // For PutHash
+	Error         string
 }
 
 type GetArgs struct {
@@ -81,4 +84,22 @@ func myLogger(step string, msg string, call string, file string) {
 
 	log.SetOutput(f)
 	log.Println(step, ": ", msg, "-", call, "-", file)
+}
+
+func myLog(id int64) {
+	f, err := os.OpenFile("testID", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatalf("error opening file: %v", err)
+	}
+	defer f.Close()
+
+	log.SetOutput(f)
+	log.Println("group_id:", id)
+}
+
+func groupIdForRequest() int64 {
+	max := big.NewInt(int64(1) << 62)
+	bigx, _ := rand.Int(rand.Reader, max)
+	x := bigx.Int64()
+	return x
 }
