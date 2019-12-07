@@ -72,22 +72,27 @@ func (ck *Clerk) Get(key string) string {
 	args := &GetArgs{}
 	args.Key = key
 	var reply *GetReply
+	var baseReply GetReply
+	baseReply.Value = ""
+	reply = &baseReply
+
+	//* denotes client messages
 	myLogger("*********************", "DO GET CK", "", "*********************")
-	ok := call(view.Primary, "PBServer.Get", args, &reply)
-	myLogger("$$$$$$$$$$$$$$$", "PBSERVICE CLERK GET RPC", "", "$$$$$$$$$$$$$$")
+	call(view.Primary, "PBServer.Get", args, &reply)
+	//myLogger("*********************", "PBSERVICE CLERK GET RPC", "", "********************")
 
-	if ok {
-		myLogger("$$$$$$$$$$$$$$$", "PBSERVICE CLERK GET RPC RETURN", "", "$$$$$$$$$$$$$$")
-		return reply.Value
-	}
+	//	if ok {
+	//myLogger("******************", "PBSERVICE CLERK GET RPC RETURN", "", "*****************")
+	//		return reply.Value
+	//}
 
-	for !ok {
-		myLogger("$$$$$$$$$$$$$$$", "FALSE", "", "$$$$$$$$$$$$$$")
+	for view.Primary == "" {
+		// 	myLogger("******************", "FALSE", "", "*************************")
 	}
-	return ""
+	return reply.Value
+	//return ""
 }
 
-//
 // tell the primary to update key's value.
 // must keep trying until it succeeds.
 //
