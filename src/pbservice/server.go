@@ -149,23 +149,30 @@ func (pb *PBServer) tick() {
 					pb.reader <- msg
 				}
 			} else {
-				myLog("duplicate", val)
+				myLog("duplicate GET", val)
 			}
 
 		case write := <-pb.writer:
 			myLog("SVR PUT", write.Gid)
-			pb.db[write.Key] = write.Value
-			args := &PutArgs{}
-			var reply *PutReply
-			args.Key = write.Key
-			args.Value = write.Value
-			myLogger("After Recieve", pb.db[write.Key], "Tick", "Server.go")
-			if ok := call(view.Backup, "PBServer.RecieveUpdate", args, &reply); !ok {
-				myLogger("ReciveUpdate", "RPC FAIL", "Tick", "Server.go")
-				return
+
+			if val, ok := pb.completedRequests[write.Gid]; !ok {
+				pb.completedRequests[write.Gid] = write.Gid
+				pb.db[write.Key] = write.Value
+				args := &PutArgs{}
+				var reply *PutReply
+				args.Key = write.Key
+				args.Value = write.Value
+
+				myLogger("After Recieve", pb.db[write.Key], "Tick", "Server.go")
+				if ok := call(view.Backup, "PBServer.RecieveUpdate", args, &reply); !ok {
+					myLogger("ReciveUpdate", "RPC FAIL", "Tick", "Server.go")
+					return
+				}
+				// wait for update to be written to backup
+				//<-pb.ack
+			} else {
+				myLog("duplicate PUT", val)
 			}
-			// wait for update to be written to backup
-			//<-pb.ack
 		}
 
 	} else if pb.me == view.Backup {
