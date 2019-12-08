@@ -64,8 +64,8 @@ func call(srv string, rpcname string,
 // says the key doesn't exist (has never been Put().
 //
 func (ck *Clerk) Get(key string) string {
-	requestGroup := groupIdForRequest()
-	myLog(requestGroup)
+	gid := groupIdForRequest()
+	myLog("CLIENT GET", gid)
 
 	// Your code here.
 	view, _ := ck.vs.Get()
@@ -75,6 +75,7 @@ func (ck *Clerk) Get(key string) string {
 	var baseReply GetReply
 	baseReply.Value = ""
 	reply = &baseReply
+	args.Gid = gid
 
 	//* denotes client messages
 	myLogger("*********************", "DO GET CK", "", "*********************")
@@ -93,8 +94,11 @@ func (ck *Clerk) PutExt(key string, value string, dohash bool) string {
 	// Your code here.
 	//remember to test this function explicitly (the hashing part )
 	// Your code here.
+	gid := groupIdForRequest()
 	view, _ := ck.vs.Get()
 	putArgs := &PutArgs{}
+	putArgs.Gid = gid
+	myLog("CLIENT PUT", gid)
 	var putReply *PutReply
 	var basePutReply PutReply
 	basePutReply.Error = "ERROR"

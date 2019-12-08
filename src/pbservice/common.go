@@ -20,7 +20,7 @@ type PutArgs struct {
 	Key    string
 	Value  string
 	DoHash bool // For PutHash
-	// You'll have to add definitions here.
+	Gid    int64
 
 	// Field names must start with capital letters,
 	// otherwise RPC will break.
@@ -34,7 +34,7 @@ type PutReply struct {
 
 type GetArgs struct {
 	Key string
-	// You'll have to add definitions here.
+	Gid int64
 }
 
 type GetReply struct {
@@ -46,6 +46,7 @@ type GetReply struct {
 type ClientMsg struct {
 	Key   string
 	Value string
+	Gid   int64
 }
 
 type Update struct {
@@ -86,7 +87,7 @@ func myLogger(step string, msg string, call string, file string) {
 	log.Println(step, ": ", msg, "-", call, "-", file)
 }
 
-func myLog(id int64) {
+func myLog(process string, reqGid int64) {
 	f, err := os.OpenFile("testID", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatalf("error opening file: %v", err)
@@ -94,7 +95,7 @@ func myLog(id int64) {
 	defer f.Close()
 
 	log.SetOutput(f)
-	log.Println("group_id:", id)
+	log.Println(process, ":", "gid:", reqGid)
 }
 
 func groupIdForRequest() int64 {
@@ -103,3 +104,17 @@ func groupIdForRequest() int64 {
 	x := bigx.Int64()
 	return x
 }
+
+// request are sent by the client until, a request is successful
+// implementing at most once semantics
+// unique group_id for a set of requests sent to the primary
+// if a request is processed, no further incoming requests with same group_id should be processed
+// to filter out duplicate requests that could arrive after a succesful request has already been made
+// (the peroid in between the acknowldgement and the successful processing of the request)
+// attach a group_id to a client request. any requests sent within one call to get has the same group id
+// each time the primary server handles an incoming request it should check to see if a request
+// with an exisiting group_id has been made, if so, the request is ingored. if not, the request is processed
+// when a request has successfully been processed the group_id should be recorded in a map
+// the actual request data need not be saved.
+
+//completed_requests[int64]int64

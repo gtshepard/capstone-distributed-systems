@@ -34,14 +34,16 @@ type PBServer struct {
 	vs         *viewservice.Clerk
 	done       sync.WaitGroup
 	finish     chan interface{}
+
 	// Your declarations here.
-	writer    chan *ClientMsg
-	reader    chan *ClientMsg
-	db        map[string]string
-	update    chan *Update
-	repilcate chan *DBCopy
-	ack       chan *SrvAckArgs
-	intervals int
+	writer            chan *ClientMsg
+	reader            chan *ClientMsg
+	db                map[string]string
+	update            chan *Update
+	repilcate         chan *DBCopy
+	ack               chan *SrvAckArgs
+	intervals         int
+	completedRequests map[int64]int64
 }
 
 func (pb *PBServer) Put(args *PutArgs, reply *PutReply) error {
@@ -49,6 +51,7 @@ func (pb *PBServer) Put(args *PutArgs, reply *PutReply) error {
 	msg := &ClientMsg{}
 	msg.Key = args.Key
 	msg.Value = args.Value
+	msg.Gid = args.Gid
 	reply.Error = ""
 	pb.writer <- msg
 	return nil
@@ -60,6 +63,7 @@ func (pb *PBServer) Get(args *GetArgs, reply *GetReply) error {
 
 	msg := &ClientMsg{}
 	msg.Key = args.Key
+	msg.Gid = args.Gid
 	myLogger("$$$$$$$$$$$$$$$", "SEND ON READ CHANNEL ", "", "$$$$$$$$$$$$$$")
 	pb.reader <- msg
 
@@ -130,19 +134,26 @@ func (pb *PBServer) tick() {
 		case read := <-pb.reader:
 			myLogger("$$$$$$$$$$$$$$$", "PBSERVICE TICK READ", "", "$$$$$$$$$$$$$$")
 			msg := &ClientMsg{}
-			if val, ok := pb.db[read.Key]; ok {
-				//read given key from db
-				msg.Key = read.Key
-				msg.Value = val
-				pb.reader <- msg
+			if val, ok := pb.completedRequests[read.Gid]; !ok {
+				pb.completedRequests[read.Gid] = read.Gid
+				myLog("SRV GET", read.Gid)
+				if val, ok := pb.db[read.Key]; ok {
+					//read given key from db
+					msg.Key = read.Key
+					msg.Value = val
+					pb.reader <- msg
+				} else {
+					//attempted to read key that does not exist
+					msg.Key = read.Key
+					msg.Value = ""
+					pb.reader <- msg
+				}
 			} else {
-				//attempted to read key that does not exist
-				msg.Key = read.Key
-				msg.Value = ""
-				pb.reader <- msg
+				myLog("duplicate", val)
 			}
 
 		case write := <-pb.writer:
+			myLog("SVR PUT", write.Gid)
 			pb.db[write.Key] = write.Value
 			args := &PutArgs{}
 			var reply *PutReply
@@ -174,7 +185,6 @@ func (pb *PBServer) tick() {
 	} else {
 		myLogger("$$$$$$$$$$$$$$$", "IDLE: "+pb.me, "", "$$$$$$$$$$$$$$")
 	}
-	//here is a comment
 }
 
 // tell the server to shut itself down.
@@ -195,6 +205,7 @@ func StartServer(vshost string, me string) *PBServer {
 	pb.update = make(chan *Update)
 	pb.repilcate = make(chan *DBCopy)
 	pb.db = make(map[string]string)
+	pb.completedRequests = make(map[int64]int64)
 	pb.intervals = 0
 
 	rpcs := rpc.NewServer()
@@ -247,8 +258,6 @@ func StartServer(vshost string, me string) *PBServer {
 		}
 		DPrintf("%s: wait until all request are done\n", pb.me)
 		pb.done.Wait()
-		// If you have an additional thread in your solution, you could
-		// have it read to the finish channel to hear when to terminate.
 		close(pb.finish)
 	}()
 
