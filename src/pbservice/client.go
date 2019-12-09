@@ -65,9 +65,6 @@ func call(srv string, rpcname string,
 //
 func (ck *Clerk) Get(key string) string {
 	gid := groupIdForRequest()
-	myLog("CLIENT GET", gid)
-
-	// Your code here.
 	args := &GetArgs{}
 	args.Key = key
 	var reply *GetReply
@@ -76,22 +73,15 @@ func (ck *Clerk) Get(key string) string {
 	reply = &baseReply
 	args.Gid = gid
 	view, _ := ck.vs.Get()
-	myLogger("*********************", "GET FROM CK", "", "*********************")
 
 	ok := call(view.Primary, "PBServer.Get", args, &reply)
 	for !ok {
 		myLogger("@@@@@@@@@@@@@@@@@@@@@@@@@@@@", "GET RPC CALL FAILED....RETRYING", "", "@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
 		ok = call(view.Primary, "PBServer.Get", args, &reply)
 	}
-	myLogger("*********************", "BEFORE WAIT", "", "*********************")
-
 	for view.Primary == "" {
 	}
 
-	myLogger("*********************", "AFTER WAIT", "", "*********************")
-	if !ok {
-		return ""
-	}
 	return reply.Value
 }
 
@@ -100,14 +90,11 @@ func (ck *Clerk) Get(key string) string {
 //
 func (ck *Clerk) PutExt(key string, value string, dohash bool) string {
 
-	// Your code here.
-	//remember to test this function explicitly (the hashing part )
-	// Your code here.
 	gid := groupIdForRequest()
 	view, _ := ck.vs.Get()
 	putArgs := &PutArgs{}
 	putArgs.Gid = gid
-	myLog("CLIENT PUT", gid)
+
 	var putReply *PutReply
 	var basePutReply PutReply
 	putReply = &basePutReply
@@ -133,7 +120,7 @@ func (ck *Clerk) PutExt(key string, value string, dohash bool) string {
 		putArgs.Key = key
 		putArgs.Value = value
 		ok := call(view.Primary, "PBServer.Put", putArgs, &putReply)
-		if !ok {
+		for !ok {
 			myLogger("@@@@@@@@@@@@@@@@@@@@@@@@@@@@", "PUT HASH RPC CALL FAILED....RETRYING", "", "@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
 			ok = call(view.Primary, "PBServer.Put", putArgs, &putReply)
 		}
