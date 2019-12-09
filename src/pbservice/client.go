@@ -114,16 +114,7 @@ func (ck *Clerk) PutExt(key string, value string, dohash bool) string {
 
 	if dohash {
 
-		getArgs := &GetArgs{}
-		var getReply *GetReply
-		getArgs.Key = key
-		var baseGetReply GetReply
-		getReply = &baseGetReply
-		//get previous value for a key
-		call(view.Primary, "PBServer.Get", getArgs, &getReply)
-
-		//hash new value
-		prev := getReply.Value
+		prev := ck.Get(key)
 		hashedValue := strconv.Itoa(int(hash(prev + value)))
 		putArgs.Key = key
 		putArgs.Value = hashedValue
@@ -143,7 +134,8 @@ func (ck *Clerk) PutExt(key string, value string, dohash bool) string {
 		putArgs.Value = value
 		ok := call(view.Primary, "PBServer.Put", putArgs, &putReply)
 		if !ok {
-			return ""
+			myLogger("@@@@@@@@@@@@@@@@@@@@@@@@@@@@", "PUT HASH RPC CALL FAILED....RETRYING", "", "@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+			ok = call(view.Primary, "PBServer.Put", putArgs, &putReply)
 		}
 		return key
 	}
