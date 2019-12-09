@@ -132,9 +132,8 @@ func (pb *PBServer) tick() {
 		select {
 
 		case read := <-pb.reader:
-			//myLogger("$$$$$$$$$$$$$$$", "PBSERVICE TICK READ", "", "$$$$$$$$$$$$$$")
-			msg := &ClientMsg{}
 
+			msg := &ClientMsg{}
 			if val, ok := pb.completedRequests[read.Gid]; !ok {
 				pb.completedRequests[read.Gid] = read.Gid
 				myLog("SRV GET", read.Gid)
@@ -154,8 +153,7 @@ func (pb *PBServer) tick() {
 			}
 
 		case write := <-pb.writer:
-			myLog("SVR PUT", write.Gid)
-			myLogger("^^^^^^^^^^^^^^^^^^^", "MESSAGE TO WRITE", write.Value, "^^^^^^^^^^^^^^^^^^^^^^")
+
 			serverResponse := &ClientMsg{}
 			serverResponse.Gid = write.Gid
 			serverResponse.Key = write.Key
@@ -168,32 +166,19 @@ func (pb *PBServer) tick() {
 				var reply *PutReply
 				args.Key = write.Key
 				args.Value = write.Value
+				args.Gid = write.Gid
 
 				pb.writer <- serverResponse
-				myLogger("After Recieve", pb.db[write.Key], "Tick", "Server.go")
-
 				ok := call(view.Backup, "PBServer.RecieveUpdate", args, &reply)
-				if !ok {
-					myLogger("ReciveUpdate", "RPC FAIL", "Tick", "Server.go")
-					aok := call(view.Backup, "PBServer.RecieveUpdate", args, &reply)
-					if !aok {
+				if view.Backup != "" {
+					for !ok {
 						myLogger("ReciveUpdate", "RPC FAIL", "Tick", "Server.go")
-						bok := call(view.Backup, "PBServer.RecieveUpdate", args, &reply)
-						if !bok {
-							myLogger("ReciveUpdate", "RPC FAIL", "Tick", "Server.go")
-							call(view.Backup, "PBServer.RecieveUpdate", args, &reply)
-						}
+						ok = call(view.Backup, "PBServer.RecieveUpdate", args, &reply)
 					}
-
 				}
 
-				//return
-
-				// wait for update to be written to backup
-				//<-pb.ack
 			} else {
 				myLog("duplicate PUT", val)
-
 			}
 		}
 
@@ -201,14 +186,18 @@ func (pb *PBServer) tick() {
 
 		select {
 		case replica := <-pb.repilcate:
+
 			pb.db = replica.Db
 			myLogger("$$$$$$$$$$$$$$$", "PBSERVICE TICK - BACKUP REPLICATE ", "", "$$$$$$$$$$$$$$")
-			//call(view.Primary, "PBServer.Ack", args, &reply)
-		case update := <-pb.update:
-			myLogger("$$$$$$$$$$$$$$$", "PBSERVICE TICK - BACKUP UPDATE ", "", "$$$$$$$$$$$$$$")
-			pb.db[update.Key] = update.Value
 
-			//call(view.Primary, "PBServer.Ack", args, &reply)
+		case update := <-pb.update:
+			if val, ok := pb.completedRequests[update.Gid]; !ok {
+				myLogger("$$$$$$$$$$$$$$$", "PBSERVICE TICK - BACKUP UPDATE ", "", "$$$$$$$$$$$$$$")
+				pb.db[update.Key] = update.Value
+			} else {
+				myLog("DUPLICATE UPDATE", val)
+				myLogger("$$$$$$$$$$$$$$$", "DUPLICATE - BACKUP UPDATE ", "", "$$$$$$$$$$$$$$")
+			}
 		default:
 			myLogger("$$$$$$$$$$$$$$$", "PBSERVICE TICK - BACKUP DEFAULT ", "", "$$$$$$$$$$$$$$")
 		}

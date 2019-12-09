@@ -51,19 +51,23 @@ type ClientMsg struct {
 type Update struct {
 	Key   string
 	Value string
+	Gid   int64
 }
 
 type DBCopy struct {
-	Db map[string]string
+	Db  map[string]string
+	Gid int64
 }
 
 type ReplicateArgs struct {
-	Db map[string]string
+	Db  map[string]string
+	Gid int64
 }
 
 type ReplicateReply struct {
 	Err Err
 	Db  map[string]string
+	Gid int64
 }
 
 type SrvAckArgs struct{}

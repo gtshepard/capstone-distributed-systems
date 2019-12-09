@@ -21,7 +21,6 @@ func MakeClerk(vshost string, me string) *Clerk {
 	ck := new(Clerk)
 	ck.vs = viewservice.MakeClerk(me, vshost)
 	// Your ck.* initializations here
-
 	return ck
 }
 
@@ -62,7 +61,7 @@ func call(srv string, rpcname string,
 // Get() must keep trying until it either the
 // primary replies with the value or the primary
 // says the key doesn't exist (has never been Put().
-//
+
 func (ck *Clerk) Get(key string) string {
 	gid := groupIdForRequest()
 	args := &GetArgs{}
@@ -100,7 +99,6 @@ func (ck *Clerk) PutExt(key string, value string, dohash bool) string {
 	putReply = &basePutReply
 
 	if dohash {
-
 		prev := ck.Get(key)
 		hashedValue := strconv.Itoa(int(hash(prev + value)))
 		putArgs.Key = key
@@ -114,7 +112,6 @@ func (ck *Clerk) PutExt(key string, value string, dohash bool) string {
 		}
 		myLogger("@@@@@@@@@@@@@@@@@@@@@@@@@@@@", "RPC RECIEVED A REPLY", "", "@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
 		return prev
-
 	} else {
 		// put value not hash
 		putArgs.Key = key
