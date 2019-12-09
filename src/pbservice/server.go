@@ -98,11 +98,8 @@ func (pb *PBServer) Ack(args *SrvAckArgs, reply *SrvAckReply) error {
 // ping the viewserver periodically.
 func (pb *PBServer) tick() {
 	// Your code here.
-
 	pb.intervals += 1
-	//	myLogger("INTERVAL COUNT: ", strconv.Itoa(pb.intervals)+" SRV: "+pb.me, "Tick", "Server.go")
 	if pb.dead {
-		//	myLogger("DEAD FLAG", "SRV FAILED: "+pb.me, "Tick", "Server.go")
 		time.Sleep(viewservice.PingInterval * 5)
 	}
 
@@ -117,33 +114,30 @@ func (pb *PBServer) tick() {
 
 	if pb.me == view.Primary {
 
-		//if pb.prevBackUp == "" && view.Backup != "" {
 		if view.JustElectedBackup {
 			myLogger("&&&&&&&&&&&&&&&&&&&", "COPY TO BACKUP", "", "&&&&&&&&&&&&&&&&")
 			args := &ReplicateArgs{}
 			var reply *ReplicateReply
 			args.Db = pb.db
-			if ok := call(view.Backup, "PBServer.RecieveReplica", args, &reply); !ok {
+
+			ok := call(view.Backup, "PBServer.RecieveReplica", args, &reply)
+			for !ok {
 				myLogger("ReciveReplica", "RPC FAIL", "Tick", "Server.go")
-				return
+				ok = call(view.Backup, "PBServer.RecieveReplica", args, &reply)
 			}
 		}
 
 		select {
 
 		case read := <-pb.reader:
-
 			msg := &ClientMsg{}
 			if val, ok := pb.completedRequests[read.Gid]; !ok {
 				pb.completedRequests[read.Gid] = read.Gid
-				myLog("SRV GET", read.Gid)
 				if val, ok := pb.db[read.Key]; ok {
-					//read given key from db
 					msg.Key = read.Key
 					msg.Value = val
 					pb.reader <- msg
 				} else {
-					//attempted to read key that does not exist
 					msg.Key = read.Key
 					msg.Value = ""
 					pb.reader <- msg
@@ -186,9 +180,13 @@ func (pb *PBServer) tick() {
 
 		select {
 		case replica := <-pb.repilcate:
-
-			pb.db = replica.Db
-			myLogger("$$$$$$$$$$$$$$$", "PBSERVICE TICK - BACKUP REPLICATE ", "", "$$$$$$$$$$$$$$")
+			if val, ok := pb.completedRequests[replica.Gid]; !ok {
+				pb.db = replica.Db
+				myLogger("$$$$$$$$$$$$$$$", "PBSERVICE TICK - BACKUP REPLICATE ", "", "$$$$$$$$$$$$$$")
+			} else {
+				myLog("DUPLICATE REPLICA", val)
+				myLogger("$$$$$$$$$$$$$$$", " DUPLICATE - BACKUP REPLICATE ", "", "$$$$$$$$$$$$$$")
+			}
 
 		case update := <-pb.update:
 			if val, ok := pb.completedRequests[update.Gid]; !ok {
@@ -202,7 +200,7 @@ func (pb *PBServer) tick() {
 			myLogger("$$$$$$$$$$$$$$$", "PBSERVICE TICK - BACKUP DEFAULT ", "", "$$$$$$$$$$$$$$")
 		}
 	} else {
-		//myLogger("$$$$$$$$$$$$$$$", "IDLE: "+pb.me, "", "$$$$$$$$$$$$$$")
+		myLogger("$$$$$$$$$$$$$$$", "IDLE: "+pb.me, "", "$$$$$$$$$$$$$$")
 	}
 }
 
