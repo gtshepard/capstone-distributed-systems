@@ -68,7 +68,6 @@ func (ck *Clerk) Get(key string) string {
 	myLog("CLIENT GET", gid)
 
 	// Your code here.
-
 	args := &GetArgs{}
 	args.Key = key
 	var reply *GetReply
@@ -80,6 +79,10 @@ func (ck *Clerk) Get(key string) string {
 	myLogger("*********************", "GET FROM CK", "", "*********************")
 
 	ok := call(view.Primary, "PBServer.Get", args, &reply)
+	for !ok {
+		myLogger("@@@@@@@@@@@@@@@@@@@@@@@@@@@@", "GET RPC CALL FAILED....RETRYING", "", "@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+		ok = call(view.Primary, "PBServer.Get", args, &reply)
+	}
 	myLogger("*********************", "BEFORE WAIT", "", "*********************")
 
 	for view.Primary == "" {
@@ -124,16 +127,15 @@ func (ck *Clerk) PutExt(key string, value string, dohash bool) string {
 		hashedValue := strconv.Itoa(int(hash(prev + value)))
 		putArgs.Key = key
 		putArgs.Value = hashedValue
-		myLogger("@@@@@@@@@@@@@@@@@@@@@@@@@@@@", "BEFORE RPC PUT CALL", "", "@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-		//send key and hashed value pair to database
+		myLogger("@@@@@@@@@@@@@@@@@@@@@@@@@@@@", "key: "+key, "value:"+value, "@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+		myLogger("@@@@@@@@@@@@@@@@@@@@@@@@@@@@", "prev:"+prev, "hashed-value:"+hashedValue, "@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
 		ok := call(view.Primary, "PBServer.Put", putArgs, putReply)
-		myLogger("*******************", "AFTER RPC PUT CALL", "reply"+putReply.Value, "*******************")
-
-		if !ok {
-			return ""
+		for !ok {
+			myLogger("@@@@@@@@@@@@@@@@@@@@@@@@@@@@", "PUT HASH RPC CALL FAILED....RETRYING", "", "@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+			ok = call(view.Primary, "PBServer.Put", putArgs, putReply)
 		}
-
-		return putReply.Value
+		myLogger("@@@@@@@@@@@@@@@@@@@@@@@@@@@@", "RPC RECIEVED A REPLY", "", "@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+		return prev
 
 	} else {
 		// put value not hash

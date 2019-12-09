@@ -52,8 +52,9 @@ func (pb *PBServer) Put(args *PutArgs, reply *PutReply) error {
 	msg.Value = args.Value
 	msg.Gid = args.Gid
 	pb.writer <- msg
-
+	myLogger("^^^^^^^^^^^^^^^^^^^", "PUT MESSAGE", args.Value, "^^^^^^^^^^^^^^^^^^^^^^")
 	serverResponse := <-pb.writer
+	myLogger("^^^^^^^^^^^^^^^^^^^", "RESPONSE", serverResponse.Value, "^^^^^^^^^^^^^^^^^^^^^^")
 	reply.Value = serverResponse.Value
 	return nil
 }
@@ -77,6 +78,7 @@ func (pb *PBServer) RecieveUpdate(args *PutArgs, reply *PutReply) error {
 	update := &Update{}
 	update.Key = args.Key
 	update.Value = args.Value
+
 	pb.update <- update
 	return nil
 }
@@ -132,6 +134,7 @@ func (pb *PBServer) tick() {
 		case read := <-pb.reader:
 			//myLogger("$$$$$$$$$$$$$$$", "PBSERVICE TICK READ", "", "$$$$$$$$$$$$$$")
 			msg := &ClientMsg{}
+
 			if val, ok := pb.completedRequests[read.Gid]; !ok {
 				pb.completedRequests[read.Gid] = read.Gid
 				myLog("SRV GET", read.Gid)
@@ -152,7 +155,7 @@ func (pb *PBServer) tick() {
 
 		case write := <-pb.writer:
 			myLog("SVR PUT", write.Gid)
-
+			myLogger("^^^^^^^^^^^^^^^^^^^", "MESSAGE TO WRITE", write.Value, "^^^^^^^^^^^^^^^^^^^^^^")
 			serverResponse := &ClientMsg{}
 			serverResponse.Gid = write.Gid
 			serverResponse.Key = write.Key
@@ -168,10 +171,23 @@ func (pb *PBServer) tick() {
 
 				pb.writer <- serverResponse
 				myLogger("After Recieve", pb.db[write.Key], "Tick", "Server.go")
-				if ok := call(view.Backup, "PBServer.RecieveUpdate", args, &reply); !ok {
+
+				ok := call(view.Backup, "PBServer.RecieveUpdate", args, &reply)
+				if !ok {
 					myLogger("ReciveUpdate", "RPC FAIL", "Tick", "Server.go")
-					return
+					aok := call(view.Backup, "PBServer.RecieveUpdate", args, &reply)
+					if !aok {
+						myLogger("ReciveUpdate", "RPC FAIL", "Tick", "Server.go")
+						bok := call(view.Backup, "PBServer.RecieveUpdate", args, &reply)
+						if !bok {
+							myLogger("ReciveUpdate", "RPC FAIL", "Tick", "Server.go")
+							call(view.Backup, "PBServer.RecieveUpdate", args, &reply)
+						}
+					}
+
 				}
+
+				//return
 
 				// wait for update to be written to backup
 				//<-pb.ack
@@ -191,6 +207,7 @@ func (pb *PBServer) tick() {
 		case update := <-pb.update:
 			myLogger("$$$$$$$$$$$$$$$", "PBSERVICE TICK - BACKUP UPDATE ", "", "$$$$$$$$$$$$$$")
 			pb.db[update.Key] = update.Value
+
 			//call(view.Primary, "PBServer.Ack", args, &reply)
 		default:
 			myLogger("$$$$$$$$$$$$$$$", "PBSERVICE TICK - BACKUP DEFAULT ", "", "$$$$$$$$$$$$$$")
