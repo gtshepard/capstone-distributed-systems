@@ -52,23 +52,22 @@ func (pb *PBServer) Put(args *PutArgs, reply *PutReply) error {
 	msg.Value = args.Value
 	msg.Gid = args.Gid
 	pb.writer <- msg
-	reply.Value = ""
+
+	serverResponse := <-pb.writer
+	reply.Value = serverResponse.Value
 	return nil
 }
 
 func (pb *PBServer) Get(args *GetArgs, reply *GetReply) error {
 	// Your code here.
 	//make request to db
-
 	msg := &ClientMsg{}
 	msg.Key = args.Key
 	msg.Gid = args.Gid
-	//myLogger("$$$$$$$$$$$$$$$", "SEND ON READ CHANNEL ", "", "$$$$$$$$$$$$$$")
 	pb.reader <- msg
 
 	//get reply
 	rep := <-pb.reader
-	//myLogger("$$$$$$$$$$$$$$$", "RECIEVE ON READ ", "", "$$$$$$$$$$$$$$")
 	reply.Value = rep.Value
 
 	return nil
@@ -154,6 +153,11 @@ func (pb *PBServer) tick() {
 		case write := <-pb.writer:
 			myLog("SVR PUT", write.Gid)
 
+			serverResponse := &ClientMsg{}
+			serverResponse.Gid = write.Gid
+			serverResponse.Key = write.Key
+			serverResponse.Value = write.Value
+
 			if val, ok := pb.completedRequests[write.Gid]; !ok {
 				pb.completedRequests[write.Gid] = write.Gid
 				pb.db[write.Key] = write.Value
@@ -162,15 +166,18 @@ func (pb *PBServer) tick() {
 				args.Key = write.Key
 				args.Value = write.Value
 
+				pb.writer <- serverResponse
 				myLogger("After Recieve", pb.db[write.Key], "Tick", "Server.go")
 				if ok := call(view.Backup, "PBServer.RecieveUpdate", args, &reply); !ok {
 					myLogger("ReciveUpdate", "RPC FAIL", "Tick", "Server.go")
 					return
 				}
+
 				// wait for update to be written to backup
 				//<-pb.ack
 			} else {
 				myLog("duplicate PUT", val)
+
 			}
 		}
 

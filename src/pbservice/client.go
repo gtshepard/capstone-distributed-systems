@@ -68,7 +68,7 @@ func (ck *Clerk) Get(key string) string {
 	myLog("CLIENT GET", gid)
 
 	// Your code here.
-	view, _ := ck.vs.Get()
+
 	args := &GetArgs{}
 	args.Key = key
 	var reply *GetReply
@@ -76,15 +76,16 @@ func (ck *Clerk) Get(key string) string {
 	baseReply.Value = ""
 	reply = &baseReply
 	args.Gid = gid
+	view, _ := ck.vs.Get()
+	myLogger("*********************", "GET FROM CK", "", "*********************")
 
-	//* denotes client messages
-	myLogger("*********************", "DO GET CK", "", "*********************")
 	ok := call(view.Primary, "PBServer.Get", args, &reply)
+	myLogger("*********************", "BEFORE WAIT", "", "*********************")
 
 	for view.Primary == "" {
-		myLogger("@@@@@@@@@@@@@@@@@@@@@@@@@@", "RUNNING LOOP NO PRIMARY", "", "@@@@@@@@@@@@@@@@@@@@@@@@")
 	}
 
+	myLogger("*********************", "AFTER WAIT", "", "*********************")
 	if !ok {
 		return ""
 	}
@@ -127,6 +128,7 @@ func (ck *Clerk) PutExt(key string, value string, dohash bool) string {
 		//send key and hashed value pair to database
 		ok := call(view.Primary, "PBServer.Put", putArgs, putReply)
 		myLogger("*******************", "AFTER RPC PUT CALL", "reply"+putReply.Value, "*******************")
+
 		if !ok {
 			return ""
 		}
