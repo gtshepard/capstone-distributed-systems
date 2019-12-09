@@ -27,9 +27,8 @@ type PutArgs struct {
 }
 
 type PutReply struct {
-	Err           Err
-	PreviousValue string // For PutHash
-	Error         string
+	Err   Err
+	Value string // For PutHash
 }
 
 type GetArgs struct {

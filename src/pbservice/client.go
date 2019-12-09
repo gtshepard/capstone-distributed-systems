@@ -79,9 +79,14 @@ func (ck *Clerk) Get(key string) string {
 
 	//* denotes client messages
 	myLogger("*********************", "DO GET CK", "", "*********************")
-	call(view.Primary, "PBServer.Get", args, &reply)
+	ok := call(view.Primary, "PBServer.Get", args, &reply)
 
 	for view.Primary == "" {
+		myLogger("@@@@@@@@@@@@@@@@@@@@@@@@@@", "RUNNING LOOP NO PRIMARY", "", "@@@@@@@@@@@@@@@@@@@@@@@@")
+	}
+
+	if !ok {
+		return ""
 	}
 	return reply.Value
 }
@@ -101,7 +106,6 @@ func (ck *Clerk) PutExt(key string, value string, dohash bool) string {
 	myLog("CLIENT PUT", gid)
 	var putReply *PutReply
 	var basePutReply PutReply
-	basePutReply.Error = "ERROR"
 	putReply = &basePutReply
 
 	if dohash {
@@ -110,7 +114,6 @@ func (ck *Clerk) PutExt(key string, value string, dohash bool) string {
 		var getReply *GetReply
 		getArgs.Key = key
 		var baseGetReply GetReply
-		baseGetReply.Value = "ERROR"
 		getReply = &baseGetReply
 		//get previous value for a key
 		call(view.Primary, "PBServer.Get", getArgs, &getReply)
@@ -120,22 +123,23 @@ func (ck *Clerk) PutExt(key string, value string, dohash bool) string {
 		hashedValue := strconv.Itoa(int(hash(prev + value)))
 		putArgs.Key = key
 		putArgs.Value = hashedValue
-
+		myLogger("@@@@@@@@@@@@@@@@@@@@@@@@@@@@", "BEFORE RPC PUT CALL", "", "@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
 		//send key and hashed value pair to database
-		call(view.Primary, "PBServer.Put", putArgs, putReply)
-
-		if putReply.Error != "" {
-			return putReply.Error
+		ok := call(view.Primary, "PBServer.Put", putArgs, putReply)
+		myLogger("*******************", "AFTER RPC PUT CALL", "reply"+putReply.Value, "*******************")
+		if !ok {
+			return ""
 		}
-		return key
+
+		return putReply.Value
 
 	} else {
 		// put value not hash
 		putArgs.Key = key
 		putArgs.Value = value
-		call(view.Primary, "PBServer.Put", putArgs, &putReply)
-		if putReply.Error != "" {
-			return putReply.Error
+		ok := call(view.Primary, "PBServer.Put", putArgs, &putReply)
+		if !ok {
+			return ""
 		}
 		return key
 	}

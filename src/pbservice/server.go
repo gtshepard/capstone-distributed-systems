@@ -7,7 +7,6 @@ import (
 	"net"
 	"net/rpc"
 	"os"
-	"strconv"
 	"sync"
 	"syscall"
 	"time"
@@ -52,8 +51,8 @@ func (pb *PBServer) Put(args *PutArgs, reply *PutReply) error {
 	msg.Key = args.Key
 	msg.Value = args.Value
 	msg.Gid = args.Gid
-	reply.Error = ""
 	pb.writer <- msg
+	reply.Value = ""
 	return nil
 }
 
@@ -64,12 +63,12 @@ func (pb *PBServer) Get(args *GetArgs, reply *GetReply) error {
 	msg := &ClientMsg{}
 	msg.Key = args.Key
 	msg.Gid = args.Gid
-	myLogger("$$$$$$$$$$$$$$$", "SEND ON READ CHANNEL ", "", "$$$$$$$$$$$$$$")
+	//myLogger("$$$$$$$$$$$$$$$", "SEND ON READ CHANNEL ", "", "$$$$$$$$$$$$$$")
 	pb.reader <- msg
 
 	//get reply
 	rep := <-pb.reader
-	myLogger("$$$$$$$$$$$$$$$", "RECIEVE ON READ ", "", "$$$$$$$$$$$$$$")
+	//myLogger("$$$$$$$$$$$$$$$", "RECIEVE ON READ ", "", "$$$$$$$$$$$$$$")
 	reply.Value = rep.Value
 
 	return nil
@@ -100,9 +99,9 @@ func (pb *PBServer) tick() {
 	// Your code here.
 
 	pb.intervals += 1
-	myLogger("INTERVAL COUNT: ", strconv.Itoa(pb.intervals)+" SRV: "+pb.me, "Tick", "Server.go")
+	//	myLogger("INTERVAL COUNT: ", strconv.Itoa(pb.intervals)+" SRV: "+pb.me, "Tick", "Server.go")
 	if pb.dead {
-		myLogger("DEAD FLAG", "SRV FAILED: "+pb.me, "Tick", "Server.go")
+		//	myLogger("DEAD FLAG", "SRV FAILED: "+pb.me, "Tick", "Server.go")
 		time.Sleep(viewservice.PingInterval * 5)
 	}
 
@@ -132,7 +131,7 @@ func (pb *PBServer) tick() {
 		select {
 
 		case read := <-pb.reader:
-			myLogger("$$$$$$$$$$$$$$$", "PBSERVICE TICK READ", "", "$$$$$$$$$$$$$$")
+			//myLogger("$$$$$$$$$$$$$$$", "PBSERVICE TICK READ", "", "$$$$$$$$$$$$$$")
 			msg := &ClientMsg{}
 			if val, ok := pb.completedRequests[read.Gid]; !ok {
 				pb.completedRequests[read.Gid] = read.Gid
@@ -190,7 +189,7 @@ func (pb *PBServer) tick() {
 			myLogger("$$$$$$$$$$$$$$$", "PBSERVICE TICK - BACKUP DEFAULT ", "", "$$$$$$$$$$$$$$")
 		}
 	} else {
-		myLogger("$$$$$$$$$$$$$$$", "IDLE: "+pb.me, "", "$$$$$$$$$$$$$$")
+		//myLogger("$$$$$$$$$$$$$$$", "IDLE: "+pb.me, "", "$$$$$$$$$$$$$$")
 	}
 }
 
