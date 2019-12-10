@@ -197,10 +197,10 @@ func (pb *PBServer) tick() {
 				myLogger("$$$$$$$$$$$$$$$", "DUPLICATE - BACKUP UPDATE ", "", "$$$$$$$$$$$$$$")
 			}
 		default:
-			myLogger("$$$$$$$$$$$$$$$", "PBSERVICE TICK - BACKUP DEFAULT ", "", "$$$$$$$$$$$$$$")
+			//	myLogger("$$$$$$$$$$$$$$$", "PBSERVICE TICK - BACKUP DEFAULT ", "", "$$$$$$$$$$$$$$")
 		}
 	} else {
-		myLogger("$$$$$$$$$$$$$$$", "IDLE: "+pb.me, "", "$$$$$$$$$$$$$$")
+		//myLogger("$$$$$$$$$$$$$$$", "IDLE: "+pb.me, "", "$$$$$$$$$$$$$$")
 	}
 }
 
