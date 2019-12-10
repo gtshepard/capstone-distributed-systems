@@ -122,6 +122,7 @@ func (pb *PBServer) tick() {
 
 			ok := call(view.Backup, "PBServer.RecieveReplica", args, &reply)
 			for !ok {
+				view, _ := pb.vs.Get()
 				myLogger("ReciveReplica", "RPC FAIL", "Tick", "Server.go")
 				ok = call(view.Backup, "PBServer.RecieveReplica", args, &reply)
 			}
@@ -166,8 +167,10 @@ func (pb *PBServer) tick() {
 				ok := call(view.Backup, "PBServer.RecieveUpdate", args, &reply)
 				if view.Backup != "" {
 					for !ok {
-						myLogger("ReciveUpdate", "RPC FAIL", "Tick", "Server.go")
+						view, _ := pb.vs.Get()
+						//myLogger("ReciveUpdate", "RPC FAIL", "Tick", "Server.go")
 						ok = call(view.Backup, "PBServer.RecieveUpdate", args, &reply)
+						//time.Sleep(time.Millisecond * 30)
 					}
 				}
 

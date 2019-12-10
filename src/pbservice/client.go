@@ -75,7 +75,8 @@ func (ck *Clerk) Get(key string) string {
 
 	ok := call(view.Primary, "PBServer.Get", args, &reply)
 	for !ok {
-		myLogger("@@@@@@@@@@@@@@@@@@@@@@@@@@@@", "GET RPC CALL FAILED....RETRYING", "", "@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+		view, _ := ck.vs.Get()
+		//myLogger("@@@@@@@@@@@@@@@@@@@@@@@@@@@@", "GET RPC CALL FAILED....RETRYING", "", "@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
 		ok = call(view.Primary, "PBServer.Get", args, &reply)
 	}
 	for view.Primary == "" {
@@ -107,6 +108,7 @@ func (ck *Clerk) PutExt(key string, value string, dohash bool) string {
 		myLogger("@@@@@@@@@@@@@@@@@@@@@@@@@@@@", "prev:"+prev, "hashed-value:"+hashedValue, "@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
 		ok := call(view.Primary, "PBServer.Put", putArgs, putReply)
 		for !ok {
+			view, _ := ck.vs.Get()
 			myLogger("@@@@@@@@@@@@@@@@@@@@@@@@@@@@", "PUT HASH RPC CALL FAILED....RETRYING", "", "@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
 			ok = call(view.Primary, "PBServer.Put", putArgs, putReply)
 		}
@@ -118,6 +120,7 @@ func (ck *Clerk) PutExt(key string, value string, dohash bool) string {
 		putArgs.Value = value
 		ok := call(view.Primary, "PBServer.Put", putArgs, &putReply)
 		for !ok {
+			view, _ := ck.vs.Get()
 			myLogger("@@@@@@@@@@@@@@@@@@@@@@@@@@@@", "PUT HASH RPC CALL FAILED....RETRYING", "", "@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
 			ok = call(view.Primary, "PBServer.Put", putArgs, &putReply)
 		}
