@@ -7,6 +7,7 @@ import (
 	"net"
 	"net/rpc"
 	"os"
+	"strconv"
 	"sync"
 	"syscall"
 	"time"
@@ -43,6 +44,7 @@ type PBServer struct {
 	ack               chan *SrvAckArgs
 	intervals         int
 	completedRequests map[int64]int64
+	restart           bool
 }
 
 func (pb *PBServer) Put(args *PutArgs, reply *PutReply) error {
@@ -52,9 +54,9 @@ func (pb *PBServer) Put(args *PutArgs, reply *PutReply) error {
 	msg.Value = args.Value
 	msg.Gid = args.Gid
 	pb.writer <- msg
-	myLogger("^^^^^^^^^^^^^^^^^^^", "PUT MESSAGE", args.Value, "^^^^^^^^^^^^^^^^^^^^^^")
+	myLogger("^^^^^^^^^^^^^^^^^^^", "PUT MESSAGE: ", args.Value+pb.me, "^^^^^^^^^^^^^^^^^^^^^^")
 	serverResponse := <-pb.writer
-	myLogger("^^^^^^^^^^^^^^^^^^^", "RESPONSE", serverResponse.Value, "^^^^^^^^^^^^^^^^^^^^^^")
+	myLogger("^^^^^^^^^^^^^^^^^^^", "RESPONSE", serverResponse.Value+pb.me, "^^^^^^^^^^^^^^^^^^^^^^")
 	reply.Value = serverResponse.Value
 	return nil
 }
@@ -97,18 +99,20 @@ func (pb *PBServer) Ack(args *SrvAckArgs, reply *SrvAckReply) error {
 
 // ping the viewserver periodically.
 func (pb *PBServer) tick() {
-	// Your code here.
-	pb.intervals += 1
-	if pb.dead {
-		time.Sleep(viewservice.PingInterval * 5)
-	}
 
 	view, _ := pb.vs.Get()
+	myLogger("&&&&&&&&&&&&&&&", "KNOWS VIEW "+strconv.Itoa(int(view.Viewnum))+": ", pb.me, "&&&&&&&&&&&&&")
+	myLogger("&&&&&&&&&&&&&&&", "VIEW.PRIMARY  "+": ", view.Primary, "&&&&&&&&&&&&&")
+	myLogger("&&&&&&&&&&&&&&&", "VIEW.BACKUP "+": ", view.Backup, "&&&&&&&&&&&&&")
 
-	if view.Viewnum < 2 {
+	if pb.restart {
+		myLogger("&&&&&&&&&&&&&&&", "START:", pb.me, "&&&&&&&&&&&&&")
+		pb.restart = false
 		view, _ = pb.vs.Ping(0)
 
+		//view, _ = pb.vs.Ping(view.Viewnum)
 	} else {
+		myLogger("&&&&&&&&&&&&&&&", "PINGING VS FROM", pb.me, "&&&&&&&&&&&&&")
 		view, _ = pb.vs.Ping(view.Viewnum)
 	}
 
@@ -164,8 +168,11 @@ func (pb *PBServer) tick() {
 				args.Gid = write.Gid
 
 				pb.writer <- serverResponse
-				ok := call(view.Backup, "PBServer.RecieveUpdate", args, &reply)
+
 				if view.Backup != "" {
+					//why this line of code?
+					view, _ = pb.vs.Ping(view.Viewnum)
+					ok := call(view.Backup, "PBServer.RecieveUpdate", args, &reply)
 					for !ok {
 						view, _ := pb.vs.Get()
 						//myLogger("ReciveUpdate", "RPC FAIL", "Tick", "Server.go")
@@ -203,7 +210,7 @@ func (pb *PBServer) tick() {
 			//	myLogger("$$$$$$$$$$$$$$$", "PBSERVICE TICK - BACKUP DEFAULT ", "", "$$$$$$$$$$$$$$")
 		}
 	} else {
-		//myLogger("$$$$$$$$$$$$$$$", "IDLE: "+pb.me, "", "$$$$$$$$$$$$$$")
+		myLogger("$$$$$$$$$$$$$$$", "IDLE: "+pb.me, "", "$$$$$$$$$$$$$$")
 	}
 }
 
@@ -227,6 +234,7 @@ func StartServer(vshost string, me string) *PBServer {
 	pb.db = make(map[string]string)
 	pb.completedRequests = make(map[int64]int64)
 	pb.intervals = 0
+	pb.restart = true
 
 	rpcs := rpc.NewServer()
 	rpcs.Register(pb)

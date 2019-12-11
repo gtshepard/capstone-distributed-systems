@@ -84,7 +84,11 @@ func (vs *ViewServer) tick() {
 	// this fucntion Tick is called once per pinginterval
 
 	srvMsg := <-vs.ping
+	//srvMsg.name
 
+	//has primary acknowdleged current view
+
+	//myLogger("#######################", "PING - oldview#: "+strconv.Itoa(int(srvMsg.oldViewNum)), " - "+srvMsg.name, "ViewService.go")
 	for key := range vs.servers {
 		vs.servers[key].ttl -= 1
 		ttl := strconv.Itoa(vs.servers[key].ttl)
@@ -92,16 +96,16 @@ func (vs *ViewServer) tick() {
 	}
 
 	if vs.currentView.Primary == "" && vs.isFirstElection {
-
+		//vs.currentView.Viewnum += 1
 		vs.currentView.Primary = srvMsg.name
 		vs.currentView.JustElectedBackup = false
 		vs.servers[srvMsg.name] = srvMsg
 		vs.servers[srvMsg.name].ttl = DeadPings
 		vs.isFirstElection = false
-		myLogger("", "ELECTED FIRST PRIMARY", "Tick()", "ViewService.go")
+		myLogger("", "ELECTED FIRST PRIMARY", srvMsg.name, "ViewService.go")
 
 	} else if vs.currentView.Backup == "" && srvMsg.oldViewNum < uint(1) {
-
+		//make sure primary has acked for currwent  view
 		if srvMsg.name != vs.currentView.Primary {
 			vs.currentView.Viewnum += 1
 			vs.currentView.Backup = srvMsg.name
@@ -111,6 +115,7 @@ func (vs *ViewServer) tick() {
 			myLogger("", "ELECTED BACKUP: "+srvMsg.name, "Tick()", "ViewService.go")
 		} else {
 			//account for primary pinging before first backup elected
+			myLogger("", "BAD: "+srvMsg.name, "Tick()", "ViewService.go")
 			vs.currentView.JustElectedBackup = false
 			vs.servers[srvMsg.name].ttl = DeadPings
 		}
@@ -126,8 +131,9 @@ func (vs *ViewServer) tick() {
 		// myLogger("!!!!!!!!!!!!!!!!", "BACKUP ELECTED "+srvMsg.name, "Tick()", "!!!!!!!!!!!!!!!!")
 		// vs.currentView.Backup = srvMsg.name
 		// vs.currentView.JustElectedBackup = true
-		myLogger("", "CURRENT PRIMARY: "+vs.currentView.Primary, "", "ViewService.go")
-		myLogger("", "CURRENT BACKUP: "+vs.currentView.Backup, "", "ViewService.go")
+
+		//	myLogger("", "CURRENT PRIMARY: "+vs.currentView.Primary, "", "ViewService.go")
+		//	myLogger("", "CURRENT BACKUP: "+vs.currentView.Backup, "", "ViewService.go")
 
 	} else {
 		vs.currentView.JustElectedBackup = false
@@ -153,6 +159,8 @@ func (vs *ViewServer) tick() {
 					vs.currentView.Backup = ""
 					vs.currentView.JustElectedBackup = false
 					delete(vs.servers, key)
+				} else {
+					myLogger("@@@@@@@@@@", "PRIMARY IS BEHIND CURRENT VIEW : "+key, "T", "@@@@@@@@@@@@")
 				}
 			}
 		}
