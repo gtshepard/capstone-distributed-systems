@@ -41,6 +41,9 @@ type ViewServer struct {
 	clientMsg          chan View
 	crashAndRestart    uint
 	primaryAcknowleged bool
+	viewHasChanged     bool
+	viewUpdateCache    []*SrvMsg
+	backupFailed       bool
 }
 
 //acquires lock when writing?
@@ -82,7 +85,7 @@ func (vs *ViewServer) Get(args *GetArgs, reply *GetReply) error {
 func (vs *ViewServer) tick() {
 
 	srvMsg := <-vs.ping
-
+	myLogger("3", "VS--SRV--MESSAGE", srvMsg.name, "ViewService.go")
 	//has primary acknowdleged current view
 	for key := range vs.servers {
 		vs.servers[key].ttl -= 1
@@ -94,6 +97,8 @@ func (vs *ViewServer) tick() {
 		if srvMsg.oldViewNum == vs.currentView.Viewnum {
 			vs.primaryAcknowleged = true
 			myLogger("", "PRIMARY ACKED", srvMsg.name, "ViewService.go")
+		} else {
+
 		}
 	}
 
@@ -110,13 +115,14 @@ func (vs *ViewServer) tick() {
 		//make sure primary has acked for currwent  view
 		if srvMsg.name != vs.currentView.Primary {
 			if vs.primaryAcknowleged {
-				vs.currentView.Viewnum += 1
 				vs.currentView.Backup = srvMsg.name
 				vs.currentView.JustElectedBackup = true
 				vs.servers[srvMsg.name] = srvMsg
 				vs.servers[srvMsg.name].ttl = DeadPings
 				myLogger("", "ELECTED BACKUP: "+srvMsg.name, "Tick()", "ViewService.go")
 				vs.primaryAcknowleged = false
+				vs.currentView.Viewnum += 1
+				vs.viewUpdateCache = append(vs.viewUpdateCache, srvMsg)
 			} else {
 				myLogger("", "UNACKED: ", "Tick()", "ViewService.go")
 			}
@@ -139,6 +145,13 @@ func (vs *ViewServer) tick() {
 		vs.servers[srvMsg.name].ttl = DeadPings
 		dp := strconv.Itoa(DeadPings)
 		myLogger("3", "RESTORE TTL  : "+srvMsg.name+":"+dp, "Tick()", "ViewService.go")
+
+		if vs.currentView.Backup == "" && vs.backupFailed {
+			vs.currentView.Viewnum += 1
+			vs.currentView.Backup = srvMsg.name
+			vs.currentView.JustElectedBackup = true
+			vs.backupFailed = false
+		}
 	}
 
 	// //promote back up and prune dead servers
@@ -159,6 +172,13 @@ func (vs *ViewServer) tick() {
 				} else {
 					myLogger("@@@@@@@@@@", "PRIMARY IS BEHIND CURRENT VIEW : "+key, "T", "@@@@@@@@@@@@")
 				}
+			} else if key == vs.currentView.Backup {
+				myLogger("", "BACKUP FAILED: "+vs.currentView.Backup, "Tick()", "ViewService.go")
+				vs.currentView.Backup = ""
+				vs.currentView.JustElectedBackup = false
+				delete(vs.servers, key)
+				vs.primaryAcknowleged = false
+				vs.backupFailed = true
 			}
 		}
 	}
@@ -333,12 +353,14 @@ func StartServer(me string) *ViewServer {
 	vs.ping = make(chan *SrvMsg)
 	vs.clientMsg = make(chan View)
 	vs.servers = make(map[string]*SrvMsg)
-
+	vs.viewUpdateCache = make([]*SrvMsg, 0)
 	vs.testCount = 0
 	vs.currentView.Viewnum = 1
 	vs.isFirstElection = true
 	vs.crashAndRestart = 0
 	vs.primaryAcknowleged = false
+	vs.backupFailed = false
+
 	// tell net/rpc about our RPC server and handlers.
 	rpcs := rpc.NewServer()
 	rpcs.Register(vs)
