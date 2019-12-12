@@ -109,8 +109,6 @@ func (pb *PBServer) tick() {
 		myLogger("&&&&&&&&&&&&&&&", "START:", pb.me, "&&&&&&&&&&&&&")
 		pb.restart = false
 		view, _ = pb.vs.Ping(0)
-
-		//view, _ = pb.vs.Ping(view.Viewnum)
 	} else {
 		myLogger("&&&&&&&&&&&&&&&", "PINGING VS FROM", pb.me, "&&&&&&&&&&&&&")
 		view, _ = pb.vs.Ping(view.Viewnum)
@@ -170,20 +168,19 @@ func (pb *PBServer) tick() {
 				pb.writer <- serverResponse
 
 				if view.Backup != "" {
-					//why this line of code?
 					view, _ = pb.vs.Ping(view.Viewnum)
 					ok := call(view.Backup, "PBServer.RecieveUpdate", args, &reply)
 					for !ok {
 						view, _ := pb.vs.Get()
-						//myLogger("ReciveUpdate", "RPC FAIL", "Tick", "Server.go")
 						ok = call(view.Backup, "PBServer.RecieveUpdate", args, &reply)
-						//time.Sleep(time.Millisecond * 30)
 					}
 				}
 
 			} else {
 				myLog("duplicate PUT", val)
 			}
+		default:
+			myLogger("$^$^$^$^$^$^$^$$^$^$", "PRIMARY TICKING: ", pb.me, "$^$^$^$^$^$^$^$$^$^$")
 		}
 
 	} else if pb.me == view.Backup {
@@ -213,6 +210,8 @@ func (pb *PBServer) tick() {
 		myLogger("$$$$$$$$$$$$$$$", "IDLE: "+pb.me, "", "$$$$$$$$$$$$$$")
 	}
 }
+
+//fails to ACK on backu up up election. no pings are sent
 
 // tell the server to shut itself down.
 // please do not change this function.
@@ -293,6 +292,7 @@ func StartServer(vshost string, me string) *PBServer {
 	go func() {
 		for pb.dead == false {
 			pb.tick()
+			myLogger("$^$^$^$^$^$^$^$$^$^$", "TICK--TICK--TICK: ", pb.me, "$^$^$^$^$^$^$^$$^$^$")
 			time.Sleep(viewservice.PingInterval)
 		}
 		pb.done.Done()
@@ -300,3 +300,12 @@ func StartServer(vshost string, me string) *PBServer {
 
 	return pb
 }
+
+// System Assumptions: Fault tolerant key/value service
+//  - K/V service should with stand up to n-1 faults (excluding view service)
+//  - use primary/backup scheme with view service
+//	- system not exepcted to work correctly if view service goes down (SPOF)
+//
+//
+//
+//
