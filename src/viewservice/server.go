@@ -38,8 +38,9 @@ type ViewServer struct {
 	//reviece ping message data incoming reqeust. elimnates need to write to shared variable
 	ping chan *SrvMsg
 	//send replys from view service in form of mesage passing to elimante shared variables
-	clientMsg      chan View
-	crashAndResart uint
+	clientMsg          chan View
+	crashAndRestart    uint
+	primaryAcknowleged bool
 }
 
 //acquires lock when writing?
@@ -89,6 +90,13 @@ func (vs *ViewServer) tick() {
 		myLogger("3", "TTL FOR SRV : "+key+":"+ttl, "Tick()", "ViewService.go")
 	}
 
+	if srvMsg.name == vs.currentView.Primary {
+		if srvMsg.oldViewNum == vs.currentView.Viewnum {
+			vs.primaryAcknowleged = true
+			myLogger("", "PRIMARY ACKED", srvMsg.name, "ViewService.go")
+		}
+	}
+
 	if vs.currentView.Primary == "" && vs.isFirstElection {
 		//vs.currentView.Viewnum += 1
 		vs.currentView.Primary = srvMsg.name
@@ -98,27 +106,31 @@ func (vs *ViewServer) tick() {
 		vs.isFirstElection = false
 		myLogger("", "ELECTED FIRST PRIMARY", srvMsg.name, "ViewService.go")
 
-	} else if vs.currentView.Backup == "" && srvMsg.oldViewNum == vs.crashAndResart {
+	} else if vs.currentView.Backup == "" && srvMsg.oldViewNum == vs.crashAndRestart {
 		//make sure primary has acked for currwent  view
 		if srvMsg.name != vs.currentView.Primary {
-			vs.currentView.Viewnum += 1
-			vs.currentView.Backup = srvMsg.name
-			vs.currentView.JustElectedBackup = true
-			vs.servers[srvMsg.name] = srvMsg
-			vs.servers[srvMsg.name].ttl = DeadPings
-			myLogger("", "ELECTED BACKUP: "+srvMsg.name, "Tick()", "ViewService.go")
+			if vs.primaryAcknowleged {
+				vs.currentView.Viewnum += 1
+				vs.currentView.Backup = srvMsg.name
+				vs.currentView.JustElectedBackup = true
+				vs.servers[srvMsg.name] = srvMsg
+				vs.servers[srvMsg.name].ttl = DeadPings
+				myLogger("", "ELECTED BACKUP: "+srvMsg.name, "Tick()", "ViewService.go")
+				vs.primaryAcknowleged = false
+			} else {
+				myLogger("", "UNACKED: ", "Tick()", "ViewService.go")
+			}
 		} else {
 			//account for primary pinging before first backup elected
 			myLogger("", "BAD: "+srvMsg.name, "Tick()", "ViewService.go")
 			vs.currentView.JustElectedBackup = false
 			vs.servers[srvMsg.name].ttl = DeadPings
 		}
-		//what other case activates this
-		//restart with idle server
 
-	} else if srvMsg.name == vs.currentView.Primary && srvMsg.oldViewNum == vs.crashAndResart {
+	} else if srvMsg.name == vs.currentView.Primary && srvMsg.oldViewNum == vs.crashAndRestart {
 		myLogger("", "PRIMARY RESTART "+srvMsg.name, "Tick()", "ViewService.go")
 		vs.currentView.JustElectedBackup = false
+		vs.primaryAcknowleged = true
 		//treat primary restart as dead
 		vs.servers[srvMsg.name].ttl = 0
 	} else {
@@ -129,20 +141,21 @@ func (vs *ViewServer) tick() {
 		myLogger("3", "RESTORE TTL  : "+srvMsg.name+":"+dp, "Tick()", "ViewService.go")
 	}
 
-	//promote back up and prune dead servers
+	// //promote back up and prune dead servers
 	for key := range vs.servers {
 		if vs.servers[key].ttl <= 0 {
 			//if primary not alive
 			if key == vs.currentView.Primary {
 				myLogger("", "PRIMARY FAILED: "+key, "Tick()", "ViewService.go")
 				//wait for ack to change views
-				if vs.servers[key].oldViewNum == vs.currentView.Viewnum {
+				if vs.primaryAcknowleged {
 					vs.currentView.Viewnum += 1
 					vs.currentView.Primary = vs.currentView.Backup
 					myLogger("", "PROMOTED TO PRIMARY: "+vs.currentView.Backup, "Tick()", "ViewService.go")
 					vs.currentView.Backup = ""
 					vs.currentView.JustElectedBackup = false
 					delete(vs.servers, key)
+					vs.primaryAcknowleged = false
 				} else {
 					myLogger("@@@@@@@@@@", "PRIMARY IS BEHIND CURRENT VIEW : "+key, "T", "@@@@@@@@@@@@")
 				}
@@ -236,13 +249,13 @@ func (vs *ViewServer) tick() {
 //			the view service know that there are still alive and ready to be elected if need be
 //
 //
-//  case 3: n servers ping when, primary already assigned
+//  X case 3: n servers ping when, primary already assigned
 //     a backup will be elected. for this process see case 2b
 //
-//  case 4: n servers ping when back up already assigned
+//  X case 4: n servers ping when back up already assigned
 //		all roles have been already been assigned. see case 2c)
 //
-//  case 5: primary fails, with backup, n idle servers
+//  X case 5: primary fails, with backup, n idle servers
 //
 //	    consider when the primary P fails and with an availible backup B.
 //	    server failure is detected by the view service.
@@ -295,7 +308,7 @@ func (vs *ViewServer) tick() {
 //
 //
 // case 7: primary fails, no backup assigned, no idles servers availbile
-//		service fails.all data is lost. system desgined to handle N-1 faults and where N is the number of servers that make up the service.
+//		service fails. all data is lost. system desgined to handle N-1 faults and where N is the number of servers that make up the service.
 //		this N excludes the view service. it is assumed the view service does NOT fail. in the event of the view service
 //		failure, the system is not expected to work correctly
 //
@@ -324,7 +337,8 @@ func StartServer(me string) *ViewServer {
 	vs.testCount = 0
 	vs.currentView.Viewnum = 1
 	vs.isFirstElection = true
-	vs.crashAndResart = 0
+	vs.crashAndRestart = 0
+	vs.primaryAcknowleged = false
 	// tell net/rpc about our RPC server and handlers.
 	rpcs := rpc.NewServer()
 	rpcs.Register(vs)
