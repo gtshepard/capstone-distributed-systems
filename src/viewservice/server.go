@@ -42,7 +42,6 @@ type ViewServer struct {
 	crashAndRestart    uint
 	primaryAcknowleged bool
 	viewHasChanged     bool
-	viewUpdateCache    []*SrvMsg
 	backupFailed       bool
 }
 
@@ -85,7 +84,8 @@ func (vs *ViewServer) Get(args *GetArgs, reply *GetReply) error {
 func (vs *ViewServer) tick() {
 
 	srvMsg := <-vs.ping
-	myLogger("3", "VS--SRV--MESSAGE", srvMsg.name, "ViewService.go")
+	myLogger("3", "VS--SRV--PINGGEd", srvMsg.name, "ViewService.go")
+
 	//has primary acknowdleged current view
 	for key := range vs.servers {
 		vs.servers[key].ttl -= 1
@@ -97,15 +97,13 @@ func (vs *ViewServer) tick() {
 		if srvMsg.oldViewNum == vs.currentView.Viewnum {
 			vs.primaryAcknowleged = true
 			myLogger("", "PRIMARY ACKED", srvMsg.name, "ViewService.go")
-		} else {
-
 		}
 	}
 
 	if vs.currentView.Primary == "" && vs.isFirstElection {
 		//vs.currentView.Viewnum += 1
 		vs.currentView.Primary = srvMsg.name
-		vs.currentView.JustElectedBackup = false
+		//vs.currentView.JustElectedBackup = false
 		vs.servers[srvMsg.name] = srvMsg
 		vs.servers[srvMsg.name].ttl = DeadPings
 		vs.isFirstElection = false
@@ -116,41 +114,45 @@ func (vs *ViewServer) tick() {
 		if srvMsg.name != vs.currentView.Primary {
 			if vs.primaryAcknowleged {
 				vs.currentView.Backup = srvMsg.name
-				vs.currentView.JustElectedBackup = true
+				//vs.currentView.JustElectedBackup = true
 				vs.servers[srvMsg.name] = srvMsg
 				vs.servers[srvMsg.name].ttl = DeadPings
-				myLogger("", "ELECTED BACKUP: "+srvMsg.name, "Tick()", "ViewService.go")
 				vs.primaryAcknowleged = false
 				vs.currentView.Viewnum += 1
-				vs.viewUpdateCache = append(vs.viewUpdateCache, srvMsg)
+				myLogger("", "ELECTED BACKUP RESTARTED: "+srvMsg.name, "Tick()", "ViewService.go")
 			} else {
 				myLogger("", "UNACKED: ", "Tick()", "ViewService.go")
 			}
 		} else {
 			//account for primary pinging before first backup elected
 			myLogger("", "BAD: "+srvMsg.name, "Tick()", "ViewService.go")
-			vs.currentView.JustElectedBackup = false
+			//vs.currentView.JustElectedBackup = false
 			vs.servers[srvMsg.name].ttl = DeadPings
 		}
 
 	} else if srvMsg.name == vs.currentView.Primary && srvMsg.oldViewNum == vs.crashAndRestart {
 		myLogger("", "PRIMARY RESTART "+srvMsg.name, "Tick()", "ViewService.go")
-		vs.currentView.JustElectedBackup = false
+		//	vs.currentView.JustElectedBackup = false
 		vs.primaryAcknowleged = true
 		//treat primary restart as dead
 		vs.servers[srvMsg.name].ttl = 0
 	} else {
-		vs.currentView.JustElectedBackup = false
+		//	vs.currentView.JustElectedBackup = false
 		vs.servers[srvMsg.name] = srvMsg
 		vs.servers[srvMsg.name].ttl = DeadPings
 		dp := strconv.Itoa(DeadPings)
 		myLogger("3", "RESTORE TTL  : "+srvMsg.name+":"+dp, "Tick()", "ViewService.go")
 
-		if vs.currentView.Backup == "" && vs.backupFailed {
+		if vs.currentView.Backup == "" && vs.backupFailed && srvMsg.name != vs.currentView.Primary {
+			myLogger("@@@@@@@@@@@@", "REPLACE FAILED BACKUP  : "+srvMsg.name, "Tick()", "@@@@@@@@@@@@")
 			vs.currentView.Viewnum += 1
 			vs.currentView.Backup = srvMsg.name
-			vs.currentView.JustElectedBackup = true
+			//vs.currentView.JustElectedBackup = true
 			vs.backupFailed = false
+		} else if vs.currentView.Backup == "" && srvMsg.name != vs.currentView.Primary {
+			myLogger("@@@@@@@@@@@@", "ADD BACKUP IDLE - NO INIT BACKUP  : "+srvMsg.name, "Tick()", "@@@@@@@@@@@@")
+			vs.currentView.Viewnum += 1
+			vs.currentView.Backup = srvMsg.name
 		}
 	}
 
@@ -166,7 +168,7 @@ func (vs *ViewServer) tick() {
 					vs.currentView.Primary = vs.currentView.Backup
 					myLogger("", "PROMOTED TO PRIMARY: "+vs.currentView.Backup, "Tick()", "ViewService.go")
 					vs.currentView.Backup = ""
-					vs.currentView.JustElectedBackup = false
+					//vs.currentView.JustElectedBackup = false
 					delete(vs.servers, key)
 					vs.primaryAcknowleged = false
 				} else {
@@ -175,7 +177,7 @@ func (vs *ViewServer) tick() {
 			} else if key == vs.currentView.Backup {
 				myLogger("", "BACKUP FAILED: "+vs.currentView.Backup, "Tick()", "ViewService.go")
 				vs.currentView.Backup = ""
-				vs.currentView.JustElectedBackup = false
+				//	vs.currentView.JustElectedBackup = false
 				delete(vs.servers, key)
 				vs.primaryAcknowleged = false
 				vs.backupFailed = true
@@ -353,7 +355,6 @@ func StartServer(me string) *ViewServer {
 	vs.ping = make(chan *SrvMsg)
 	vs.clientMsg = make(chan View)
 	vs.servers = make(map[string]*SrvMsg)
-	vs.viewUpdateCache = make([]*SrvMsg, 0)
 	vs.testCount = 0
 	vs.currentView.Viewnum = 1
 	vs.isFirstElection = true
