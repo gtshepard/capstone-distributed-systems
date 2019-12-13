@@ -45,6 +45,7 @@ type PBServer struct {
 	intervals         int
 	completedRequests map[int64]int64
 	restart           bool
+	copier            chan bool
 }
 
 func (pb *PBServer) Put(args *PutArgs, reply *PutReply) error {
@@ -76,6 +77,11 @@ func (pb *PBServer) Get(args *GetArgs, reply *GetReply) error {
 	return nil
 }
 
+func (pb *PBServer) SendCopy(args *SendCopyArgs, reply *SendCopyReply) error {
+	go func() { pb.copier <- true }()
+	return nil
+}
+
 func (pb *PBServer) RecieveUpdate(args *PutArgs, reply *PutReply) error {
 	update := &Update{}
 	update.Key = args.Key
@@ -104,6 +110,7 @@ func (pb *PBServer) tick() {
 	myLogger("&&&&&&&&&&&&&&&", "KNOWS VIEW "+strconv.Itoa(int(view.Viewnum))+": ", pb.me, "&&&&&&&&&&&&&")
 	myLogger("&&&&&&&&&&&&&&&", "VIEW.PRIMARY  "+": ", view.Primary, "&&&&&&&&&&&&&")
 	myLogger("&&&&&&&&&&&&&&&", "VIEW.BACKUP "+": ", view.Backup, "&&&&&&&&&&&&&")
+	myLogger("&&&&&&&&&&&&&&&", "VIEW.JustElectedBackup "+": ", strconv.FormatBool(view.JustElectedBackup), "&&&&&&&&&&&&&")
 
 	if pb.restart {
 		myLogger("&&&&&&&&&&&&&&&", "START:", pb.me, "&&&&&&&&&&&&&")
@@ -116,8 +123,23 @@ func (pb *PBServer) tick() {
 
 	if pb.me == view.Primary {
 
-		if view.JustElectedBackup {
-			myLogger("&&&&&&&&&&&&&&&&&&&", "COPY TO BACKUP", "", "&&&&&&&&&&&&&&&&")
+		// if view.JustElectedBackup {
+		// 	myLogger("&&&&&&&&&&&&&&&&&&&", "COPY TO BACKUP", "", "&&&&&&&&&&&&&&&&")
+		// 	args := &ReplicateArgs{}
+		// 	var reply *ReplicateReply
+		// 	args.Db = pb.db
+
+		// 	ok := call(view.Backup, "PBServer.RecieveReplica", args, &reply)
+		// 	for !ok {
+		// 		view, _ := pb.vs.Get()
+		// 		myLogger("ReciveReplica", "RPC FAIL", "Tick", "Server.go")
+		// 		ok = call(view.Backup, "PBServer.RecieveReplica", args, &reply)
+		// 	}
+		// }
+		select {
+		case copy := <-pb.copier:
+			myLogger("&&&&&&&&&&&&&&&&&&&", "COPY TO BACKUP", strconv.FormatBool(copy), "&&&&&&&&&&&&&&&&")
+
 			args := &ReplicateArgs{}
 			var reply *ReplicateReply
 			args.Db = pb.db
@@ -128,6 +150,8 @@ func (pb *PBServer) tick() {
 				myLogger("ReciveReplica", "RPC FAIL", "Tick", "Server.go")
 				ok = call(view.Backup, "PBServer.RecieveReplica", args, &reply)
 			}
+		default:
+			myLogger("&&&&&&&&&&&&&&&&&&&", "DEFUALY CASE FOR PRIMARY SELECT", "", "&&&&&&&&&&&&&&&&")
 		}
 
 		select {
@@ -185,6 +209,18 @@ func (pb *PBServer) tick() {
 
 	} else if pb.me == view.Backup {
 
+		if len(pb.db) == 0 {
+			view, _ = pb.vs.Ping(view.Viewnum)
+			args := &SendCopyArgs{}
+			var reply *SendCopyReply
+
+			ok := call(view.Primary, "PBServer.SendCopy", args, &reply)
+			for !ok {
+				view, _ := pb.vs.Get()
+				ok = call(view.Primary, "PBServer.SendCopy", args, &reply)
+			}
+		}
+
 		select {
 		case replica := <-pb.repilcate:
 			if val, ok := pb.completedRequests[replica.Gid]; !ok {
@@ -226,6 +262,7 @@ func StartServer(vshost string, me string) *PBServer {
 	pb.vs = viewservice.MakeClerk(me, vshost)
 	pb.finish = make(chan interface{})
 	// Your pb.* initializations here.
+	pb.copier = make(chan bool)
 	pb.writer = make(chan *ClientMsg)
 	pb.reader = make(chan *ClientMsg)
 	pb.update = make(chan *Update)

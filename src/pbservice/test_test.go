@@ -19,7 +19,7 @@ func check(ck *Clerk, key string, value string) {
 	v := ck.Get(key)
 	//	myLogger("$$$$$$$$$$$$$$$", "GRABBED KEY", "", "$$$$$$$$$$$$$$")
 	if v != value {
-		//myLogger("$$$$$$$$$$$$$$$", "FAIL VALUE CHECK", "", "$$$$$$$$$$$$$$")
+		myLogger("$$$$$$$$$$$$$$$", "FAIL VALUE CHECK", "expcteed: "+value, "$$$$$$$$$$$$$$")
 		log.Fatalf("Get(%v) -> %v, expected %v", key, v, value)
 	}
 }

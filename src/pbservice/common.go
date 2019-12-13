@@ -42,6 +42,10 @@ type GetReply struct {
 }
 
 // Your RPC definitions here.
+
+type SendCopyArgs struct{}
+type SendCopyReply struct{}
+
 type ClientMsg struct {
 	Key   string
 	Value string
