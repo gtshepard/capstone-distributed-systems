@@ -237,6 +237,11 @@ func (pb *PBServer) tick() {
 		default:
 			myLogger("$^$^$^$^$^$^$^$$^$^$", "PRIMARY TICKING: ", pb.me, "$^$^$^$^$^$^$^$$^$^$")
 		}
+		myLogger("@&@&@&@@&@&@&@@&@&@&@&@", "PRIMARY: ", "DATABASE", "@&@&@&@@&@&@&@@&@&@&@&@")
+		for k, v := range pb.db {
+			fmt.Printf("key[%s] value[%s]\n", k, v)
+			myLogger("@&@&@&@@&@&@&@@&@&@&@&@", "Key: "+k, "Value: "+v, "@&@&@&@@&@&@&@@&@&@&@&@")
+		}
 
 	} else if pb.me == view.Backup {
 
