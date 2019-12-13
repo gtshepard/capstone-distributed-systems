@@ -468,7 +468,7 @@ func TestConcurrentSameUnreliable(t *testing.T) {
 			t.Fatalf("Get(%v) failed from primary", i)
 		}
 	}
-
+	myLogger("&&&&&&&&&&&&&&&&&&&&&&", "KILL PRIMARY SERVER IN CSU TEST", "", "&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
 	// kill the primary
 	for i := 0; i < nservers; i++ {
 		if view1.Primary == sa[i].me {
@@ -476,18 +476,21 @@ func TestConcurrentSameUnreliable(t *testing.T) {
 			break
 		}
 	}
+
 	for iters := 0; iters < viewservice.DeadPings*2; iters++ {
 		view, _ := vck.Get()
 		if view.Primary == view1.Backup {
 			break
 		}
+		//time.Sleep(viewservice.PingInterval * viewservice.DeadPings)
 		time.Sleep(viewservice.PingInterval)
 	}
+	myLogger("&&&&&&&&&&&&&&&&&&&&&&", "Before Wrong Primary test", "", "&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
 	view2, _ := vck.Get()
 	if view2.Primary != view1.Backup {
 		t.Fatal("wrong Primary")
 	}
-
+	myLogger("&&&&&&&&&&&&&&&&&&&&&&", "Before READ BACKUP test", "", "&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
 	// read from old backup
 	for i := 0; i < nkeys; i++ {
 		z := ck.Get(strconv.Itoa(i))
@@ -509,14 +512,12 @@ func TestConcurrentSameUnreliable(t *testing.T) {
 // constant put/get while crashing and restarting servers
 func TestRepeatedCrash(t *testing.T) {
 	runtime.GOMAXPROCS(4)
-
+	fmt.Printf("Test: Repeated failures/restarts ...\n")
 	tag := "rc"
 	vshost := port(tag+"v", 1)
 	vs := viewservice.StartServer(vshost)
 	time.Sleep(time.Second)
 	vck := viewservice.MakeClerk("", vshost)
-
-	fmt.Printf("Test: Repeated failures/restarts ...\n")
 
 	const nservers = 3
 	var sa [nservers]*PBServer

@@ -149,7 +149,7 @@ func (pb *PBServer) tick() {
 			for !ok {
 				view, _ := pb.vs.Get()
 				ok = call(view.Backup, "PBServer.SendCopy", args, &reply)
-				myLogger("*******************", "RPC FAIL", "SEND COPY", "****************")
+				myLogger("*******************", "RPC FAIL", "SEND COPY FROM"+pb.me, "****************")
 			}
 
 			if reply.Value {
@@ -237,11 +237,11 @@ func (pb *PBServer) tick() {
 		default:
 			myLogger("$^$^$^$^$^$^$^$$^$^$", "PRIMARY TICKING: ", pb.me, "$^$^$^$^$^$^$^$$^$^$")
 		}
-		myLogger("@&@&@&@@&@&@&@@&@&@&@&@", "PRIMARY: ", "DATABASE", "@&@&@&@@&@&@&@@&@&@&@&@")
-		for k, v := range pb.db {
-			fmt.Printf("key[%s] value[%s]\n", k, v)
-			myLogger("@&@&@&@@&@&@&@@&@&@&@&@", "Key: "+k, "Value: "+v, "@&@&@&@@&@&@&@@&@&@&@&@")
-		}
+		// myLogger("@&@&@&@@&@&@&@@&@&@&@&@", "PRIMARY: ", "DATABASE", "@&@&@&@@&@&@&@@&@&@&@&@")
+		// for k, v := range pb.db {
+		// 	fmt.Printf("key[%s] value[%s]\n", k, v)
+		// 	myLogger("@&@&@&@@&@&@&@@&@&@&@&@", "Key: "+k, "Value: "+v, "@&@&@&@@&@&@&@@&@&@&@&@")
+		// }
 
 	} else if pb.me == view.Backup {
 

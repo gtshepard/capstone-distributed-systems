@@ -43,6 +43,9 @@ type ViewServer struct {
 	primaryAcknowleged bool
 	viewHasChanged     bool
 	backupFailed       bool
+	deadServers        map[string]*SrvMsg
+	flushInterval      int
+	intervalCount      int
 }
 
 //acquires lock when writing?
@@ -84,8 +87,19 @@ func (vs *ViewServer) Get(args *GetArgs, reply *GetReply) error {
 func (vs *ViewServer) tick() {
 
 	srvMsg := <-vs.ping
-	myLogger("3", "VS--SRV--PINGGEd", srvMsg.name, "ViewService.go")
 
+	if vs.intervalCount >= vs.flushInterval {
+		vs.intervalCount = 0
+		for k := range vs.deadServers {
+			delete(vs.deadServers, k)
+		}
+	}
+
+	if val, ok := vs.deadServers[srvMsg.name]; ok {
+		myLogger("------------", "STRAY PING FROM DEAD SERVER : "+val.name, "------------", "ViewService.go")
+		return
+	}
+	myLogger("3", "VS--SRV--PINGGEd", srvMsg.name, "ViewService.go")
 	//has primary acknowdleged current view
 	for key := range vs.servers {
 		vs.servers[key].ttl -= 1
@@ -157,9 +171,10 @@ func (vs *ViewServer) tick() {
 	}
 
 	// //promote back up and prune dead servers
-	for key := range vs.servers {
+	for key, value := range vs.servers {
 		if vs.servers[key].ttl <= 0 {
 			//if primary not alive
+			vs.deadServers[key] = value
 			if key == vs.currentView.Primary {
 				myLogger("", "PRIMARY FAILED: "+key, "Tick()", "ViewService.go")
 				//wait for ack to change views
@@ -192,6 +207,7 @@ func (vs *ViewServer) tick() {
 			}
 		}
 	}
+	vs.intervalCount += 1
 }
 
 // View Service
@@ -361,6 +377,9 @@ func StartServer(me string) *ViewServer {
 	vs.crashAndRestart = 0
 	vs.primaryAcknowleged = false
 	vs.backupFailed = false
+	vs.flushInterval = 5
+	vs.intervalCount = 0
+	vs.deadServers = make(map[string]*SrvMsg)
 
 	// tell net/rpc about our RPC server and handlers.
 	rpcs := rpc.NewServer()
