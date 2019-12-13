@@ -114,7 +114,6 @@ func (pb *PBServer) tick() {
 	myLogger("&&&&&&&&&&&&&&&", "KNOWS VIEW "+strconv.Itoa(int(view.Viewnum))+": ", pb.me, "&&&&&&&&&&&&&")
 	myLogger("&&&&&&&&&&&&&&&", "VIEW.PRIMARY  "+": ", view.Primary, "&&&&&&&&&&&&&")
 	myLogger("&&&&&&&&&&&&&&&", "VIEW.BACKUP "+": ", view.Backup, "&&&&&&&&&&&&&")
-	myLogger("&&&&&&&&&&&&&&&", "VIEW.JustElectedBackup "+": ", strconv.FormatBool(view.JustElectedBackup), "&&&&&&&&&&&&&")
 
 	if pb.restart {
 		myLogger("&&&&&&&&&&&&&&&", "START:", pb.me, "&&&&&&&&&&&&&")
