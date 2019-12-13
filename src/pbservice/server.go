@@ -78,7 +78,11 @@ func (pb *PBServer) Get(args *GetArgs, reply *GetReply) error {
 }
 
 func (pb *PBServer) SendCopy(args *SendCopyArgs, reply *SendCopyReply) error {
-	go func() { pb.copier <- true }()
+	if len(pb.db) == 0 {
+		reply.Value = true
+	} else {
+		reply.Value = false
+	}
 	return nil
 }
 
@@ -136,23 +140,50 @@ func (pb *PBServer) tick() {
 		// 		ok = call(view.Backup, "PBServer.RecieveReplica", args, &reply)
 		// 	}
 		// }
-		select {
-		case copy := <-pb.copier:
-			myLogger("&&&&&&&&&&&&&&&&&&&", "COPY TO BACKUP", strconv.FormatBool(copy), "&&&&&&&&&&&&&&&&")
 
-			args := &ReplicateArgs{}
-			var reply *ReplicateReply
-			args.Db = pb.db
+		if view.Backup != "" {
+			view, _ = pb.vs.Ping(view.Viewnum)
+			args := &SendCopyArgs{}
+			var reply *SendCopyReply
 
-			ok := call(view.Backup, "PBServer.RecieveReplica", args, &reply)
+			ok := call(view.Backup, "PBServer.SendCopy", args, &reply)
 			for !ok {
 				view, _ := pb.vs.Get()
-				myLogger("ReciveReplica", "RPC FAIL", "Tick", "Server.go")
-				ok = call(view.Backup, "PBServer.RecieveReplica", args, &reply)
+				ok = call(view.Backup, "PBServer.SendCopy", args, &reply)
+				myLogger("*******************", "RPC FAIL", "SEND COPY", "****************")
 			}
-		default:
-			myLogger("&&&&&&&&&&&&&&&&&&&", "DEFUALY CASE FOR PRIMARY SELECT", "", "&&&&&&&&&&&&&&&&")
+
+			if reply.Value {
+				args := &ReplicateArgs{}
+				var reply *ReplicateReply
+				args.Db = pb.db
+
+				ok := call(view.Backup, "PBServer.RecieveReplica", args, &reply)
+				for !ok {
+					view, _ := pb.vs.Get()
+					myLogger("ReciveReplica", "RPC FAIL", "Tick", "Server.go")
+					ok = call(view.Backup, "PBServer.RecieveReplica", args, &reply)
+				}
+			}
 		}
+
+		// select {
+		// case copy := <-pb.copier:
+		// 	myLogger("&&&&&&&&&&&&&&&&&&&", "COPY TO BACKUP", strconv.FormatBool(copy), "&&&&&&&&&&&&&&&&")
+
+		// 	args := &ReplicateArgs{}
+		// 	var reply *ReplicateReply
+		// 	args.Db = pb.db
+
+		// 	ok := call(view.Backup, "PBServer.RecieveReplica", args, &reply)
+		// 	for !ok {
+		// 		view, _ := pb.vs.Get()
+		// 		myLogger("ReciveReplica", "RPC FAIL", "Tick", "Server.go")
+		// 		ok = call(view.Backup, "PBServer.RecieveReplica", args, &reply)
+		// 	}
+		// default:
+		// 	myLogger("&&&&&&&&&&&&&&&&&&&", "DEFUALY CASE FOR PRIMARY SELECT", "", "&&&&&&&&&&&&&&&&")
+		// }
 
 		select {
 
@@ -197,6 +228,7 @@ func (pb *PBServer) tick() {
 					for !ok {
 						view, _ := pb.vs.Get()
 						ok = call(view.Backup, "PBServer.RecieveUpdate", args, &reply)
+						myLogger("*******************", "RPC FAIL", "SEND UPDATE TO BACKUP", "****************")
 					}
 				}
 
@@ -209,17 +241,17 @@ func (pb *PBServer) tick() {
 
 	} else if pb.me == view.Backup {
 
-		if len(pb.db) == 0 {
-			view, _ = pb.vs.Ping(view.Viewnum)
-			args := &SendCopyArgs{}
-			var reply *SendCopyReply
+		// if len(pb.db) == 0 {
+		// 	// view, _ = pb.vs.Ping(view.Viewnum)
+		// 	// args := &SendCopyArgs{}
+		// 	// var reply *SendCopyReply
 
-			ok := call(view.Primary, "PBServer.SendCopy", args, &reply)
-			for !ok {
-				view, _ := pb.vs.Get()
-				ok = call(view.Primary, "PBServer.SendCopy", args, &reply)
-			}
-		}
+		// 	// ok := call(view.Primary, "PBServer.SendCopy", args, &reply)
+		// 	// for !ok {
+		// 	// 	view, _ := pb.vs.Get()
+		// 	// 	ok = call(view.Primary, "PBServer.SendCopy", args, &reply)
+		// 	// }
+		// }
 
 		select {
 		case replica := <-pb.repilcate:

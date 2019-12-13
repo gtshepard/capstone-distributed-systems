@@ -83,7 +83,7 @@ func TestBasicFail(t *testing.T) {
 	if v.Backup != s2.me {
 		t.Fatal("backup never came up")
 	}
-
+	//myLogger("#############################", "PASSED FIRST PRIMARY", "", "#############################")
 	ck.Put("3", "33")
 	check(ck, "3", "33")
 
@@ -270,7 +270,7 @@ func TestFailPut(t *testing.T) {
 		}
 		time.Sleep(viewservice.PingInterval)
 	}
-
+	myLogger("&&&&&&&&&&&&&&&&&&&&&&", "WAITING FOR ELECTION ", "", "&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
 	time.Sleep(time.Second) // wait for backup initialization
 	v2, _ := vck.Get()
 	if v2.Primary != s1.me || v2.Backup != s3.me {
@@ -327,6 +327,7 @@ func TestConcurrentSame(t *testing.T) {
 	for i := 0; i < nservers; i++ {
 		sa[i] = StartServer(vshost, port(tag, i+1))
 	}
+	myLogger("&&&&&&&&&&&&&&&&&&&&&&", "STARTED 2 SERVERS ", "", "&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
 
 	for iters := 0; iters < viewservice.DeadPings*2; iters++ {
 		view, _ := vck.Get()
@@ -335,6 +336,7 @@ func TestConcurrentSame(t *testing.T) {
 		}
 		time.Sleep(viewservice.PingInterval)
 	}
+	myLogger("&&&&&&&&&&&&&&&&&&&&&&", "ROLES ASSIGNED TO BOTH SERVERS", "", "&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
 
 	// give p+b time to ack, initialize
 	time.Sleep(viewservice.PingInterval * viewservice.DeadPings)
