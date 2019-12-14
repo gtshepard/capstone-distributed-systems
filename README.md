@@ -50,12 +50,11 @@ i.e a banking system or keyvalue store
 ```
 mit-6.824-dist-system
 │   README.md
-│     
 └───src 
     └─── main  
-    │   │ 
-    │   │ file112.txt
-    │   
+    │   │ test-wc.sh
+    |   | kjv12.txt
+    │
     └─── mapreduce 
     │   │ file021.txt
     │   │ file022.txt
