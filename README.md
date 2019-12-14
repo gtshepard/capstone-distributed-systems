@@ -21,7 +21,7 @@
   ##### 1. Overview 
    - Distributed Data Processing (Stateless)
   ##### 2. Setup and Usage 
-   - assuming project cloned to home directory 
+   - Assuming project cloned to home directory 
         - export GOPATH=$HOME/mit-6.824-dist-system
    - Part 1 Test Cases 
         - cd $HOME/mit-6.824-dist-system/src/main 
