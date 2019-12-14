@@ -10,12 +10,17 @@
 ### Abstact
 
 ### Case Studies
-    
+  #### Run this command once intially for setup 
+      export GOPATH=$HOME/6.824 
+      
   #### MapReduce 
   ##### 1. Distributed Data Processing (Stateless)
   ##### 2. How to Run Case Study 
-    - to run this case study 
-     ``` export GOPATH=/Users/Garrison/go/6.824 ```
+   
+   - to run this case study 
+   
+           export GOPATH=/Users/Garrison/go/6.824
+ 
    
   
   #### Key Value Store 
