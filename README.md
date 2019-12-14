@@ -4,25 +4,31 @@
 1. [Abstract](#abstract)
 2. [Case Studies](#case-studies)
     1. [Map Reduce](#map-reduce)
+      1. [Overview](#overview)
+      2. [Setup and Usage](#setup-and-usage)
     2. [Key Value Store](#key-value-store)
+      1. [Overview](#overview)
+      2. [Setup and Usage](#setup-and-usage)
 3. [Findings](#findings)
 
 ### Abstact
 
 ### Case Studies
   #### Setup
-    - assuming project cloned to home directory 
-      export GOPATH=$HOME/mit-6.824-dist-system
+
       
   #### Map Reduce 
-  ##### 1. Distributed Data Processing (Stateless)
-  ##### 2. How to Run Case Study 
-   
-   - to run this case study 
-   
-           export GOPATH=/Users/Garrison/go/6.824
- 
-   
+  ##### 1. Overview 
+   - Distributed Data Processing (Stateless)
+  ##### 2. Setup and Usage 
+   - assuming project cloned to home directory 
+        - export GOPATH=$HOME/mit-6.824-dist-system
+   - Part 1 Test Cases 
+        - cd $HOME/mit-6.824-dist-system/src/main 
+        - ./test-wc.sh    
+   - Part 2 and 3 Test Cases 
+     - cd $HOME/mit-6.824-dist-system/src/mapreduce
+     - go test 
   
   #### Key Value Store 
   1. Fault Tolerance With State 
