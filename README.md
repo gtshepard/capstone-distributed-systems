@@ -36,33 +36,34 @@
   
   #### Case Studies Directory Tree
    - A Directory Tree For Case Studies (note: unimportant files have been omitted for brevity)
+   
     ```
-    mit-6.824-dist-system
-    │   README.md
-    └───src 
-    |   └─── main  
-    │   │ test-wc.sh
-    |   | kjv12.txt
-    |   | wc.go
-    │
-    └─── mapreduce 
-    │   │ common.go
-    │   │ mapreduce.go
-    |   | master.go
-    |   | test_test.go
-    |   | worker.go
-    |
-    └─── viewservice 
-    |   | client.go 
-    |   | common.go
-    |   | server.go
-    |   | test_test.go
-    |
-    └─── pbservice 
-         | client.go
-         | common.go
-         | server.go
-         | test_test.go     
+        mit-6.824-dist-system
+        │   README.md
+        └───src 
+        |   └─── main  
+        │   │ test-wc.sh
+        |   | kjv12.txt
+        |   | wc.go
+        │
+        └─── mapreduce 
+        │   │ common.go
+        │   │ mapreduce.go
+        |   | master.go
+        |   | test_test.go
+        |   | worker.go
+        |
+        └─── viewservice 
+        |   | client.go 
+        |   | common.go
+        |   | server.go
+        |   | test_test.go
+        |
+        └─── pbservice 
+            | client.go
+            | common.go
+            | server.go
+            | test_test.go     
     ```
     
 ### Findings
