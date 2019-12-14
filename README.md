@@ -12,8 +12,11 @@
 ### Case Studies
     
   #### MapReduce 
-  1. Distributed Data Processing (Stateless)
-  2. How to Run Case Study 
+  ##### 1. Distributed Data Processing (Stateless)
+  ##### 2. How to Run Case Study 
+    - to run this case study 
+     ``` export GOPATH=/Users/Garrison/go/6.824 ```
+   
   
   #### Key Value Store 
   1. Fault Tolerance With State 
