@@ -54,20 +54,26 @@ mit-6.824-dist-system
     └─── main  
     │   │ test-wc.sh
     |   | kjv12.txt
+    |   | wc.go
     │
     └─── mapreduce 
-    │   │ file021.txt
-    │   │ file022.txt
+    │   │ common.go
+    │   │ mapreduce.go
+    |   | master.go
+    |   | test_test.go
+    |   | worker.go
     |
     └─── viewservice 
     |   | client.go 
     |   | common.go
     |   | server.go
+    |   | test_test.go
     |
     └─── pbservice 
          | client.go
          | common.go
          | server.go
+         | test_test.go
         
         
 ```
