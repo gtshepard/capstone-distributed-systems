@@ -3,7 +3,7 @@
 ### Table of Contents 
 1. [Abstract](#abstract)
 2. [Case Studies](#case-studies)
-    1. [MapReduce](#map-reduce)
+    1. [Map Reduce](#map-reduce)
     2. [Key Value Store](#key-value-store)
 3. [Findings](#findings)
 
@@ -14,7 +14,7 @@
     - assuming project cloned to home directory 
       export GOPATH=$HOME/mit-6.824-dist-system
       
-  #### MapReduce 
+  #### Map Reduce 
   ##### 1. Distributed Data Processing (Stateless)
   ##### 2. How to Run Case Study 
    
