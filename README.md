@@ -37,7 +37,7 @@
   #### Case Studies Directory Tree
    - A Directory Tree For Case Studies (note: unimportant files have been omitted for brevity)
    
-    ```
+      ```
         mit-6.824-dist-system
         │   README.md
         └───src 
@@ -64,7 +64,7 @@
             | common.go
             | server.go
             | test_test.go     
-    ```
+      ```
     
 ### Findings
 
@@ -95,3 +95,4 @@ project
 └───folder2
     │   file021.txt
     │ 
+```
