@@ -38,7 +38,14 @@ type ViewServer struct {
 	//reviece ping message data incoming reqeust. elimnates need to write to shared variable
 	ping chan *SrvMsg
 	//send replys from view service in form of mesage passing to elimante shared variables
-	clientMsg chan View
+	clientMsg          chan View
+	crashAndRestart    uint
+	primaryAcknowleged bool
+	viewHasChanged     bool
+	backupFailed       bool
+	deadServers        map[string]*SrvMsg
+	flushInterval      int
+	intervalCount      int
 }
 
 //acquires lock when writing?
@@ -67,83 +74,128 @@ func (vs *ViewServer) Ping(args *PingArgs, reply *PingReply) error {
 // server Get() RPC handler.
 //
 func (vs *ViewServer) Get(args *GetArgs, reply *GetReply) error {
-
 	// Your code here.
 	//retrieve the most current view
 	reply.View = vs.currentView
 	return nil
 }
 
-//
 // tick() is called once per PingInterval; it should notice
 // if servers have died or recovered, and change the view
 // accordingly.
 //
 func (vs *ViewServer) tick() {
-	// Your code here.
-	// THIS FUCNTION IS GOOD FOR PERIODIC DECISISONS
-	// I.E to promote the backup, backup if the the view service has missed N pings (N = deadpings) from the primary
-	// this fucntion Tick is called once per pinginterval
 
 	srvMsg := <-vs.ping
+
+	if vs.intervalCount >= vs.flushInterval {
+		vs.intervalCount = 0
+		for k := range vs.deadServers {
+			delete(vs.deadServers, k)
+		}
+	}
+
+	if val, ok := vs.deadServers[srvMsg.name]; ok {
+		myLogger("------------", "STRAY PING FROM DEAD SERVER : "+val.name, "------------", "ViewService.go")
+		return
+	}
+	myLogger("3", "VS--SRV--PINGGEd", srvMsg.name, "ViewService.go")
+	//has primary acknowdleged current view
 	for key := range vs.servers {
 		vs.servers[key].ttl -= 1
 		ttl := strconv.Itoa(vs.servers[key].ttl)
 		myLogger("3", "TTL FOR SRV : "+key+":"+ttl, "Tick()", "ViewService.go")
 	}
 
-	if vs.currentView.Primary == "" && vs.isFirstElection {
+	if srvMsg.name == vs.currentView.Primary {
+		if srvMsg.oldViewNum == vs.currentView.Viewnum {
+			vs.primaryAcknowleged = true
+			myLogger("", "PRIMARY ACKED", srvMsg.name, "ViewService.go")
+		}
+	}
 
+	if vs.currentView.Primary == "" && vs.isFirstElection {
+		//vs.currentView.Viewnum += 1
 		vs.currentView.Primary = srvMsg.name
+		//vs.currentView.JustElectedBackup = false
 		vs.servers[srvMsg.name] = srvMsg
 		vs.servers[srvMsg.name].ttl = DeadPings
 		vs.isFirstElection = false
-		myLogger("", "ELECTED FIRST PRIMARY", "Tick()", "ViewService.go")
-		//myLogger("3", "Primary Elected: "+srvMsg.name, "Tick()", "ViewService.go")
-		//myLogger("3", "MAP SIZE: "+strconv.Itoa(len(vs.servers)), "Tick()", "ViewService.go")
+		myLogger("", "ELECTED FIRST PRIMARY", srvMsg.name, "ViewService.go")
 
-	} else if vs.currentView.Backup == "" && srvMsg.oldViewNum < uint(1) {
-
+	} else if vs.currentView.Backup == "" && srvMsg.oldViewNum == vs.crashAndRestart {
+		//make sure primary has acked for currwent  view
 		if srvMsg.name != vs.currentView.Primary {
-			vs.currentView.Viewnum += 1
-			vs.currentView.Backup = srvMsg.name
-			vs.servers[srvMsg.name] = srvMsg
-			vs.servers[srvMsg.name].ttl = DeadPings
-			myLogger("", "ELECTED BACKUP: "+srvMsg.name, "Tick()", "ViewService.go")
+			if vs.primaryAcknowleged {
+				vs.currentView.Backup = srvMsg.name
+				//vs.currentView.JustElectedBackup = true
+				vs.servers[srvMsg.name] = srvMsg
+				vs.servers[srvMsg.name].ttl = DeadPings
+				vs.primaryAcknowleged = false
+				vs.currentView.Viewnum += 1
+				myLogger("", "ELECTED BACKUP RESTARTED: "+srvMsg.name, "Tick()", "ViewService.go")
+			} else {
+				myLogger("", "UNACKED: ", "Tick()", "ViewService.go")
+			}
 		} else {
 			//account for primary pinging before first backup elected
+			myLogger("", "BAD: "+srvMsg.name, "Tick()", "ViewService.go")
+			//vs.currentView.JustElectedBackup = false
 			vs.servers[srvMsg.name].ttl = DeadPings
 		}
-		//what other case activates this
-		//restart with idle server
 
-	} else if srvMsg.name == vs.currentView.Primary && srvMsg.oldViewNum < uint(1) {
+	} else if srvMsg.name == vs.currentView.Primary && srvMsg.oldViewNum == vs.crashAndRestart {
 		myLogger("", "PRIMARY RESTART "+srvMsg.name, "Tick()", "ViewService.go")
+		//	vs.currentView.JustElectedBackup = false
+		vs.primaryAcknowleged = true
 		//treat primary restart as dead
 		vs.servers[srvMsg.name].ttl = 0
 	} else {
-
+		//	vs.currentView.JustElectedBackup = false
 		vs.servers[srvMsg.name] = srvMsg
 		vs.servers[srvMsg.name].ttl = DeadPings
 		dp := strconv.Itoa(DeadPings)
 		myLogger("3", "RESTORE TTL  : "+srvMsg.name+":"+dp, "Tick()", "ViewService.go")
+
+		if vs.currentView.Backup == "" && vs.backupFailed && srvMsg.name != vs.currentView.Primary {
+			myLogger("@@@@@@@@@@@@", "REPLACE FAILED BACKUP  : "+srvMsg.name, "Tick()", "@@@@@@@@@@@@")
+			vs.currentView.Viewnum += 1
+			vs.currentView.Backup = srvMsg.name
+			//vs.currentView.JustElectedBackup = true
+			vs.backupFailed = false
+		} else if vs.currentView.Backup == "" && srvMsg.name != vs.currentView.Primary {
+			myLogger("@@@@@@@@@@@@", "ADD BACKUP IDLE - NO INIT BACKUP  : "+srvMsg.name, "Tick()", "@@@@@@@@@@@@")
+			vs.currentView.Viewnum += 1
+			vs.currentView.Backup = srvMsg.name
+		}
 	}
-	//reset TTL for pinging SRV
 
-	//promote back up and prune dead servers
-
-	for key := range vs.servers {
+	// //promote back up and prune dead servers
+	for key, value := range vs.servers {
 		if vs.servers[key].ttl <= 0 {
 			//if primary not alive
+			vs.deadServers[key] = value
 			if key == vs.currentView.Primary {
-				myLogger("", "PRIMARY NOT ALIVE PROMOTE BACK UP: "+key, "Tick()", "ViewService.go")
+				myLogger("", "PRIMARY FAILED: "+key, "Tick()", "ViewService.go")
 				//wait for ack to change views
-				if vs.servers[key].oldViewNum == vs.currentView.Viewnum {
+				if vs.primaryAcknowleged {
 					vs.currentView.Viewnum += 1
 					vs.currentView.Primary = vs.currentView.Backup
+					myLogger("", "PROMOTED TO PRIMARY: "+vs.currentView.Backup, "Tick()", "ViewService.go")
 					vs.currentView.Backup = ""
+					//vs.currentView.JustElectedBackup = false
 					delete(vs.servers, key)
+					vs.primaryAcknowleged = false
+				} else {
+					myLogger("@@@@@@@@@@", "PRIMARY IS BEHIND CURRENT VIEW : "+key, "T", "@@@@@@@@@@@@")
 				}
+			} else if key == vs.currentView.Backup {
+				myLogger("", "BACKUP FAILED: "+vs.currentView.Backup, "Tick()", "ViewService.go")
+				vs.currentView.Backup = ""
+				//	vs.currentView.JustElectedBackup = false
+				delete(vs.servers, key)
+				vs.primaryAcknowleged = false
+				vs.backupFailed = true
 			}
 		}
 	}
@@ -155,7 +207,152 @@ func (vs *ViewServer) tick() {
 			}
 		}
 	}
+	vs.intervalCount += 1
 }
+
+// View Service
+// goal of view service
+// 1. assign roles
+// 2. make sure servers are alive
+//
+// Servers in K/V Service ping View Service
+// View service replys to server requests with view objects
+// View objects contain server roles and view number
+//
+// the view service has a current view number, the current view number that can be learned
+// no other view can be learned. the currentview number only increases, never decreases
+//
+// case 1: start up
+//   upon start up, the view service has a current view number of 1
+//   no K/V servers are present upon start up, therefore no pings, therefore no roles assigned
+//
+// case 2: n servers ping when no roles assigned
+// 	 case 2a) elect primary
+//	 	 the first server S_i to successfully ping the view service will be assigned the role of primary
+//		 the very first assignment of primary does not increase the current view number. (this is a special case)
+//
+//   case 2b) elect backup
+//  		all n-1 servers left that have also sent pings, will reach the View Service
+//   		the first server of these n-1 servers, S_k to successfully ping the View Service
+//   		will be elected backup, all remaining n-2 servers will eventually ping the view service,
+//   		and will not be assigned a role.
+//
+//	 		this idea leads to two cases because of the following
+//
+//  		a backup should NOT be assgined until the primary has acknowledged the current
+//  		view that it is in. once the primary has acknowleged this view, only then the backup can be elected.
+//	 		we say the S_k will eventually be elected backup
+//
+//
+//   		2b_1) S_k makes a successful ping after the primary P has acknowleged the current view
+//				S_k is elected backup. the current view number is increased by one for the role change
+//				any server who sends a ping from this point will learn the new view.
+//				the primary P will learn this view from its next succesful ping p_k. the primary P will acknowledge the
+//				current view with a succesful ping p_k+1
+//
+//    		2b_2) S_k makes a successful ping and the primary P has NOT yet acknowleged the current view
+//
+//        		role assignment of backup to S_k must be delayed until primary acknowledges the backup
+//
+//       	 	We say S_k will eventually be elected backup
+//        		to ensure S_k is eventually elected backup, all pings from all servers (except primary)
+//        		are recorded in a slice with a time stamp and the server name. These records can later be accessed.
+//        		the record will be accessed when the primary P  acknowledges the current view V it is currently operating in
+//				(before backup sent ping)
+
+//
+//       		once the primary acknowlegdes the current view V, the slice containing the records of pings should
+//        		be sorted in DESC order by time stamp, then the first item in the slice should be selected
+//        		which will be the message sent by S_k. (not bad nLogn once every view change)
+//
+//        		with this information the backup can now be elected, and the current view number
+//        		should now increase by 1, servers can immedaitely start learning the new view
+//				the successful ping cache is cleared (the slice containing the records).
+//
+//				any time there is a new current view V, the primary must learn this current view V  ands need to acknowledge it
+//				any time the primary must acknowldege a view, there is a chance that some server S_m will attempt to become backup
+//				there for it is crucial that we ensure evenutal election of the backup, not immedaite, in the case where the primary
+//				has not yet acknowledgeed the current view V
+//
+//        		a backup role assignment, is considered a change in the view.
+//        		therefore the view number will be incremented. any server that makes a request
+//        		to the view service will recieve this view from now on.
+//
+//        		response:
+//	        		p: S1
+//          		b: S2
+//          		v_n: 2
+//		case 2c) idle servers ping after roles of primary and backup have been assigned
+//			no role is assigned. idle servers make pings with in given time bound (pinginterval) to let
+//			the view service know that there are still alive and ready to be elected if need be
+//
+//
+//  X case 3: n servers ping when, primary already assigned
+//     a backup will be elected. for this process see case 2b
+//
+//  X case 4: n servers ping when back up already assigned
+//		all roles have been already been assigned. see case 2c)
+//
+//  X case 5: primary fails, with backup, n idle servers
+//
+//	    consider when the primary P fails and with an availible backup B.
+//	    server failure is detected by the view service.
+//
+//	    a server is considered failed if the view service does not hear from
+//      a server in deadping pingintervals. meaning if a message is not sent with
+//	    in the expected time bound T, within N number of times (where M = deadping) the server
+//	    is consisered failed.
+//
+//     5a) primary P fails before P acknowledges the current view V
+//          view service will spin for ever, service is not expected to work correctly for this case
+//
+//	   5b) primary P fails after P has acknowleged current view V
+//		    if Primary P fails, the backup B for the current view is promoted to the role of primary
+//          and the current view number is increased by 1 for role change.
+//
+//			observe the following
+//
+//			5b_1) backup promoted, n idle where n = 0
+//              the new primary (previously the backup B) will learn the new view next time P sends a succucessful ping p_k.
+//				a successful ping is a ping that reaches the view service. the next successful ping p_k+1 sent by the primary
+//			    will act as the primary's acknowledgement of the current view there are no idle servers to take on the role of the backup
+//
+//			5b_2) backup promoted, n idle where n > 0
+//				  previously backup B is now the primary and there are n idle servers that could pontentially
+//				  become the new backup.
+//
+//			      5b_2_a) new primary (previously backup B) HAS acknowleged the current view
+//					the first server S_i to ping to succesfully ping the view service is elected
+//					as the new backup. the current view number is increased by 1 for role change.
+//					the new view can be learned immediately. the new primary will learn of this current view V with its next
+//					successful ping p_k. the new primary will acknoweledge the current view with successful ping p_k+1
+//
+//				  5b_2_a) new primary (previously backup B) has NOT acknowleged the current view
+//				     to elect back up with these constraints follow case 2b
+//
+//
+//  case 6: backup fails, n idle servers
+//      	a primary P and a backup B are operating in the current view. n idle servers that could potenitally
+//			become backup
+//
+//		   6a) backup B fails, n = 0
+//				no idle servers to take place. no elections
+//				current view number is increased. dead backup is removed
+//			    new view is availible to be learned
+//
+//		   6b) backup B fails, n > 0
+//				a new backup must be selected. see 3b_2)  for the procedure
+//				note that there is no new primary, but the same cases present themselves
+//
+//
+// case 7: primary fails, no backup assigned, no idles servers availbile
+//		service fails. all data is lost. system desgined to handle N-1 faults and where N is the number of servers that make up the service.
+//		this N excludes the view service. it is assumed the view service does NOT fail. in the event of the view service
+//		failure, the system is not expected to work correctly
+//
+//
+//
+//
 
 //
 // tell the server to shut itself down.
@@ -174,10 +371,16 @@ func StartServer(me string) *ViewServer {
 	vs.ping = make(chan *SrvMsg)
 	vs.clientMsg = make(chan View)
 	vs.servers = make(map[string]*SrvMsg)
-
 	vs.testCount = 0
 	vs.currentView.Viewnum = 1
 	vs.isFirstElection = true
+	vs.crashAndRestart = 0
+	vs.primaryAcknowleged = false
+	vs.backupFailed = false
+	vs.flushInterval = 5
+	vs.intervalCount = 0
+	vs.deadServers = make(map[string]*SrvMsg)
+
 	// tell net/rpc about our RPC server and handlers.
 	rpcs := rpc.NewServer()
 	rpcs.Register(vs)

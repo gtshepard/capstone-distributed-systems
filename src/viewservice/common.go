@@ -38,9 +38,10 @@ import (
 //
 
 type View struct {
-	Viewnum uint   //view number
-	Primary string //identity of primary (port name)
-	Backup  string //identity of backup (port name )
+	Viewnum           uint   //view number
+	Primary           string //identity of primary (port name)
+	Backup            string //identity of backup (port name )
+	JustElectedBackup bool
 }
 
 // clients should send a Ping RPC this often,
@@ -68,6 +69,12 @@ type PingArgs struct {
 //view object
 type PingReply struct {
 	View View
+}
+
+type ServerFailureArgs struct {
+	Srv string
+}
+type ServerFailureReply struct {
 }
 
 // Get(): fetch the current view, without volunteering
