@@ -22,13 +22,13 @@
    - Distributed Data Processing (Stateless)
   ##### 2. Setup and Usage 
    - Assuming project cloned to home directory 
-        - export GOPATH=$HOME/mit-6.824-dist-system
+        -  ``` export GOPATH=$HOME/mit-6.824-dist-system ```
    - Part 1 Test Cases 
         - cd $HOME/mit-6.824-dist-system/src/main 
-        - ./test-wc.sh    
+        - ``` ./test-wc.sh ```   
    - Part 2 and 3 Test Cases 
-     - cd $HOME/mit-6.824-dist-system/src/mapreduce
-     - go test 
+     - ``` cd $HOME/mit-6.824-dist-system/src/mapreduce ```
+     - ``` go test ```
   
   #### Key Value Store 
   1. Fault Tolerance With State 
