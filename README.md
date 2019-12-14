@@ -45,3 +45,23 @@ compexity of map reduce vs. paxos becomes much more difficult.
 how can we show it is indeed more complex
 not all problems can be modeled as stateless
 i.e a banking system or keyvalue store 
+
+
+```
+project
+│   README.md
+│   file001.txt    
+│
+└───folder1
+│   │   file011.txt
+│   │   file012.txt
+│   │
+│   └───subfolder1
+│       │   file111.txt
+│       │   file112.txt
+│       │   ...
+│   
+└───folder2
+    │   file021.txt
+    │   file022.txt
+```
