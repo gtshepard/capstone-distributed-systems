@@ -19,7 +19,10 @@
   #### Map Reduce 
   ##### 1. Overview 
    - Distributed Data Processing (Stateless)
-  ##### 2. Setup and Usage 
+     - Map Reduce is framework for processing large amounts of data over a large cluster of commodity machines (Distributed)
+     - Map Reduce parallelizes the work load by taking input say some file, and slpitting it up into multiple pieces and indpendenly processing these inddividual pieces simltanousely on different processes. Each job has excatly the information it needs to complete the job and will always produce the correct results. this is because the functional primitives map and reduce will always produce the same output y for some input x (a key notion in functional programming) another way of saying this is that map and reduce are stateless meaning no information needs to be rememebered about previous inputs for these operations to produce a correct result and because the fucntions do not suffer from side-effects, previous rememberd values changing that could alter the result of the operation. (dig into this more)
+     
+  ##### 2. Setup and Usage
    - Assuming project cloned to home directory 
         -  ``` export GOPATH=$HOME/mit-6.824-dist-system ```
    - Part 1 Test Cases 
@@ -76,23 +79,3 @@ compexity of map reduce vs. paxos becomes much more difficult.
 how can we show it is indeed more complex
 not all problems can be modeled as stateless
 i.e a banking system or keyvalue store 
-
-
-```
-project
-│   README.md
-│   file001.txt    
-│
-└───folder1
-│   │   file011.txt
-│   │   file012.txt
-│   │
-│   └───subfolder1
-│       │   file111.txt
-│       │   file112.txt
-│       │   ...
-│   
-└───folder2
-    │   file021.txt
-    │ 
-```
