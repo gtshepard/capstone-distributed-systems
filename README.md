@@ -3,8 +3,9 @@
 ### Table of Contents 
 1. [Case Studies](#case-studies)
     1. [Map Reduce](#map-reduce)
-    2. [Primary Backup](#key-value-store)
-    3. [Directory Tree](#directory-tree)
+    2. [View Service](#view-service)
+    3. [Primary Backup](#key-value-store)
+    4. [Directory Tree](#directory-tree)
     
 ### Case Studies
   - Assuming project cloned to home directory 
@@ -17,6 +18,8 @@
      - ``` cd $HOME/mit-6.824-dist-system/src/mapreduce ```
      - ``` go test ```
      
+  #### View Service 
+  
   #### Primary Backup 
     -  go test -run BasicFail
     -  go test -run AtMostOnce 
