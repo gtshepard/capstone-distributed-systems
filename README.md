@@ -19,8 +19,11 @@
      - ``` go test ```
      
   #### View Service 
+    - cd $HOME/capstone-distributed-systems/src/viewservice
+    - go test 
   
   #### Primary Backup 
+    -  cd $HOME/capstone-distributed-systems/src/pbservice
     -  go test -run BasicFail
     -  go test -run AtMostOnce 
     -  go test -run FailPut
