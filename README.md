@@ -9,7 +9,7 @@
     
 ### Case Studies
   - Assuming project cloned to home directory 
-        -  ``` export GOPATH=$HOME/mit-6.824-dist-system ```
+  -  ``` export GOPATH=$HOME/capstone-distributed-systems```
   #### Map Reduce
    - Part 1 Test Cases 
         - cd $HOME/mit-6.824-dist-system/src/main 
