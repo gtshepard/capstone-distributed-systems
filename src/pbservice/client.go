@@ -52,7 +52,7 @@ func call(srv string, rpcname string,
 		return true
 	}
 
-	fmt.Println(err)
+	fmt.Println("Please Wait...")
 	return false
 }
 
