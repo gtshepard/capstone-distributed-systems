@@ -1,15 +1,11 @@
 ## Distributed Systems Research 
 
 ### Table of Contents 
-1. [Abstract](#abstract)
-2. [Case Studies](#case-studies)
+1. [Case Studies](#case-studies)
     1. [Map Reduce](#map-reduce)
     2. [Primary Backup](#key-value-store)
     3. [Directory Tree](#directory-tree)
-3. [Findings](#findings)
-
-### Abstact
-
+    
 ### Case Studies
   - Assuming project cloned to home directory 
         -  ``` export GOPATH=$HOME/mit-6.824-dist-system ```
@@ -30,9 +26,8 @@
     -  go test -run Partition1 
     -  go test -run Partition2
     
-  do not run go test, becuase it runs all tests/ RepeatedCrash and RepeatedCrashUnrebiable do not pass
+  do not run go test, becuase it runs all tests. RepeatedCrash and RepeatedCrashUnrebiable do not pass
     
- 
   #### Directory Tree
    - A Directory Tree For Case Studies 
    ```
