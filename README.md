@@ -4,22 +4,16 @@
 1. [Abstract](#abstract)
 2. [Case Studies](#case-studies)
     1. [Map Reduce](#map-reduce)
-      1. [Overview](#overview)
-      2. [Setup and Usage](#setup-and-usage)
     2. [Key Value Store](#key-value-store)
-      1. [Overview](#overview)
-      2. [Setup and Usage](#setup-and-usage)
-    3. Directory Tree For Case Studies 
+    3. [Directory Tree](#directory-tree)
 3. [Findings](#findings)
 
 ### Abstact
 
 ### Case Studies
-
-  #### Map Reduce Lab 1
-  ##### Setup and Usage
-   - Assuming project cloned to home directory 
+  - Assuming project cloned to home directory 
         -  ``` export GOPATH=$HOME/mit-6.824-dist-system ```
+  #### Map Reduce Lab 1
    - Part 1 Test Cases 
         - cd $HOME/mit-6.824-dist-system/src/main 
         - ``` ./test-wc.sh ```   
