@@ -12,7 +12,7 @@
   -  ``` export GOPATH=$HOME/capstone-distributed-systems```
   #### Map Reduce
    - Part 1 Test Cases 
-        - cd $HOME/capstone-distributed-systems/src/main 
+        - ``` cd $HOME/capstone-distributed-systems/src/main ```
         - ``` ./test-wc.sh ```   
    - Part 2 and 3 Test Cases 
      - ``` cd $HOME/capstone-distributed-systems/src/mapreduce ```
