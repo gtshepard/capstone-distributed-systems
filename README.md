@@ -19,7 +19,7 @@
      - ``` go test ```
      
   #### View Service 
-    - cd $HOME/capstone-distributed-systems/src/viewservice
+    - ``` cd $HOME/capstone-distributed-systems/src/viewservice ```
     - go test 
   
   #### Primary Backup 
