@@ -4,7 +4,7 @@
 1. [Abstract](#abstract)
 2. [Case Studies](#case-studies)
     1. [Map Reduce](#map-reduce)
-    2. [Key Value Store](#key-value-store)
+    2. [Primary Backup](#key-value-store)
     3. [Directory Tree](#directory-tree)
 3. [Findings](#findings)
 
@@ -13,7 +13,7 @@
 ### Case Studies
   - Assuming project cloned to home directory 
         -  ``` export GOPATH=$HOME/mit-6.824-dist-system ```
-  #### Map Reduce Lab 1
+  #### Map Reduce
    - Part 1 Test Cases 
         - cd $HOME/mit-6.824-dist-system/src/main 
         - ``` ./test-wc.sh ```   
@@ -21,16 +21,16 @@
      - ``` cd $HOME/mit-6.824-dist-system/src/mapreduce ```
      - ``` go test ```
      
-  #### Key Value Store Primary/Backup Lab 2
-    - ``` go test -run BasicFail ```
-    - ``` go test -run AtMostOnce ```
-    - ``` go test -run FailPut ```
-    - ``` go test -run ConcurrentSame ```
-    - ``` go test -run ConcurrentSameUnreliable ```
-    - ``` go test -run Partition1 ```
-    - ``` go test -run Partition2 ```
+  #### Primary Backup 
+    -  go test -run BasicFail
+    -  go test -run AtMostOnce 
+    -  go test -run FailPut
+    -  go test -run ConcurrentSame 
+    -  go test -run ConcurrentSameUnreliable 
+    -  go test -run Partition1 
+    -  go test -run Partition2
     
-    - Note: do not run go test, becuase it runs all tests/ RepeatedCrash and RepeatedCrashUnrebiable do not pass
+  do not run go test, becuase it runs all tests/ RepeatedCrash and RepeatedCrashUnrebiable do not pass
     
   
   #### Directory Tree
