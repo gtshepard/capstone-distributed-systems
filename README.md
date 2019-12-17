@@ -12,10 +12,10 @@
   -  ``` export GOPATH=$HOME/capstone-distributed-systems```
   #### Map Reduce
    - Part 1 Test Cases 
-        - cd $HOME/mit-6.824-dist-system/src/main 
+        - cd $HOME/capstone-distributed-systems/src/main 
         - ``` ./test-wc.sh ```   
    - Part 2 and 3 Test Cases 
-     - ``` cd $HOME/mit-6.824-dist-system/src/mapreduce ```
+     - ``` cd $HOME/capstone-distributed-systems/src/mapreduce ```
      - ``` go test ```
      
   #### View Service 
@@ -32,12 +32,12 @@
     -  go test -run Partition1 
     -  go test -run Partition2
     
-  do not run go test, becuase it runs all tests. RepeatedCrash and RepeatedCrashUnrebiable do not pass
+  do not run go test, becuase it runs all tests. RepeatedCrash and RepeatedCrashUnrebiable do not pass. all others pass
     
   #### Directory Tree
    - A Directory Tree For Case Studies 
    ```
-        mit-6.824-dist-system
+        capstone-distributed-systems
         │   README.md
         └───src 
         |   └─── main  
