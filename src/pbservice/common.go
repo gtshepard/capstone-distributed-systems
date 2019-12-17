@@ -113,17 +113,3 @@ func groupIdForRequest() int64 {
 	x := bigx.Int64()
 	return x
 }
-
-// request are sent by the client until, a request is successful
-// implementing at most once semantics
-// unique group_id for a set of requests sent to the primary
-// if a request is processed, no further incoming requests with same group_id should be processed
-// to filter out duplicate requests that could arrive after a succesful request has already been made
-// (the peroid in between the acknowldgement and the successful processing of the request)
-// attach a group_id to a client request. any requests sent within one call to get has the same group id
-// each time the primary server handles an incoming request it should check to see if a request
-// with an exisiting group_id has been made, if so, the request is ingored. if not, the request is processed
-// when a request has successfully been processed the group_id should be recorded in a map
-// the actual request data need not be saved.
-
-//completed_requests[int64]int64

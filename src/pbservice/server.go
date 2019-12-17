@@ -126,20 +126,6 @@ func (pb *PBServer) tick() {
 
 	if pb.me == view.Primary {
 
-		// if view.JustElectedBackup {
-		// 	myLogger("&&&&&&&&&&&&&&&&&&&", "COPY TO BACKUP", "", "&&&&&&&&&&&&&&&&")
-		// 	args := &ReplicateArgs{}
-		// 	var reply *ReplicateReply
-		// 	args.Db = pb.db
-
-		// 	ok := call(view.Backup, "PBServer.RecieveReplica", args, &reply)
-		// 	for !ok {
-		// 		view, _ := pb.vs.Get()
-		// 		myLogger("ReciveReplica", "RPC FAIL", "Tick", "Server.go")
-		// 		ok = call(view.Backup, "PBServer.RecieveReplica", args, &reply)
-		// 	}
-		// }
-
 		if view.Backup != "" {
 			view, _ = pb.vs.Ping(view.Viewnum)
 			args := &SendCopyArgs{}
@@ -165,24 +151,6 @@ func (pb *PBServer) tick() {
 				}
 			}
 		}
-
-		// select {
-		// case copy := <-pb.copier:
-		// 	myLogger("&&&&&&&&&&&&&&&&&&&", "COPY TO BACKUP", strconv.FormatBool(copy), "&&&&&&&&&&&&&&&&")
-
-		// 	args := &ReplicateArgs{}
-		// 	var reply *ReplicateReply
-		// 	args.Db = pb.db
-
-		// 	ok := call(view.Backup, "PBServer.RecieveReplica", args, &reply)
-		// 	for !ok {
-		// 		view, _ := pb.vs.Get()
-		// 		myLogger("ReciveReplica", "RPC FAIL", "Tick", "Server.go")
-		// 		ok = call(view.Backup, "PBServer.RecieveReplica", args, &reply)
-		// 	}
-		// default:
-		// 	myLogger("&&&&&&&&&&&&&&&&&&&", "DEFUALY CASE FOR PRIMARY SELECT", "", "&&&&&&&&&&&&&&&&")
-		// }
 
 		select {
 
@@ -237,25 +205,8 @@ func (pb *PBServer) tick() {
 		default:
 			myLogger("$^$^$^$^$^$^$^$$^$^$", "PRIMARY TICKING: ", pb.me, "$^$^$^$^$^$^$^$$^$^$")
 		}
-		// myLogger("@&@&@&@@&@&@&@@&@&@&@&@", "PRIMARY: ", "DATABASE", "@&@&@&@@&@&@&@@&@&@&@&@")
-		// for k, v := range pb.db {
-		// 	fmt.Printf("key[%s] value[%s]\n", k, v)
-		// 	myLogger("@&@&@&@@&@&@&@@&@&@&@&@", "Key: "+k, "Value: "+v, "@&@&@&@@&@&@&@@&@&@&@&@")
-		// }
 
 	} else if pb.me == view.Backup {
-
-		// if len(pb.db) == 0 {
-		// 	// view, _ = pb.vs.Ping(view.Viewnum)
-		// 	// args := &SendCopyArgs{}
-		// 	// var reply *SendCopyReply
-
-		// 	// ok := call(view.Primary, "PBServer.SendCopy", args, &reply)
-		// 	// for !ok {
-		// 	// 	view, _ := pb.vs.Get()
-		// 	// 	ok = call(view.Primary, "PBServer.SendCopy", args, &reply)
-		// 	// }
-		// }
 
 		select {
 		case replica := <-pb.repilcate:
