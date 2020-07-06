@@ -13,7 +13,7 @@
   -  ``` export GOPATH=$HOME/capstone-distributed-systems```
   #### Map Reduce
    - to view source code 
-     - ```d $HOME/capstone-distributed-systems/src/main/ ```
+     - ```d $HOME/capstone-distributed-systems/src/mapreduce ```
    - Part 1 Test Cases 
         - ``` cd $HOME/capstone-distributed-systems/src/main ```
         - ``` ./test-wc.sh ```   
@@ -22,10 +22,14 @@
      - ``` go test ```
      
   #### View Service 
+    - to view source code 
+        - ```d $HOME/capstone-distributed-systems/src/viewservice ```
     - ``` cd $HOME/capstone-distributed-systems/src/viewservice ```
     - go test 
   
-  #### Primary Backup 
+  #### Primary Backup Service
+     - to view source code 
+        - ```d $HOME/capstone-distributed-systems/src/pbservice ```
     -  cd $HOME/capstone-distributed-systems/src/pbservice
     -  go test -run BasicFail
     -  go test -run AtMostOnce 
