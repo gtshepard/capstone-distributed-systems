@@ -7,10 +7,13 @@
     3. [Primary Backup](#key-value-store)
     4. [Directory Tree](#directory-tree)
     
+   
 ### Case Studies
   - Assuming project cloned to home directory 
   -  ``` export GOPATH=$HOME/capstone-distributed-systems```
   #### Map Reduce
+   - to view source code 
+     - ```d $HOME/capstone-distributed-systems/src/main/ ```
    - Part 1 Test Cases 
         - ``` cd $HOME/capstone-distributed-systems/src/main ```
         - ``` ./test-wc.sh ```   
